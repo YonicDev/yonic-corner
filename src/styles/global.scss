@@ -1,0 +1,72 @@
+@use "./speech.scss";
+
+html, body {
+    font-family: system-ui, sans-serif;
+    background-color: #F6F6F6;
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+code {
+    font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+        Bitstream Vera Sans Mono, Courier New, monospace;
+    counter-reset: step;
+    counter-increment: step 0;
+}
+
+code .line::before {
+    content: counter(step);
+    counter-increment: step;
+    width: 1rem;
+    margin-right: 1.5rem;
+    display: inline-block;
+    text-align: right;
+    color: rgba(115,138,148,.6);
+}
+
+pre {
+    margin-top: 0;
+    border: 1px solid magenta;
+}
+
+code .line {
+    margin-left: 1rem;
+}
+
+.filename {
+    background-color: darken(aqua, 20%);
+    padding: 0.25rem 0.75rem;
+    display: inline-block;
+    color: white;
+    border-radius: 5px 5px 0 0;
+    border: 1px solid magenta;
+    position: relative;
+    top: 1px;
+    z-index: 1;
+    border-bottom: none;
+}
+
+
+.code-block > div {
+    position: relative;
+}
+.code-block button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    border: 1px solid rgba(148, 148, 148, 0.205);
+    border-radius: 5px;
+    background: none;
+    color: #aaa;
+    padding: 0.5em;
+    z-index: 1;
+    cursor: pointer;
+}
+pre {
+    padding: 1ch 0;
+}

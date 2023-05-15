@@ -10,6 +10,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^2.3.0"
+    "@astrojs/mdx": "^0.19.0",
+    "@astrojs/sitemap": "^1.2.2",
+    "@astrojs/svelte": "^2.1.0",
+    "astro": "^2.3.0",
+    "astro-auto-import": "^0.2.1",
+    "astro-mdx-code-blocks": "^0.0.3",
+    "sass": "^1.62.0",
+    "svelte": "^3.58.0"
   }
 }

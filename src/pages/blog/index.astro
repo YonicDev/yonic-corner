@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@lib/layouts/Layout.astro";
+
+const posts = (await getCollection('blog'))
+    .filter(post => !post.data.draft && post.data.pubDate < new Date())
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const dateFormat = new Intl.DateTimeFormat('en', {
+    year: "numeric",
+    month: "short",
+    day: "2-digit"
+});
+
+function formatDate(parts: Intl.DateTimeFormatPart[]) {
+    const year = parts.find(part => part.type === "year")!;
+    const month = parts.find(part => part.type === "month")!;
+    const day = parts.find(part => part.type === "day")!;
+    return `${year.value}-${month.value}-${day.value}`
+}
+
+---
+
+<Layout title="Posts">
+    <main>
+        <ul>
+            {
+                posts.map((post) => (
+                    <li>
+                        <time datetime={post.data.pubDate.toISOString()}>
+                            {formatDate(dateFormat.formatToParts(post.data.pubDate))}
+                        </time>
+                        <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+                    </li>
+                ))
+            }
+        </ul>
+    </main>
+</Layout>

@@ -1,4 +1,6 @@
 ---
+import '../styles/global.scss';
+
 export interface Props {
 	title: string;
 }
@@ -16,20 +18,30 @@ const { title } = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body>
+		<nav>
+			<b><a href="/">The Yonic Corner</a></b>
+			<ul>
+				<li><a href="/blog">Blog</a></li>
+				<li><a href="/about">About</a></li>
+			</ul>
+		</nav>
 		<slot />
 	</body>
 </html>
-<style is:global>
-	:root {
-		--accent: 124, 58, 237;
-		--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
-	}
-	html {
-		font-family: system-ui, sans-serif;
-		background-color: #F6F6F6;
-	}
-	code {
-		font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-			Bitstream Vera Sans Mono, Courier New, monospace;
+<style lang="scss">
+	nav {
+		display: flex;
+		justify-content: space-between;
+		border-bottom: 1px solid black;
+		padding: 1em;
+		ul {
+			display: flex;
+			gap: 1em;
+			margin: 0;
+			padding: 0;
+			li {
+				display: block;
+			}
+		}
 	}
 </style>

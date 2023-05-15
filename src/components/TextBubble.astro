@@ -1,0 +1,19 @@
+---
+
+const themes = [
+    "lightblueGradient",
+    "none",
+] as const;
+
+export interface Props {
+	position?: "top"|"left"|"right"|"bottom"|"none",
+    alignment?: "near"|"center"|"far"|"none"
+    theme?: typeof themes[number]
+}
+
+const { position = "none", alignment = "none", theme = "none" } = Astro.props;
+---
+
+<div class={`speech ${position} ${alignment} ${theme}`}>
+    <slot />
+</div>

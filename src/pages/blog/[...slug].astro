@@ -1,0 +1,43 @@
+---
+import { CollectionEntry, getCollection } from 'astro:content';
+import Layout from '@lib/layouts/Layout.astro';
+
+import QuickLinks from '@lib/components/QuickLinks.astro';
+
+export async function getStaticPaths() {
+	const posts = (await getCollection('blog')).filter(post => {
+        return !post.data.draft && post.data.pubDate < new Date();
+    });
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: post,
+	}));
+}
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { Content } = await post.render();
+
+const posts = (await getCollection('blog'))
+    .filter(post => !post.data.draft && post.data.pubDate < new Date())
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const postIndex = posts.findIndex(colPost => colPost.id === post.id);
+---
+
+<Layout {...post.data}>
+    <article>
+        <h1>{post.data.title}</h1>
+        <Content />
+    </article>
+    <QuickLinks prev={posts[postIndex-1]} next={posts[postIndex+1]} />
+</Layout>
+
+<style lang="scss">
+    article {
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+</style>
