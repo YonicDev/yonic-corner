@@ -9,7 +9,7 @@ import MDXCodeBlocks, { mdxCodeBlockAutoImport } from 'astro-mdx-code-blocks';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://yonic-corner.netlify.app",
+  site: "https://yonic-corner-astro.netlify.app",
   integrations: [
     svelte(),
     AutoImport({
