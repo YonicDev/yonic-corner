@@ -14,6 +14,10 @@ export interface Props {
 const { position = "none", alignment = "none", theme = "none" } = Astro.props;
 ---
 
-<div class={`speech ${position} ${alignment} ${theme}`}>
-    <slot />
+<div class:list={["speech-container", alignment]}>
+    <slot name="charaLeft"/>
+    <div class={`speech ${position} ${alignment} ${theme}`}>
+        <slot />
+    </div>
+    <slot name="charaRight"/>
 </div>

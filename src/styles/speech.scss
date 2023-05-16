@@ -1,5 +1,6 @@
 .speech {
     display: block;
+    flex-grow: 1;
     background-color: #ececec;
     color: black;
     position: relative;
@@ -8,6 +9,7 @@
     border-radius: 10px;
     overflow: visible;
     box-sizing: content-box;
+    min-width: 0;
 
     &::before {
         content: "";
@@ -117,5 +119,22 @@
 
     &.lightblueGradient::before {
         background-image: linear-gradient(45deg, rgba(31,109,190,1) 0%, rgba(22,137,201,1) 51%, rgba(47,163,250,1) 50%);
+    }
+}
+
+.speech-container {
+    display: flex;
+    gap: 1rem;
+    &.near {
+        align-items: flex-start;
+    }
+    &.center {
+        align-items: center;
+    }
+    &.far {
+        align-items: flex-end;
+    }
+    br {
+        display: none;
     }
 }

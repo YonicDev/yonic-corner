@@ -15,7 +15,8 @@ export default defineConfig({
     AutoImport({
       imports: [
         mdxCodeBlockAutoImport("@lib/components/CodeBlock.astro"),
-        '@lib/components/TextBubble.astro'
+        '@lib/components/TextBubble.astro',
+        '@lib/components/Chara.astro',
         {
           'astro:assets': ['Image']
         },
