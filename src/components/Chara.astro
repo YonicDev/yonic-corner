@@ -1,0 +1,15 @@
+---
+export interface Props {
+    name: string;
+    set?: string;
+    sprite: string;
+    thoughts?: string;
+    height?: number;
+    position?: "left"|"right";
+}
+
+const { name, set = "default", sprite, thoughts, height = 200, position = "right" } = Astro.props;
+---
+
+<img src={`/chara/${name}/${set}/${sprite}.svg`} alt={name} title={thoughts} {height} style={`cursor: help; float: ${position}`}/>
+<br style="clear: both"/>

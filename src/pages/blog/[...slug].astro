@@ -30,7 +30,7 @@ const postIndex = posts.findIndex(colPost => colPost.id === post.id);
         <h1>{post.data.title}</h1>
         <Content />
     </article>
-    <QuickLinks prev={posts[postIndex-1]} next={posts[postIndex+1]} />
+    <QuickLinks prev={posts[postIndex+1]} next={posts[postIndex-1]} />
 </Layout>
 
 <style lang="scss">
