@@ -16,9 +16,15 @@ export default defineConfig({
       imports: [
         mdxCodeBlockAutoImport("@lib/components/CodeBlock.astro"),
         '@lib/components/TextBubble.astro'
+        {
+          'astro:assets': ['Image']
+        },
       ]
     }),
     MDXCodeBlocks(),
     mdx(), 
-    sitemap()]
+    sitemap()],
+    experimental: {
+      assets: true,
+    }
 });

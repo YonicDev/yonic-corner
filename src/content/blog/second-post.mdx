@@ -7,6 +7,7 @@ fuxk: error
 ---
 
 import CodeBlock from '../../components/CodeBlock.astro'
+import TestImage2 from "@assets/first-post/test_transparent.png";
 export const components = {pre: CodeBlock}
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
@@ -19,7 +20,13 @@ Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam s
     I can put **Markdown** here.
     \
     This is great.
-    <img style="width: 100%" src="https://play-lh.googleusercontent.com/1-hPxafOxdYpYZEOKzNIkSP43HXCNftVJVttoo4ucl7rsMASXW3Xr6GlXURCubE1tA=w3840-h2160-rw"/>
+    <figure>
+        <Image src={TestImage2} alt="Test image" width={768} />
+        <figcaption>
+            Here is Blue Spark. He is *adorable*. 
+        </figcaption>
+    </figure>
+
 
     *Why is this possible*? `I do not know`
 
