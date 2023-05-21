@@ -1,0 +1,61 @@
+---
+    import { getImage } from "astro:assets";
+
+    import StandardSummer from "@assets/img/profile-icon/standard_summer.png"
+    import StandardWinter from "@assets/img/profile-icon/standard_winter.png"
+
+    async function getProfilePic(src: ImageMetadata) {
+        const img = await getImage({src, format: "webp", width: 200, height: 200});
+        return img.src;
+    }
+
+    const images: Record<string, string> = {
+        summer: await getProfilePic(StandardSummer),
+        winter: await getProfilePic(StandardWinter)
+    }
+    
+---
+
+<img id="profile-image" alt="Profile icon" data-images={JSON.stringify(images)} src={images.summer} width=200 height=200 />
+
+<script>
+    const profileImage = document.getElementById("profile-image") as HTMLImageElement;
+    const images: Record<string, string> = JSON.parse(profileImage.dataset.images!);
+    const currentMonth = new Date().getMonth();
+    if(currentMonth >= 9 || currentMonth <= 2)
+        profileImage.src = images.winter;
+</script>
+
+<style lang="scss">
+    $base-color: #00423A;
+    $shadow: "";
+
+
+    /* Iteramos con un ciclo del 1 al 4, cada iteración del siglo $i (una variable) va cambiando su valor */
+    @for $i from 1 through 8 {
+
+        /* La posición de la sombra la cambiamos con la variable $i que primero vale 1, luego 2 y así hasta el 4 */
+        $shadow: $shadow + "#{$i}px #{$i}px 0px " + var(--emphasis-color) + ",";
+
+        /*  La función darken, nos permite oscurecer un color, el primer parámetro es el color y el segundo parámetro un valor del 1-100 de cuánto oscurecerá */
+
+    }
+
+    /*  Nuestro ciclo nos devuelve una cadena con una coma demás, con la línea de abajo removemos el último caracter para quitar dicha coma */
+
+    $shadow : str-slice($shadow,0,str-length($shadow)-1);
+
+    img {
+        display: block;
+        position: relative;
+        width: 25vh;
+        height: 25vh;
+        max-width: 200px;
+        max-height: 200px;
+        top: -8px;
+        left: -8px;
+        border: 4px solid var(--emphasis-color);
+        border-radius: 50%;
+        box-shadow: unquote($shadow);
+    }
+</style>

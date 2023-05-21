@@ -1,15 +1,43 @@
 .speech {
     display: block;
     flex-grow: 1;
-    background-color: #ececec;
+    --fill-color: #ececec;
+    --outline-color: black;
+    background-color: var(--fill-color);
     color: black;
     position: relative;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 10px;
+    padding: 2rem;
+    border: 4px solid var(--outline-color);
+    margin-bottom: 3rem;
+    border-radius: 24px;
     overflow: visible;
     box-sizing: content-box;
     min-width: 0;
+    filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.25));
+
+    .triangle {
+        position: absolute;
+        z-index: 1;
+        .static {
+            position: absolute;
+            left: 0;
+            top: 0;
+            polyline {
+                // fill: #0071aa;
+                stroke: var(--outline-color);
+                fill: var(--fill-color);
+                stroke-width: 4px;
+                stroke-linejoin: round;
+            }
+        }
+        .animated {
+            position: absolute;
+            z-index: 1;
+            polygon {
+                fill: var(--outline-color);
+            }
+        }
+    }
 
     &::before {
         content: "";
@@ -23,7 +51,7 @@
         z-index: 1;
     }
 
-    & p:first-child {
+    & p:first-of-type {
         margin-top: 0;
     }
     & p:last-child {
@@ -32,8 +60,24 @@
 
     /** Positions **/
 
-    &.bottom::before {
+    &.bottom .triangle {
         top: 100%;
+        .animated {
+            animation: speecher 0.333s linear alternate infinite;
+        }
+    }
+    
+    &.bottom.near .triangle {
+        left: calc(32px);
+    }
+
+    &.bottom.far .triangle {
+        right: calc(32px + 48px);
+    }
+
+    &.bottom.center .triangle {
+        left: 50%;
+        transform: translateX(-50%);
     }
 
     &.bottom.near::before {
@@ -112,14 +156,19 @@
 
     /** Colors **/
 
-    &.lightblueGradient {
-        background-image: linear-gradient(0deg, rgba(47,163,250,1) 0%, rgba(56,168,246,1) 10%, rgba(84,226,255,1) 89%);
-        color: #0a3a61;
+    &.yonic {
+        --outline-color: #0071aa;
+        --fill-color: #0ef;
     }
 
-    &.lightblueGradient::before {
-        background-image: linear-gradient(45deg, rgba(31,109,190,1) 0%, rgba(22,137,201,1) 51%, rgba(47,163,250,1) 50%);
-    }
+    // &.lightblueGradient {
+    //     background-image: linear-gradient(0deg, rgba(47,163,250,1) 0%, rgba(56,168,246,1) 10%, rgba(84,226,255,1) 89%);
+    //     color: #0a3a61;
+    // }
+
+    // &.lightblueGradient::before {
+    //     background-image: linear-gradient(45deg, rgba(31,109,190,1) 0%, rgba(22,137,201,1) 51%, rgba(47,163,250,1) 50%);
+    // }
 }
 
 .speech-container {
@@ -136,5 +185,14 @@
     }
     br {
         display: none;
+    }
+}
+
+@keyframes speecher {
+    0% {
+        top: 0px;
+    }
+    100% {
+        top: -16px;
     }
 }

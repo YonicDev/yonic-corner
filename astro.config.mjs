@@ -6,10 +6,17 @@ import sitemap from "@astrojs/sitemap";
 import AutoImport from 'astro-auto-import';
 import MDXCodeBlocks, { mdxCodeBlockAutoImport } from 'astro-mdx-code-blocks';
 
+import absent from "./src/assets/code-themes/absent-light.json";
+
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://yonic-corner-astro.netlify.app",
+  markdown: {
+    shikiConfig: {
+      theme: absent
+    }
+  },
   integrations: [
     svelte(),
     AutoImport({
@@ -24,8 +31,9 @@ export default defineConfig({
     }),
     MDXCodeBlocks(),
     mdx(), 
-    sitemap()],
-    experimental: {
-      assets: true,
-    }
+    sitemap()
+  ],
+  experimental: {
+    assets: true,
+  },
 });

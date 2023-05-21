@@ -16,29 +16,186 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
+const {pubDate, updatedDate, tags} = post.data;
 const { Content } = await post.render();
+
+const dateFormat = new Intl.DateTimeFormat('en-US',
+{
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+})
 
 const posts = (await getCollection('blog'))
     .filter(post => !post.data.draft && post.data.pubDate < new Date())
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 const postIndex = posts.findIndex(colPost => colPost.id === post.id);
+
+const rainbowColors = ["#078D70","#26CEAA","#98E8C1","white","#7BADE2","#5049CC","#3D1A78"]
+const bowrainColors = [...rainbowColors].reverse();
 ---
 
 <Layout {...post.data}>
-    <article>
-        <h1>{post.data.title}</h1>
-        <Content />
-    </article>
-    <QuickLinks prev={posts[postIndex+1]} next={posts[postIndex-1]} />
+    <main>
+        <article>
+            <h1>{post.data.title}</h1>
+            <p class="metadata dates">
+                <img alt="Published" title="Publish date" class="icon" src="/img/icons/post.svg" height="28" width="28" />
+                <span>{dateFormat.format(pubDate)}</span>
+                {
+                    updatedDate && (
+                    <img alt="Last edited" title="Last edited" class="icon" src="/img/icons/edit.svg" height="24" width="24" />
+                    <span>{dateFormat.format(updatedDate)}</span>)
+                }
+            </p>
+            { tags.length > 0 &&
+            <p class="metadata tagList">
+                <img alt="Tags" title="Tags" class="icon" src="/img/icons/tag.svg" height="24" width="24" />
+                {tags.map(tag => {
+                    return (
+                        <a class:list={["tag", tag]} href={`/tags/${tag}`}>{tag}</a>
+                    );
+                })}
+            </p>
+            }
+            <hr/>
+            <Content />
+        </article>
+        <QuickLinks prev={posts[postIndex+1]} next={posts[postIndex-1]} />
+        <div class="rainbow">
+            <div class="rainbow-side">
+                {rainbowColors.map((strip) => (
+                    <div class="strip" style={`background: ${strip}`}/>
+                ))}
+            </div>
+            <div class="rainbow-end">
+                <div class="rainbow-corner">
+                    {rainbowColors.map((strip, i) => (
+                        <div class="rainbow-round" style={`background: ${strip}; --radius: calc(64px - ${i} * (64px / 7))`}/>
+                    ))}
+                </div>
+                <div class="rainbow-horizontal">
+                    {bowrainColors.map((strip) => (
+                        <div class="strip" style={`background: ${strip}`}/>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </main>
 </Layout>
 
 <style lang="scss">
+    main {
+        position: relative;
+        overflow: hidden;
+    }
     article {
         max-width: 800px;
         width: 100%;
         margin: 0 auto;
-        padding: 1rem;
+        padding: 1rem 3rem;
+        background: var(--article-color);
+        border: solid var(--emphasis-color);
+        border-width: 2px 8px 8px 2px;
+        font-size: 18px;
+        margin-top: 1rem;
+        margin-bottom: calc(2rem + 96px);
+        box-sizing: border-box;
+        position: relative;
+        overflow: auto;
+
+        hr {
+            border: none;
+            border-bottom: 3px solid var(--emphasis-color);
+        }
+
+        .metadata {
+            margin: 8px 0;
+            .icon {
+                vertical-align: middle;
+                cursor: help;
+                margin-top: -4px;
+            }
+            &.dates span {
+                margin: 2px 4px;
+                margin-right: 8px;
+            }
+            .tag {
+                display: inline-block;
+                background-color: var(--base-color);
+                padding: 4px 1em;
+                margin: 2px 4px;
+                border-radius: 999px;
+                font-size: 16px;
+                text-decoration: none;
+                color: var(--emphasis-color);
+            }
+        }
+    }
+    .rainbow {
+        position: absolute;
+        left: calc((100vw - 800px)/2 - 48px);
+        top: -1rem;
+        z-index: 2;
+        width: calc(100vw + 64px);
+        height: calc(100% - 96px);
+        overflow-x: hidden;
+        pointer-events: none;
+        .rainbow-side {
+            display: flex;
+            width: 64px;
+            height: calc(100% - 64px);
+        }
+        .strip {
+            width: 100%;
+            height: 100%;
+        }
+        .rainbow-end {
+            position: absolute;
+            bottom: 0;
+            height: 64px;
+            width: 120vw;
+            display: flex;
+            align-items: flex-start;
+        }
+        .rainbow-corner {
+            display: inline-block;
+            position: relative;
+            width: 64px;
+            height: 64px;
+        }
+        .rainbow-round {
+            position: absolute;
+            right: 0;
+            width: var(--radius, 64px);
+            height: var(--radius, 64px);
+            border-bottom-left-radius: 100%;
+            &.one {
+                background-color: green;
+                --radius: 64px;
+            }
+            &.two {
+                background-color: #1c2469;
+                --radius: 32px;
+            }
+        }
+        .rainbow-horizontal {
+            width: 100vw;
+            height: 64px;
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    @media screen and (max-width: 800px) {
+        .rainbow {
+            display: none;
+        }
+        article {
+            border: none;
+            margin: 0;
+        }
     }
 </style>
 

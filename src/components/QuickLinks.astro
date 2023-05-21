@@ -16,18 +16,18 @@
         {
             prev &&
             <a href={`/blog/${prev.slug}`}>
-                PREV
+                <b>PREV</b>
                 <br/>
                 {prev.data.title}
             </a>
         }
     </div>
     <div class="series"><a href={seriesUrl}>{series}</a></div>
-    <div>
+    <div style="text-align: right">
         {
             next &&
             <a href={`/blog/${next.slug}`}>
-                NEXT
+                <b>NEXT</b>
                 <br/>
                 {next.data.title}
             </a>
@@ -38,20 +38,28 @@
 <style lang="scss">
     .navigator {
         display: flex;
-        width: 80%;
-        max-width: 600px;
+        width: 100%;
+        max-width: 800px;
         justify-content: center;
         align-items: stretch;
-        border: 1px solid black;
+        border: solid var(--emphasis-color);
+        border-width: 2px 8px 8px 2px;
+        background-color: var(--base-color);
         margin: 0 auto;
         margin-bottom: 2rem;
+        font-size: 18px;
         div {
-            padding: 0 1rem;
+            padding: 5px 1rem;
             display: flex;
             flex-direction: column;
             width: 40%;
+            b {
+                letter-spacing: 2px;
+            }
             a {
                 width: 100%;
+                color: var(--emphasis-color);
+                text-decoration: none;
             }
         }
         .series {
@@ -59,10 +67,28 @@
             flex-direction: row;
             align-items: center;
             justify-content: center;
-            border: solid black;
-            border-width: 0 1px 0 1px;
+            border: solid var(--emphasis-color);
+            border-width: 0 4px 0 4px;
             text-align: center;
             font-weight: bold;
+            background: var(--nav-color-dark);
+            a {
+                color: var(--article-color);
+            }
+        }
+    }
+
+    @media screen and (max-width: 800px) {
+        .navigator {
+            width: 100vw;
+            max-width: none;
+            margin: 0 auto;
+            padding: 0 1em;
+            border-width: 0;
+            border-top-width: 2px;
+            .series {
+                border-width: 0px 2px 0px 2px;
+            }
         }
     }
 </style>

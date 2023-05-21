@@ -1,61 +1,133 @@
 ---
 import Layout from '@lib/layouts/Layout.astro';
+import ProfileIcon from "@lib/components/ProfileIcon.astro";
+
+const websiteText = "The Yonic Corner";
+const blurb = "Welcome to your just around the corner blog."
 ---
 
-<Layout title="Welcome to Astro.">
+<Layout title={`Welcome to ${websiteText}`}>
 	<main>
-		<h1>Welcome to Astro</h1>
-		<p class="instructions">
-			To get started, open the directory <code>src/pages</code> in your project.<br />
-			<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
-		</p>
-		<ul role="list" class="link-card-grid">
-
-		</ul>
+		<ProfileIcon />
+		<h1>Welcome to &nbsp;
+			<div class="bungee-container">
+				{websiteText.split("").map((char, i) => {
+					if(char === " ")
+						return <span class="bungee" style={`--i: ${i}`} translate="no">&nbsp;</span>
+					return <span class="bungee" style={`--i: ${i}`} translate="no">{char}</span>
+				})}
+				<div class="bungee-shadow">
+					{websiteText.split("").map((char, i) => {
+						if(char === " ")
+							return <span style={`--i: ${i}`} translate="no">&nbsp;</span>
+						return <span style={`--i: ${i}`} translate="no">{char}</span>
+					})}
+				</div>
+			</div>
+		</h1>
+		<div class="raised" style="max-width: 600px; width:75vw;">
+			<p>{blurb}</p>
+			<p>
+				To start, you can explore all the blog's <b><a href="/blog">Posts</a></b>.<br/>
+				You can also exploring all <b><a href="/series">Series</a></b> in this blog,
+				or you can earch them by topics with <b><a href="/tags">Tags</a></b>.
+			</p>
+		</div>
+		<noscript>
+			<div class="raised info">
+				This blog works without JavaScript! Enjoy browsing without bloat!
+			</div>
+		</noscript>
 	</main>
 </Layout>
 
-<style>
+<style lang="scss">
 	main {
-		margin: auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+		text-align: center;
+		height: calc(100vh - 110px);
 		padding: 1.5rem;
-		max-width: 60ch;
+		overflow-y: auto;
 	}
 	h1 {
 		font-size: 3rem;
 		font-weight: 800;
 		margin: 0;
+		user-select: none;
 	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
+	.bungee-container {
+		position: relative;
+		z-index: 0;
+		.bungee {
+			display: inline-block;
+			font-family: Bungee, Arial, Helvetica, sans-serif;
+			color: var(--emphasis-color);
+			-webkit-text-stroke: 2px black;
+			animation: logo 2s ease-in-out infinite;
+			animation-delay: calc(.1s * var(--i));
+			text-shadow: 2px 2px 0px black, 4px 4px 0px black;
+			z-index: 1;
+		}
+		.bungee-shadow {
+			position: absolute;
+			display: block;
+			width: 100%;
+			font-family: Bungee, Arial, Helvetica, sans-serif;
+			opacity: 1;
+			top: 4px;
+			left: 4px;
+			z-index: -1;
+			span {
+				animation: shadow 2s ease-in-out infinite;
+				animation-delay: calc(.1s * var(--i));
+			}
+		}
 	}
-	.instructions {
-		line-height: 1.6;
-		margin: 1rem 0;
-		border: 1px solid rgba(var(--accent), 25%);
-		background-color: white;
+	.raised {
+		background-color: var(--article-color);
+		border: solid var(--emphasis-color);
+		border-width: 2px 8px 8px 2px;
 		padding: 1rem;
-		border-radius: 0.4rem;
+		text-align: justify;
+		p:first-of-type {
+			margin-top: 0;
+		}
+		p:last-child {
+			margin-bottom: 0;
+		}
+
+		&.info {
+			background-color: silver;
+			border-color: darkslategray;
+		}
 	}
-	.instructions code {
-		font-size: 0.875em;
-		font-weight: bold;
-		background: rgba(var(--accent), 12%);
-		color: rgb(var(--accent));
-		border-radius: 4px;
-		padding: 0.3em 0.45em;
+
+	@keyframes logo {
+		0%, 100% {
+			color: #0b396d;
+			transform: translate(0px, 0px);
+		}
+		25%, 75% {
+			color: #21dfe6;
+		}
+		50% {
+			color: #c0ffdc;
+			transform: translate(-15px, -15px);
+		}
 	}
-	.instructions strong {
-		color: rgb(var(--accent));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 1rem;
-		padding: 0;
+
+	@keyframes shadow {
+		0%, 100% {
+			opacity: 1;
+			filter: blur(0px);
+		}
+		50% {
+			opacity: 0.5;
+			filter: blur(3px);
+		}
 	}
 </style>

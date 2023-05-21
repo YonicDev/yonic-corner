@@ -17,6 +17,15 @@ const { position = "none", alignment = "none", theme = "none" } = Astro.props;
 <div class:list={["speech-container", alignment]}>
     <slot name="charaLeft"/>
     <div class={`speech ${position} ${alignment} ${theme}`}>
+        { position && alignment && <div class="triangle">
+            <svg width="48" class="static" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 49.363281 50">
+                <polyline points="0 0 24.681640625 42.75 49.36328125 0"/>
+            </svg>
+            <svg width="48" class="animated" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 49.3635 50">
+                <polygon points="38.970703 6 10.392578 6 24.681641 30.75 38.970703 6"/>
+            </svg>
+        </div>
+        }
         <slot />
     </div>
     <slot name="charaRight"/>
