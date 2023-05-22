@@ -8,14 +8,18 @@ export async function getStaticPaths() {
 	const posts = (await getCollection('blog')).filter(post => {
         return !post.data.draft && post.data.pubDate < new Date();
     });
-	return posts.map((post) => ({
+	return posts.map((post, i) => ({
 		params: { slug: post.slug },
-		props: post,
+		props: {post, previous: posts[i-1], next: posts[i+1] },
 	}));
 }
-type Props = CollectionEntry<'blog'>;
+interface Props {
+    post: CollectionEntry<'blog'>,
+    previous: CollectionEntry<'blog'>,
+    next: CollectionEntry<'blog'>
+}
 
-const post = Astro.props;
+const { post, previous, next } = Astro.props;
 const {pubDate, updatedDate, tags} = post.data;
 const { Content } = await post.render();
 
@@ -25,12 +29,6 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
     month: 'long',
     day: '2-digit',
 })
-
-const posts = (await getCollection('blog'))
-    .filter(post => !post.data.draft && post.data.pubDate < new Date())
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-const postIndex = posts.findIndex(colPost => colPost.id === post.id);
 
 const rainbowColors = ["#078D70","#26CEAA","#98E8C1","white","#7BADE2","#5049CC","#3D1A78"]
 const bowrainColors = [...rainbowColors].reverse();
@@ -62,7 +60,7 @@ const bowrainColors = [...rainbowColors].reverse();
             <hr/>
             <Content />
         </article>
-        <QuickLinks prev={posts[postIndex+1]} next={posts[postIndex-1]} />
+        <QuickLinks prev={previous} {next} />
         <div class="rainbow">
             <div class="rainbow-side">
                 {rainbowColors.map((strip) => (
