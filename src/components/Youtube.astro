@@ -1,0 +1,35 @@
+---
+const {id, title, description} = Astro.props;
+
+interface Props {
+    id: string;
+    title?: string;
+    description?: string;
+}
+
+const INVIDIOUS_INSTANCE = "https://inv.tux.pizza";
+---
+
+<iframe title="Video player" src={`${INVIDIOUS_INSTANCE}/embed/${id}`}/>
+<p class="videoCaption">
+    <b>{title ?? "Untitled video"}</b>
+    {description && <i>{description}</i>}
+</p>
+
+<style lang="scss">
+    @use "../styles/util.scss";
+
+    iframe {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border: inherit;
+        border-width: 2px;
+        box-shadow: util.extrude(8);
+    }
+    b, i {
+        display: block;
+    }
+    b {
+        margin-bottom: 1em;
+    }
+</style>
