@@ -107,6 +107,17 @@ const { title } = Astro.props;
 				width: 40vw;
 				height: 100%;
 				overflow-x: hidden;
+				z-index: 0;
+				&::before {
+					content: "";
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: linear-gradient(90deg, var(--emphasis-color) 2%, rgba(#00423A, 0) 7%, rgba(#00423A, 0) 95%, var(--emphasis-color) 99%);
+					z-index: 1;
+				}
 			}
 			.border-transition {
 				width: 30px;
