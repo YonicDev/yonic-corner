@@ -15,7 +15,7 @@
     <div>
         {
             prev &&
-            <a href={`/blog/${prev.slug}`}>
+            <a href={`/blog/article/${prev.slug}`}>
                 <b>PREV</b>
                 <br/>
                 {prev.data.title}
@@ -26,7 +26,7 @@
     <div style="text-align: right">
         {
             next &&
-            <a href={`/blog/${next.slug}`}>
+            <a href={`/blog/article/${next.slug}`}>
                 <b>NEXT</b>
                 <br/>
                 {next.data.title}

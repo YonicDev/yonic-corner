@@ -60,7 +60,6 @@ const bowrainColors = [...rainbowColors].reverse();
             <hr/>
             <Content />
         </article>
-        <QuickLinks prev={previous} {next} />
         <div class="rainbow">
             <div class="rainbow-side">
                 {rainbowColors.map((strip) => (
@@ -81,16 +80,17 @@ const bowrainColors = [...rainbowColors].reverse();
             </div>
         </div>
     </main>
+    <QuickLinks prev={previous} {next} />
 </Layout>
 
 <style lang="scss">
     main {
         position: relative;
         overflow: hidden;
+        padding-bottom: 96px;
     }
     article {
         max-width: 800px;
-        width: 100%;
         margin: 0 auto;
         padding: 1rem 3rem;
         background: var(--article-color);
@@ -98,8 +98,6 @@ const bowrainColors = [...rainbowColors].reverse();
         border-width: 2px 8px 8px 2px;
         font-size: 18px;
         margin-top: 1rem;
-        margin-bottom: calc(2rem + 96px);
-        box-sizing: border-box;
         position: relative;
         overflow: auto;
 
@@ -137,7 +135,7 @@ const bowrainColors = [...rainbowColors].reverse();
         top: -1rem;
         z-index: 2;
         width: calc(100vw + 64px);
-        height: calc(100% - 96px);
+        height: 100%;
         overflow-x: hidden;
         pointer-events: none;
         .rainbow-side {
