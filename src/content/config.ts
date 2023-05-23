@@ -6,7 +6,11 @@ const blogCollection = defineCollection({
         title: z.string(),
         description: z.string(),
         tags: z.array(z.string()).optional().default([]),
-        hero: z.string().optional(),
+        heroPosition: z.union([
+            z.literal("top"),
+            z.literal("center"),
+            z.literal("bottom")
+        ]).optional(),
         draft: z.boolean().optional().default(false),
         pubDate: z
 			.string()

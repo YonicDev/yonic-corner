@@ -1,0 +1,256 @@
+---
+import { getImage } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+import testHero from "@assets/articles/first-post/test.png";
+
+const heroImage = await getImage({src: testHero, width: 550, height: 280, format: "webp"});
+
+interface Props {
+    posts: CollectionEntry<"blog">[],
+    currentPage?: number,
+    lastPage: number,
+    baseUrl: string,
+}
+
+const { posts, currentPage = 1, lastPage, baseUrl } = Astro.props;
+
+const heroImages = await Promise.all(posts.map(async (post) => {
+    // The images can be of any supported filetype, not just PNG.
+    // But the file *has* to be an article asset named hero.png,
+    // regardless of what the image type actually is.
+    try {
+        const imageMeta: ImageMetadata = (await import(`../assets/articles/${post.slug}/hero.png`)).default;
+        const processedImage = await getImage({ src: imageMeta, width: 550, height: 280, format: "webp"});
+        return Promise.resolve(processedImage.src);
+    } catch (err) {
+        return null;
+    }
+}));
+
+const dateFormat = new Intl.DateTimeFormat('en-US',
+{
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+})
+
+---
+
+<slot/>
+<ul class="listing">
+{ 
+    // Nested anchor elements are illegal, so instead, we make hit zones in separate layers.
+    posts.map((post, i) => (
+        <li class="article">
+            <a aria-label="Article poster image" class="hero" href={`/blog/article/${post.slug}`} style={`background-image: url(${heroImages[i] ?? heroImage.src}); background-position: center ${post.data.heroPosition ?? "center"}`}/>
+            <div class="data">
+                <a href={`/blog/categories/not-implemented`} class="category">CATEGORIES NOT IMPLEMENTED</a>
+                <a href={`/blog/article/${post.slug}`}>
+                    <h1>{post.data.title}{post.data.title}{post.data.title}{post.data.title}{post.data.title}{post.data.title}{post.data.title}{post.data.title}{post.data.title}{post.data.title}{post.data.title}{post.data.title}</h1>
+                    <span class="metadata">
+                        <span class="dataGroup">
+                            <img class="icon" alt="Published" title="Published on" src="/img/icons/post.svg" width={24} height={24} />
+                            <span>{dateFormat.format(post.data.pubDate)}</span>
+                        </span>
+                        { post.data.updatedDate && 
+                            <span class="dataGroup">
+                                <img class="icon" alt="Last updated" title="Last updated on" src="/img/icons/edit.svg" width={22} height={22} />
+                                <span>{dateFormat.format(post.data.updatedDate)}</span>
+                            </span>
+                        }
+                    </span>
+                    <p class="description">{post.data.description}{post.data.description}{post.data.description}{post.data.description}{post.data.description}{post.data.description}{post.data.description}{post.data.description}{post.data.description}{post.data.description}{post.data.description}{post.data.description}{post.data.description}{post.data.description}{post.data.description}</p>
+                    </a>
+                <div class="tags">
+                    <img class="icon" alt="Tags" title="Tags" src="/img/icons/tag.svg" width={22} height={22}/>
+                    {
+                        post.data.tags.length > 0 ? post.data.tags.map(tag => (
+                            <a class="tag" href={`/tags/${tag}`}>{tag}</span>
+                        )) : <span>None</span>
+                    }
+                </div>
+            </div>
+        </li>
+    ))
+    
+}
+</ul>
+
+<ul class="nav">
+    { 
+        currentPage > 1 && (
+            <li><a href={`${baseUrl}/1`}>&lt;&lt; First</a></li>
+        )
+    }
+    <li><ul class="adjacent">
+        {
+            (currentPage - 2) > 0 && <li><a href={`${baseUrl}/${currentPage-2}`}>{currentPage-2}</a></li>
+        }
+        {
+            (currentPage - 1) > 0 && <li><a href={`${baseUrl}/${currentPage-1}`}>{currentPage-1}</a></li>
+        }
+        <li class="current"><a href={`${baseUrl}/${currentPage}`}>{currentPage}</a></li>
+        {
+            lastPage >= (currentPage +1) && (<li><a href={`${baseUrl}/${currentPage+1}`}>{currentPage+1}</a></li>)
+        }
+        {
+            lastPage >= (currentPage +2) && (<li><a href={`${baseUrl}/${currentPage+2}`}>{currentPage+2}</a></li>)
+        }
+    </ul></li>
+    { 
+        currentPage < lastPage && (
+            <li><a href={`${baseUrl}/${lastPage}`}>&gt;&gt; Last</a></li>
+        )
+    }
+</ul>
+
+<style lang="scss">
+    @function extrude($length, $base-color: var(--emphasis-color)) {
+        $shadow: "";
+        /* Iteramos con un ciclo del 1 al 4, cada iteración del siglo $i (una variable) va cambiando su valor */
+        @for $i from 1 through $length {
+
+            /* La posición de la sombra la cambiamos con la variable $i que primero vale 1, luego 2 y así hasta el 4 */
+            $shadow: $shadow + "#{$i}px #{$i}px 0px " + $base-color + ",";
+
+            /*  La función darken, nos permite oscurecer un color, el primer parámetro es el color y el segundo parámetro un valor del 1-100 de cuánto oscurecerá */
+
+        }
+
+        /*  Nuestro ciclo nos devuelve una cadena con una coma demás, con la línea de abajo removemos el último caracter para quitar dicha coma */
+
+        $shadow : str-slice($shadow,0,str-length($shadow)-1);
+        @return unquote($shadow);
+    }
+
+    .listing {
+        padding: 0;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 1200px;
+        li {
+            display: block;
+            margin: 1rem;
+        }
+        .article {
+            display: flex;
+            align-items: stretch;
+            gap: 1rem;
+            border: 2px solid var(--emphasis-color);
+            background-color: var(--article-color);
+            box-shadow: extrude(8);
+            position: relative;
+            .hero, .data {
+                width: 50%;
+            }
+
+            .hero {
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-color: var(--nav-color-dark);
+            }
+
+            a {
+                display: block;
+                color: var(--emphasis-color);
+                padding-right: 1rem;
+            }
+            
+            .data {
+                padding: 1rem 0;
+                h1 {
+                    display: -webkit-box;
+                    font-size: 24pt;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    margin: 0;
+                    padding: 0.5rem 0;
+                }
+                .icon {
+                    cursor: help;
+                }
+                .dataGroup {
+                    display: inline-block;
+                    margin: 0.25rem;
+                    > img {
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin-top: -0.5rem;
+                        padding: 0 0.25rem;
+                        &:first-of-type {
+                            padding-left: 0;
+                        }
+                    }
+                }
+
+                .description {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 5;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    height: 90px;
+                }
+
+                .tags {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    gap: 0.5rem;
+                    color: var(--emphasis-color);
+                }
+                .tag {
+                    background-color: var(--base-color);
+                    border-radius: 16px;
+                    text-align: center;
+                    padding: 4px 0.5em;
+                }
+            }
+            .category {
+                font-weight: bold;
+            }
+        }
+    }
+
+    .nav {
+        display: flex;
+        width: 100%;
+        min-width: 400px;
+        margin: 1.5rem auto;
+        justify-content: center;
+        gap: 10px;
+        padding: 0;
+        li {
+            display: block;
+            
+            a {
+                display: flex;
+                justify-content: center;
+                padding: 10px;
+                border: 2px solid var(--emphasis-color);
+                background: var(--nav-color-dark);
+                color: var(--emphasis-color);
+                font-weight: bold;
+                box-shadow: extrude(4);
+            }
+
+        }
+        .adjacent {
+            display: flex;
+            gap: 6px;
+            padding: 0;
+            li > a {
+                width: 4ch;
+            }
+            li.current > a {
+                border: 2px solid var(--nav-color-dark);
+                background: var(--article-color);
+                font-weight: bold;
+                color: var(--nav-color-dark);
+                box-shadow: extrude(4, var(--nav-color-dark));
+            }
+        }
+    }
+</style>
