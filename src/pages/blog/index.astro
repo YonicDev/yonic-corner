@@ -8,8 +8,13 @@ import PostListing from "@lib/layouts/PostListing.astro";
 
 const posts = (await getCollection('blog'))
     .filter(post => !post.data.draft && post.data.pubDate < new Date())
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+    .sort((a, b) => {
+        const aPub = a.data.pubDate.getTime();
+        const bPub = b.data.pubDate.getTime();
+        const aEdt = a.data.updatedDate?.getTime() ?? 0;
+        const bEdt = b.data.updatedDate?.getTime() ?? 0;
+        return Math.max(bEdt, bPub) - Math.max(aPub, aEdt) || a.id.localeCompare(b.id);
+    })
 
 
 //Math.ceil won't guarantee that last page will be Page 1.
