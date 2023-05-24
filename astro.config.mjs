@@ -25,6 +25,7 @@ export default defineConfig({
         '@lib/components/TextBubble.astro',
         '@lib/components/Chara.astro',
         '@lib/components/biyonic/Paragraph.astro',
+        '@lib/components/biyonic/ListItem.astro',
         {
           'astro:assets': ['Image']
         },
