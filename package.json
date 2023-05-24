@@ -4,7 +4,10 @@
   "private": "true",
   "license": "GPL-3.0",
   "version": "0.0.1",
-  "browserslist": ["last 3 versions", "> 5%"],
+  "browserslist": [
+    "last 3 versions",
+    "> 5%"
+  ],
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -21,6 +24,7 @@
     "astro-mdx-code-blocks": "^0.0.3",
     "autoprefixer": "^10.4.14",
     "sass": "^1.62.0",
+    "sharp": "^0.31.3",
     "svelte": "^3.58.0"
   }
 }
