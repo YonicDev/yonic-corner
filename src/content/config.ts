@@ -21,9 +21,18 @@ const blogCollection = defineCollection({
             .or(z.date())
 			.optional()
 			.transform((str) => (str ? new Date(str) : undefined)),
-    })
+    }).strict()
 });
+
+const aboutCollection = defineCollection({
+    schema: z.object({
+        title: z.string(),
+        description: z.string(),
+    }).strict()
+});
+
 
 export const collections = {
   blog: blogCollection,
+  about: aboutCollection,
 };
