@@ -24,6 +24,7 @@ export default defineConfig({
         mdxCodeBlockAutoImport("@lib/components/CodeBlock.astro"),
         '@lib/components/TextBubble.astro',
         '@lib/components/Chara.astro',
+        '@lib/components/biyonic/Paragraph.astro',
         {
           'astro:assets': ['Image']
         },

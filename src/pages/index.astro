@@ -40,6 +40,36 @@ const blurb = "Welcome to your just around the corner blog."
 				</div>
 			</noscript>
 		</div>
+		<ProfileIcon />
+		<h1>Welcome to &nbsp;
+			<div class="bungee-container">
+				{websiteText.split("").map((char, i) => {
+					if(char === " ")
+						return <span class="bungee" style={`--i: ${i}`} translate="no">&nbsp;</span>
+					return <span class="bungee" style={`--i: ${i}`} translate="no">{char}</span>
+				})}
+				<div class="bungee-shadow">
+					{websiteText.split("").map((char, i) => {
+						if(char === " ")
+							return <span style={`--i: ${i}`} translate="no">&nbsp;</span>
+						return <span style={`--i: ${i}`} translate="no">{char}</span>
+					})}
+				</div>
+			</div>
+		</h1>
+		<div class="raised biyonic" style="max-width: 600px; width:75vw;">
+			<p>{blurb}</p>
+			<p>
+				To start, you can explore all the blog's <b><a href="/blog">Posts</a></b>.<br/>
+				You can also exploring all <b><a href="/series">Series</a></b> in this blog,
+				or you can earch them by topics with <b><a href="/tags">Tags</a></b>.
+			</p>
+		</div>
+		<noscript>
+			<div class="raised info">
+				This blog works without JavaScript! Enjoy browsing without bloat!
+			</div>
+		</noscript>
 	</main>
 </Layout>
 

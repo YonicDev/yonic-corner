@@ -1,0 +1,119 @@
+<script>
+    import { textVide } from "text-vide";
+
+    let biyonicReading = false;
+
+    const biyonicButton = document.getElementById("biyonic") as HTMLButtonElement;
+    // Elements with HTML inside.
+    const biyonicElements = Array.from(document.getElementsByClassName("biyonic"));
+    
+    // String only elements.
+    const biyonicStringElements = Array.from(document.getElementsByClassName("biyonic-string"));
+
+    // The Biyonic button will be set differently.
+    biyonicElements.splice(biyonicElements.indexOf(biyonicButton), 1);
+
+    const biyonicHTML = biyonicElements.map(element => {
+        return {element, innerHTML: element.innerHTML}
+    });
+    const biyonicStrings = biyonicStringElements.map(element => {
+        return {element, innerString: element.innerHTML}
+    });
+
+    async function toggleBiyonic() {
+        biyonicReading = window.sessionStorage.getItem("biyonic-reading") === "on";
+        if(biyonicReading) {
+            await Promise.all([
+                ...biyonicStrings.map(({element, innerString}) => {
+                    return new Promise<void>((resolve) => {
+                        element.innerHTML = textVide(innerString, { ignoreHtmlTag: false });
+                        resolve();
+                    })
+                }),
+                ...biyonicHTML.map(({element, innerHTML}) => {
+                    return new Promise<void>((resolve) => {
+                        element.innerHTML = textVide(innerHTML, { ignoreHtmlTag: true });
+                        resolve();
+                    })
+                }),
+            ]);
+            biyonicButton.innerHTML = textVide("Disable BiYonic reading");
+        } else {
+            await Promise.all([
+                ...biyonicStrings.map(({element, innerString}) => {
+                    return new Promise<void>((resolve) => {
+                        element.innerHTML = innerString;
+                        resolve();
+                    })
+                }),
+                ...biyonicHTML.map(({element, innerHTML}) => {
+                    return new Promise<void>((resolve) => {
+                        element.innerHTML = innerHTML;
+                        resolve();
+                    })
+                }),
+            ]);
+            biyonicButton.innerHTML = "Enable BiYonic reading";
+        }
+    }
+
+    
+    window.addEventListener("load", () => {
+        biyonicButton.addEventListener("click", () => {
+            window.sessionStorage.setItem("biyonic-reading", biyonicReading? "off" : "on");
+            toggleBiyonic();
+        });
+        toggleBiyonic();
+    })
+</script>
+<div class="biyonicHolder">
+    <button id="biyonic" class="biyonic">Enable BiYonic reading</button>
+    <a href="/blog/article/biyonic-reading">What?</a>
+</div>
+<noscript>
+    <style>
+        #biyonic {
+            display: none!important;
+        }
+    </style>
+</noscript>
+
+
+<style lang="scss">
+    @use "../../styles/util.scss";
+
+    .biyonicHolder {
+        display: flex;
+        width: 50%;
+        margin-left: 25px;
+        gap: 12px;
+        #biyonic {
+            appearance: none;
+            border: 2px solid var(--emphasis-color);
+            background-color: var(--base-color);
+            box-shadow: util.extrude(4);
+            position: relative;
+            top: -2px;
+            left: 0;
+            transition: all 0.05s ease-out;
+            font-family: inherit;
+            font-size: 12pt;
+            &:hover {
+                top: -4px;
+                left: -2px;
+                box-shadow: util.extrude(6);
+            }
+            &:active {
+                top: -1px;
+                left: 2px;
+                box-shadow: none;
+            }
+        }
+        a {
+            background-color: var(--nav-color-dark);
+            color: var(--article-color);
+            border: 2px solid var(--emphasis-color);
+            padding: 0 4px;
+        }
+    }
+</style>
