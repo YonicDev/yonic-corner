@@ -1,0 +1,17 @@
+@function extrude($length, $base-color: var(--emphasis-color)) {
+    $shadow: "";
+    /* Iteramos con un ciclo del 1 al 4, cada iteración del siglo $i (una variable) va cambiando su valor */
+    @for $i from 1 through $length {
+
+        /* La posición de la sombra la cambiamos con la variable $i que primero vale 1, luego 2 y así hasta el 4 */
+        $shadow: $shadow + "#{$i}px #{$i}px 0px " + $base-color + ",";
+
+        /*  La función darken, nos permite oscurecer un color, el primer parámetro es el color y el segundo parámetro un valor del 1-100 de cuánto oscurecerá */
+
+    }
+
+    /*  Nuestro ciclo nos devuelve una cadena con una coma demás, con la línea de abajo removemos el último caracter para quitar dicha coma */
+
+    $shadow : str-slice($shadow,0,str-length($shadow)-1);
+    @return unquote($shadow);
+}
