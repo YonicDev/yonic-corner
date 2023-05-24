@@ -1,5 +1,6 @@
 ---
 import { CollectionEntry, getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Layout from '@lib/layouts/Layout.astro';
 
 import QuickLinks from '@lib/components/QuickLinks.astro';
@@ -39,11 +40,30 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
 
 const rainbowColors = ["#078D70","#26CEAA","#98E8C1","white","#7BADE2","#5049CC","#3D1A78"]
 const bowrainColors = [...rainbowColors].reverse();
+
+/**
+ * Gets the hero image.
+ * 
+ * The hero image has to be named "hero.png" and be located in a folder named the same way
+ * as the target article inside the assets/articles folder.
+ * It doesn't need to be a PNG image, other formats are supported.
+ */
+async function getHeroImage(): Promise<ImageMetadata | null> {
+    try {
+        return (await import(`../../../assets/articles/${post.slug}/hero.png`)).default
+    } catch {
+        return null;
+    }
+}
+
+const hero = await getHeroImage();
+
 ---
 
 <Layout {...post.data}>
     <main>
         <article>
+            {hero && <Image class:list={["cover", post.data.heroPosition]} alt="Cover image" src={hero} width={768} height={432} />}
             <h1>{post.data.title}</h1>
             <p class="metadata dates">
                 <img alt="Published" title="Publish date" class="icon" src="/img/icons/post.svg" height="28" width="28" />
@@ -111,6 +131,18 @@ const bowrainColors = [...rainbowColors].reverse();
         hr {
             border: none;
             border-bottom: 3px solid var(--emphasis-color);
+        }
+
+        .cover {
+            object-fit: cover;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            &.top {
+                object-position: top;
+            }
+            &.bottom {
+                object-position: bottom;
+            }
         }
 
         .metadata {
