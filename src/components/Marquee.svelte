@@ -51,7 +51,7 @@
     });
 </script>
 
-<ul aria-hidden>
+<ul aria-hidden="true">
     {#each (blurbs.length > 0 ? blurbs : commonBlurbs) as {blurb}}
         <li>{blurb}</li>
     {/each}
