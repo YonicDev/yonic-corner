@@ -15,7 +15,7 @@ html, body {
     background-size: 24px;
     margin: 0;
     padding: 0;
-    cursor: url("/img/cursors/arrow.svg"), auto;
+    cursor: url("/img/cursors/arrow.png"), auto;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -101,7 +101,7 @@ code .line {
     box-shadow: 1px 1px 0px #00423A;
     transition: all 0.1s ease-out;
     padding: 0.5em;
-    cursor: url('/img/cursors/pointer.svg'), pointer;
+    cursor: url('/img/cursors/pointer.png'), pointer;
     &:hover {
         box-shadow: 3px 3px 0px #00423A, 2px 2px 0px #00423A, 1px 1px 0px #00423A;
         transform: translate(-2px, -2px);
@@ -120,7 +120,7 @@ a {
     text-decoration: none;
     color: #2944bd;
     transition: color 0.25s ease-out;
-    cursor: url('/img/cursors/pointer.svg'), auto;
+    cursor: url('/img/cursors/pointer.png'), auto;
     &:hover {
         color: #268dee;
     }
@@ -182,11 +182,11 @@ pre *::selection {
 }
 
 h1, h2, h3, h4, h5, h6, p, code {
-    cursor: url("/img/cursors/i-beam.svg"), text;
+    cursor: url("/img/cursors/text.png" ) 8 8, text;
 }
 
 article {
     li {
-        cursor: url("/img/cursors/i-beam.svg"), text;
+        cursor: url("/img/cursors/text.png") 8 8, text;
     }
 }
