@@ -52,16 +52,18 @@ const blurb = "Welcome to your just around the corner blog."
 		height: calc(100vh - 110px);
 		padding: 1.5rem;
 		overflow-y: auto;
-	}
-	h1 {
-		font-size: 3rem;
-		font-weight: 800;
-		margin: 0;
-		user-select: none;
+		h1 {
+			font-size: 3rem;
+			font-weight: 800;
+			margin: 0;
+			user-select: none;
+			cursor: url("/img/cursors/arrow.svg"), default;
+		}
 	}
 	.bungee-container {
 		position: relative;
 		z-index: 0;
+		cursor: url("/img/cursors/arrow.svg"), default;
 		.bungee {
 			display: inline-block;
 			font-family: Bungee, Arial, Helvetica, sans-serif;
@@ -116,7 +118,7 @@ const blurb = "Welcome to your just around the corner blog."
 		}
 		50% {
 			color: #c0ffdc;
-			transform: translate(-15px, -15px);
+			transform: translate3d(-15px, -15px, 0px);
 		}
 	}
 
