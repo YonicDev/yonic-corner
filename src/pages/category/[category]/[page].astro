@@ -11,7 +11,7 @@ export const getStaticPaths: GetStaticPaths = async ({paginate}) => {
     return ids.map((catId) => {
         const category = categories[catId];
         const posts = allPosts
-            .filter(post => post.data.category === catId)
+            .filter(post => post.data.category === catId && !post.data.draft)
             .sort((a, b) => {
                 const aPub = a.data.pubDate.getTime();
                 const bPub = b.data.pubDate.getTime();

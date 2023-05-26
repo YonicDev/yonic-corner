@@ -7,7 +7,7 @@ interface Props {
 const { tag, total } = Astro.props;
 ---
 
-<a class={tag} href={`/tags/${tag}/1`}><span>{tag}</span>{total && <span>{total}</span>}</a>
+<a class={tag} href={`/tags/${tag}/1`}><span>{tag.replace("-", " ")}</span>{total && <span>{total}</span>}</a>
 
 <style lang="scss">
     a {

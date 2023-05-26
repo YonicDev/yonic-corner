@@ -5,6 +5,7 @@ import { Image } from 'astro:assets';
 import { categories } from '@lib/settings';
 import Layout from '@lib/layouts/Layout.astro';
 import QuickLinks from '@lib/components/QuickLinks.astro';
+import Tag from '@lib/components/Tag.astro';
 
 export async function getStaticPaths() {
 	const posts = (await getCollection('blog')).filter(post => {
@@ -81,11 +82,7 @@ const hero = await getHeroImage();
             { tags.length > 0 &&
             <p class="metadata tagList">
                 <img alt="Tags" title="Tags" class="icon" src="/img/icons/tag.svg" height="24" width="24" />
-                {tags.map(tag => {
-                    return (
-                        <a class:list={["tag", tag]} href={`/tags/${tag}/1`}>{tag}</a>
-                    );
-                })}
+                {tags.map(tag => <Tag {tag} /> )}
             </p>
             }
             <hr/>
