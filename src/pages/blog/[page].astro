@@ -6,6 +6,7 @@ import { BLOG_PAGE_SIZE } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
 import PostListing from "@lib/layouts/PostListing.astro";
+import CategoryButtons from "@lib/components/CategoryButtons.astro";
 
 export async function getStaticPaths({paginate}: {paginate: any}) {
     const posts = (await getCollection('blog'))
@@ -32,6 +33,7 @@ interface Props {
 
 <Layout title="Posts">
     <main>
-        <PostListing {posts} currentPage={page.currentPage} lastPage={page.lastPage} baseUrl="/blog"/>
+        <CategoryButtons />
+        <PostListing {posts} currentPage={page.currentPage} lastPage={page.lastPage} baseUrl="/blog" />
     </main>
 </Layout>

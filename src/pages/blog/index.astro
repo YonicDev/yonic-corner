@@ -5,6 +5,7 @@ import { BLOG_PAGE_SIZE } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
 import PostListing from "@lib/layouts/PostListing.astro";
+import CategoryButtons from "@lib/components/CategoryButtons.astro";
 
 const posts = (await getCollection('blog'))
     .filter(post => !post.data.draft && post.data.pubDate < new Date())
@@ -26,6 +27,7 @@ posts.length = BLOG_PAGE_SIZE;
 
 <Layout title="Posts">
     <main>
-        <PostListing {posts} currentPage={1} lastPage={lastPage} baseUrl="/blog"/>
+        <CategoryButtons />
+        <PostListing {posts} currentPage={1} lastPage={lastPage} baseUrl="/blog" />
     </main>
 </Layout>

@@ -6,17 +6,18 @@
         next?: CollectionEntry<"blog">,
         series?: string,
         seriesUrl?: string,
+        category?: Category
     }
 
-    const { prev, next, series = "All posts", seriesUrl="/blog"} = Astro.props
+    const { prev, next, series = "All posts", seriesUrl="/blog", category } = Astro.props
 ---
 
-<div class="navigator">
+<div class="navigator" style={category? `--border-color: ${category.emphasisColor}; --nav-color-dark: ${category.baseColor}`: undefined}>
     <div>
         {
             prev &&
             <a href={`/blog/article/${prev.slug}`}>
-                <b>PREV</b>
+                <b>&larr; PREV</b>
                 <br/>
                 {prev.data.title}
             </a>
@@ -27,7 +28,7 @@
         {
             next &&
             <a href={`/blog/article/${next.slug}`}>
-                <b>NEXT</b>
+                <b>NEXT &rarr;</b>
                 <br/>
                 {next.data.title}
             </a>
@@ -36,14 +37,16 @@
 </div>
 
 <style lang="scss">
+    @use "../styles/util.scss";
+
     .navigator {
         display: flex;
         width: 100%;
         max-width: 800px;
         justify-content: center;
         align-items: stretch;
-        border: solid var(--emphasis-color);
-        border-width: 2px 8px 8px 2px;
+        border: 2px solid var(--border-color, var(--emphasis-color));
+        box-shadow: util.extrude(8, var(--border-color, var(--emphasis-color)));
         background-color: var(--base-color);
         margin: 0 auto;
         margin-bottom: 2rem;
@@ -58,7 +61,7 @@
             }
             a {
                 width: 100%;
-                color: var(--emphasis-color);
+                color: var(--border-color, var(--emphasis-color));
                 text-decoration: none;
             }
         }
@@ -67,13 +70,13 @@
             flex-direction: row;
             align-items: center;
             justify-content: center;
-            border: solid var(--emphasis-color);
+            border: solid var(--border-color, var(--emphasis-color));
             border-width: 0 4px 0 4px;
             text-align: center;
             font-weight: bold;
             background: var(--nav-color-dark);
             a {
-                color: var(--article-color);
+                color: var(--border-color, var(--article-color));
             }
         }
     }

@@ -1,0 +1,15 @@
+---
+import { categories } from "@lib/settings";
+---
+
+<ul class="category-list">
+    {Object.entries(categories).map(([id, category]) => {
+        return (
+            <li style={`--category-base-color: ${category.baseColor}; --category-emphasis-color: ${category.emphasisColor}`}>
+                <a href={`/category/${id}/1`}>
+                    {category.title.toUpperCase()}
+                </a>
+            </li>
+        )
+    })}
+</ul>

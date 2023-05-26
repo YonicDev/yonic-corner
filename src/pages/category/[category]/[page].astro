@@ -1,0 +1,198 @@
+---
+import Layout from "@lib/layouts/Layout.astro";
+import type { GetStaticPaths, Page } from "astro";
+import { CategoryId, categories, BLOG_PAGE_SIZE } from "@lib/settings";
+import { CollectionEntry, getCollection } from "astro:content";
+import PostListing from "@lib/layouts/PostListing.astro";
+
+export const getStaticPaths: GetStaticPaths = async ({paginate}) => {
+    const ids = Object.keys(categories) as CategoryId[];
+    const allPosts = await getCollection('blog');
+    return ids.map((catId) => {
+        const category = categories[catId];
+        const posts = allPosts
+            .filter(post => post.data.category === catId)
+            .sort((a, b) => {
+                const aPub = a.data.pubDate.getTime();
+                const bPub = b.data.pubDate.getTime();
+                const aEdt = a.data.updatedDate?.getTime() ?? 0;
+                const bEdt = b.data.updatedDate?.getTime() ?? 0;
+                return Math.max(bEdt, bPub) - Math.max(aPub, aEdt);
+            });
+        return paginate(posts, {
+            pageSize: BLOG_PAGE_SIZE, 
+            params: { category: catId }, 
+            props: { category }
+        });
+    });
+}
+
+interface Props {
+    category: Category,
+    posts: CollectionEntry<'blog'>[],
+    page: Page
+}
+
+const { category, page } = Astro.props;
+const posts = page.data;
+const { category: categoryId } = Astro.params;
+
+const rainbowColors = ["#078D70","#26CEAA","#98E8C1","white","#7BADE2","#5049CC","#3D1A78"]
+const bowrainColors = [...rainbowColors].reverse();
+---
+
+<Layout title={`${category.title} posts`}>
+    <main>
+        <div class="heroContainer">
+            <div class="data">
+                <h1>{category.title}</h1>
+                <p>{category.description ? category.description : "Dolor sit amet"}</p>
+            </div>
+            <div class="hero" style={`background-color: ${category.baseColor}; background-image: url(/img/icons/category-${categoryId}.svg), url(/img/pattern3.svg)`}/>
+        </div>
+        <div class="rainbowAnchor">
+            <div class="listing">
+                <PostListing baseUrl={`/category/${categoryId ?? "misc"}`} {posts} lastPage={page.lastPage} />
+            </div>
+            <div class="rainbow">
+                <div class="rainbow-side">
+                    {rainbowColors.map((strip) => (
+                        <div class="strip" style={`background: ${strip}`}/>
+                    ))}
+                </div>
+                <div class="rainbow-end">
+                    <div class="rainbow-corner">
+                        {rainbowColors.map((strip, i) => (
+                            <div class="rainbow-round" style={`background: ${strip}; --radius: calc(64px - ${i} * (64px / 7))`}/>
+                        ))}
+                    </div>
+                    <div class="rainbow-horizontal">
+                        {bowrainColors.map((strip) => (
+                            <div class="strip" style={`background: ${strip}`}/>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>
+
+<style is:inline>
+    .nav {
+        margin-top: 100px!important;
+    }
+</style>
+
+<style lang="scss">
+    @use "../../../styles/util.scss";
+
+    .heroContainer {
+        display: flex;
+        position: relative;
+        width: calc(100% - 3rem);
+        max-width: 1600px;
+        margin: 1rem auto;
+        border: 4px solid var(--emphasis-color);
+        background-color: var(--article-color);
+        box-shadow: util.extrude(12);
+        z-index: 2;
+        div {
+            padding: 0.5rem 1rem;
+            width: 50%;
+        }
+        .data {
+            h1 {
+                display: inline-block;
+                word-break: break-word;
+                font-size: 38pt;
+            }
+            p {
+                font-size: 14pt;
+                min-height: 5em;
+            }
+        }
+        .hero {
+            padding: 20px;
+            background-size: contain, 16px;
+            background-repeat: no-repeat, repeat;
+            background-position: center, top left;
+            background-origin: content-box, border-box;
+        }
+    }
+    .rainbowAnchor {
+        position: relative;
+        overflow: hidden;
+        top: -5px;
+        .listing {
+            position: relative;
+            width: 80%;
+            max-width: 1000px;
+            margin: 0 auto;
+            z-index: 1;
+        }
+    }
+    .rainbow {
+        position: absolute;
+        left: calc(50% - 24px);
+        top: -4rem;
+        width: calc(100% + 64px);
+        height: calc(100% - 16px);
+        overflow-x: hidden;
+        pointer-events: none;
+        .rainbow-side {
+            display: flex;
+            width: 64px;
+            height: calc(100% - 64px);
+        }
+        .strip {
+            width: 100%;
+            height: 100%;
+        }
+        .rainbow-end {
+            position: absolute;
+            bottom: 0;
+            height: 64px;
+            width: 120vw;
+            display: flex;
+            align-items: flex-start;
+        }
+        .rainbow-corner {
+            display: inline-block;
+            position: relative;
+            width: 64px;
+            height: 64px;
+        }
+        .rainbow-round {
+            position: absolute;
+            right: 0;
+            width: var(--radius, 64px);
+            height: var(--radius, 64px);
+            border-bottom-left-radius: 100%;
+        }
+        .rainbow-horizontal {
+            width: 100vw;
+            height: 64px;
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    @media screen and (max-width: 750px) {
+        .heroContainer {
+            flex-direction: column-reverse;
+            height: 500px;
+            h1 {
+                margin: 0.25rem 0;
+            }
+            div {
+                width: auto;
+            }
+            .data > p {
+                min-height: 0;
+            }
+            .hero {
+                flex-grow: 1;
+            }
+        }
+    }
+</style>
