@@ -1,0 +1,24 @@
+---
+interface Props {
+    tag: string;
+    total?: number;
+}
+
+const { tag, total } = Astro.props;
+---
+
+<a class={tag} href={`/tags/${tag}/1`}><span>{tag}</span>{total && <span>{total}</span>}</a>
+
+<style lang="scss">
+    a {
+        display: inline-flex;
+        gap: 1rem;
+        background-color: var(--base-color);
+        padding: 4px 1em;
+        margin: 2px 4px;
+        border-radius: 999px;
+        font-size: 16px;
+        text-decoration: none;
+        color: var(--emphasis-color);
+    }
+</style>

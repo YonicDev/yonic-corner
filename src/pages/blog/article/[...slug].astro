@@ -83,7 +83,7 @@ const hero = await getHeroImage();
                 <img alt="Tags" title="Tags" class="icon" src="/img/icons/tag.svg" height="24" width="24" />
                 {tags.map(tag => {
                     return (
-                        <a class:list={["tag", tag]} href={`/tags/${tag}`}>{tag}</a>
+                        <a class:list={["tag", tag]} href={`/tags/${tag}/1`}>{tag}</a>
                     );
                 })}
             </p>

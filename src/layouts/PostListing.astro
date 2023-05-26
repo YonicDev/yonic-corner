@@ -4,6 +4,8 @@ import type { CollectionEntry } from 'astro:content';
 
 import { categories } from "@lib/settings";
 
+import Tag from "@lib/components/Tag.astro";
+
 interface Props {
     posts: CollectionEntry<"blog">[],
     currentPage?: number,
@@ -64,7 +66,7 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
                     <img class="icon" alt="Tags" title="Tags" src="/img/icons/tag.svg" width={22} height={22}/>
                     {
                         post.data.tags.length > 0 ? post.data.tags.map(tag => (
-                            <a class="tag" href={`/tags/${tag}`}>{tag}</span>
+                            <Tag {tag} />
                         )) : <span>None</span>
                     }
                 </div>
@@ -202,14 +204,10 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
                     display: flex;
                     flex-wrap: wrap;
                     align-items: center;
-                    gap: 0.5rem;
                     color: var(--emphasis-color);
-                }
-                .tag {
-                    background-color: var(--base-color);
-                    border-radius: 16px;
-                    text-align: center;
-                    padding: 4px 0.5em;
+                    img {
+                        margin-right: 0.25rem;
+                    }
                 }
             }
             .category {
