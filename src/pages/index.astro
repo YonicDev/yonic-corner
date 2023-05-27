@@ -8,50 +8,50 @@ const blurb = "Welcome to your just around the corner blog."
 
 <Layout title={`Welcome to ${websiteText}`}>
 	<main>
-		<ProfileIcon />
-		<h1>Welcome to &nbsp;
-			<div class="bungee-container">
-				{websiteText.split("").map((char, i) => {
-					if(char === " ")
-						return <span class="bungee" style={`--i: ${i}`} translate="no">&nbsp;</span>
-					return <span class="bungee" style={`--i: ${i}`} translate="no">{char}</span>
-				})}
-				<div class="bungee-shadow">
+		<div>
+			<ProfileIcon />
+			<h1>Welcome to &nbsp;
+				<div class="bungee-container">
 					{websiteText.split("").map((char, i) => {
 						if(char === " ")
-							return <span style={`--i: ${i}`} translate="no">&nbsp;</span>
-						return <span style={`--i: ${i}`} translate="no">{char}</span>
+							return <span class="bungee" style={`--i: ${i}`} translate="no">&nbsp;</span>
+						return <span class="bungee" style={`--i: ${i}`} translate="no">{char}</span>
 					})}
+					<div class="bungee-shadow">
+						{websiteText.split("").map((char, i) => {
+							if(char === " ")
+								return <span style={`--i: ${i}`} translate="no">&nbsp;</span>
+							return <span style={`--i: ${i}`} translate="no">{char}</span>
+						})}
+					</div>
 				</div>
+			</h1>
+			<div class="raised" style="max-width: 600px; width:75vw;">
+				<p>{blurb}</p>
+				<p>
+					To start, you can explore all the blog's <b><a href="/blog">Posts</a></b>.<br/>
+					You can also exploring all <b><a href="/series">Series</a></b> in this blog,
+					or you can earch them by topics with <b><a href="/tags">Tags</a></b>.
+				</p>
 			</div>
-		</h1>
-		<div class="raised" style="max-width: 600px; width:75vw;">
-			<p>{blurb}</p>
-			<p>
-				To start, you can explore all the blog's <b><a href="/blog">Posts</a></b>.<br/>
-				You can also exploring all <b><a href="/series">Series</a></b> in this blog,
-				or you can earch them by topics with <b><a href="/tags">Tags</a></b>.
-			</p>
+			<noscript>
+				<div class="raised info">
+					This blog works without JavaScript! Enjoy browsing without bloat!
+				</div>
+			</noscript>
 		</div>
-		<noscript>
-			<div class="raised info">
-				This blog works without JavaScript! Enjoy browsing without bloat!
-			</div>
-		</noscript>
 	</main>
 </Layout>
 
 <style lang="scss">
 	main {
 		display: flex;
-		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		gap: 1rem;
 		text-align: center;
-		height: calc(100vh - 110px);
+		min-height: calc(100vh - 110px);
 		padding: 1.5rem;
-		overflow-y: auto;
 		h1 {
 			font-size: 3rem;
 			font-weight: 800;
