@@ -6,6 +6,7 @@ import { categories } from '@lib/settings';
 import Layout from '@lib/layouts/Layout.astro';
 import QuickLinks from '@lib/components/QuickLinks.astro';
 import Tag from '@lib/components/Tag.astro';
+import HTMLMusicPlayer from '@lib/components/HTMLMusicPlayer.svelte';
 
 export async function getStaticPaths() {
 	const posts = (await getCollection('blog')).filter(post => {
@@ -88,6 +89,7 @@ const hero = await getHeroImage();
             <hr/>
             <Content />
         </article>
+        <HTMLMusicPlayer client:idle />
         <div class="rainbow">
             <div class="rainbow-side">
                 {rainbowColors.map((strip) => (
