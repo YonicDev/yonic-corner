@@ -1,6 +1,68 @@
+<script lang="ts">
+    import Toggle from "svelte-toggle";
+    import { textVide } from "text-vide";
+
+    let biyonicEnabled = window.sessionStorage.getItem("biyonic-reading") === "on";
+
+    $: {
+        window.sessionStorage.setItem("biyonic-reading", biyonicEnabled? "on" : "off");
+        toggleBiyonic();
+    }
+
+    // Elements with HTML inside.
+    const biyonicElements = Array.from(document.getElementsByClassName("biyonic")) as HTMLElement[];
+    const biyonicHTML = biyonicElements.map(element => {
+        return {element, innerHTML: element.innerHTML}
+    });
+    
+    // String only elements.
+    const biyonicStringElements = Array.from(document.getElementsByClassName("biyonic-string")) as HTMLElement[];
+    const biyonicStrings = biyonicStringElements.map(element => {
+        return {element, innerString: element.innerHTML}
+    });
+
+
+    async function toggleBiyonic() {
+        if(biyonicEnabled) {
+            await Promise.all([
+                ...biyonicStrings.map(({element, innerString}) => {
+                    return new Promise<void>((resolve) => {
+                        element.innerHTML = textVide(innerString, { ignoreHtmlTag: false });
+                        resolve();
+                    })
+                }),
+                ...biyonicHTML.map(({element, innerHTML}) => {
+                    return new Promise<void>((resolve) => {
+                        element.innerHTML = textVide(innerHTML, { ignoreHtmlTag: true });
+                        resolve();
+                    })
+                }),
+            ]);
+        } else {
+            await Promise.all([
+                ...biyonicStrings.map(({element, innerString}) => {
+                    return new Promise<void>((resolve) => {
+                        element.innerHTML = innerString;
+                        resolve();
+                    })
+                }),
+                ...biyonicHTML.map(({element, innerHTML}) => {
+                    return new Promise<void>((resolve) => {
+                        element.innerHTML = innerHTML;
+                        resolve();
+                    })
+                }),
+            ]);
+        }
+    }
+</script>
+
 <div id="settings-panel">
     <div class="settings-inner">
-        <p>There are no settings to configure yet.</p>
+        <div>
+            <label for="biyonicToggle">{@html textVide("Biyonic reading", {ignoreHtmlTag: true})} <a href="/blog/article/biyonic-reading" target="_blank" rel="noreferrer">(?)</a></label>
+            <Toggle id="biyonicToggle" style="cursor: url('/img/cursors/pointer.png'), pointer;" toggledColor="var(--nav-color-dark)" bind:toggled={biyonicEnabled} hideLabel on="On" off="Off"/>
+        </div>
     </div>
     <div class="settings-tab"><img alt="Music" src="/img/icons/settings.svg" width="28"/></div>
 </div>
@@ -14,8 +76,7 @@
         position: fixed;
         z-index: 555;
         display: none;
-        width: 20%;
-        min-width: 370px;
+        width: 250px;
         height: 69px;
         bottom: 64px;
         left: 0;
@@ -41,6 +102,10 @@
 
         &:hover {
             transform: translateX(-8px);
+        }
+        label {
+            font-size: 16px;
+            cursor: url("/img/cursors/text.png"), text;
         }
     }
 </style>
