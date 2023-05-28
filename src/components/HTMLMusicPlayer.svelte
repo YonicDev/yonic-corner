@@ -6,7 +6,7 @@
     let player: HTMLIFrameElement;
 
     function onPlayMusic() {
-        const src = player.contentWindow?.location.href ?? "";
+        const src = player.contentWindow?.location.href ?? "/player/null";
         if(player.contentWindow != null && /\/player\/null$/.test(src))
             return;
         nowPlaying = true;
