@@ -1,5 +1,6 @@
 ---
 import Marquee from '@lib/components/Marquee.svelte';
+import Settings from '@lib/components/Settings.svelte';
 import '../styles/global.scss';
 
 export interface Props {
@@ -45,6 +46,7 @@ const { title } = Astro.props;
 			</div>
 		</nav>
 		<slot />
+		<Settings />
 	</body>
 </html>
 <style lang="scss">
