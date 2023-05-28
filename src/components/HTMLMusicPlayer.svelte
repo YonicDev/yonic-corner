@@ -6,8 +6,8 @@
     let player: HTMLIFrameElement;
 
     function onPlayMusic() {
-        const src = player.contentWindow?.location.href ?? "/player/null";
-        if(player.contentWindow != null && /\/player\/null$/.test(src))
+        const src = player.contentWindow?.location.href ?? "/player/null/";
+        if(player.contentWindow != null && /\/player\/null\/?$/.test(src))
             return;
         nowPlaying = true;
         playerTimeout = setTimeout(() => {
@@ -17,7 +17,7 @@
     }
 </script>
 
-<div  id="player" class:hasMusic class:nowPlaying>
+<div id="player" class:hasMusic class:nowPlaying>
     <iframe bind:this={player} name="music-player" title="Music player" scrolling="no" on:load={onPlayMusic} src="/player/null"></iframe>
     <div class="music-tab"><img alt="Music" src="/img/icons/music.svg" width="28"/></div>
 </div>
