@@ -19,7 +19,7 @@
             <a href={`/blog/article/${prev.slug}`}>
                 <b>&larr; PREV</b>
                 <br/>
-                {prev.data.title}
+                {prev.data.title}{prev.data.draft && <sup>[draft]</sup>}
             </a>
         }
     </div>
@@ -30,7 +30,7 @@
             <a href={`/blog/article/${next.slug}`}>
                 <b>NEXT &rarr;</b>
                 <br/>
-                {next.data.title}
+                {next.data.title}{next.data.draft && <sup>[draft]</sup>}
             </a>
         }
     </div>

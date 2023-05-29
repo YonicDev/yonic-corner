@@ -5,7 +5,7 @@ import Layout from "@lib/layouts/Layout.astro";
 import Tag from "@lib/components/Tag.astro";
 
 const posts = (await getCollection("blog"))
-    .filter(post => !post.data.draft);
+    .filter(post => import.meta.env.DEV || !post.data.draft);
 
 const allTags = posts.flatMap(post => post.data.tags);
 const tags = [...new Set(allTags)].sort((a, b) => a.localeCompare(b));

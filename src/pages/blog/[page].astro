@@ -10,7 +10,7 @@ import CategoryButtons from "@lib/components/CategoryButtons.astro";
 
 export async function getStaticPaths({paginate}: {paginate: any}) {
     const posts = (await getCollection('blog'))
-        .filter(post => !post.data.draft && post.data.pubDate < new Date())
+        .filter(post => import.meta.env.DEV || !post.data.draft)
         .sort((a, b) => {
             const aPub = a.data.pubDate.getTime();
             const bPub = b.data.pubDate.getTime();
