@@ -189,4 +189,8 @@ article {
     li {
         cursor: url("/img/cursors/text.png") 8 8, text;
     }
+    ol li::marker {
+        font-weight: bold;
+        color: var(--emphasis-color);
+    }
 }
