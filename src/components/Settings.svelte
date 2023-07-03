@@ -33,7 +33,14 @@
                 }),
                 ...biyonicHTML.map(({element, innerHTML}) => {
                     return new Promise<void>((resolve) => {
+                        let nonBiyonicElements = Array.from(element.getElementsByClassName("no-biyonic")) as HTMLElement[];
+                        const nonBiyonicOriginalHtml = nonBiyonicElements.map((ignoredElement) => ignoredElement.innerHTML.slice());
                         element.innerHTML = textVide(innerHTML, { ignoreHtmlTag: true });
+                        nonBiyonicElements = Array.from(element.getElementsByClassName("no-biyonic")) as HTMLElement[];
+                        for (let i in nonBiyonicElements) {
+                            const ignoredElement = nonBiyonicElements[i];
+                            ignoredElement.innerHTML = nonBiyonicOriginalHtml[i];
+                        }
                         resolve();
                     })
                 }),

@@ -27,6 +27,7 @@ export default defineConfig({
         '@lib/components/PlayerLink.astro',
         '@lib/components/biyonic/Paragraph.astro',
         '@lib/components/biyonic/ListItem.astro',
+        '@lib/components/biyonic/Code.astro',
         {
           'astro:assets': ['Image']
         },
