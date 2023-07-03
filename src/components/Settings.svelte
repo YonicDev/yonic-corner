@@ -2,10 +2,10 @@
     import Toggle from "svelte-toggle";
     import { textVide } from "text-vide";
 
-    let biyonicEnabled = window.sessionStorage.getItem("biyonic-reading") === "on";
+    let biyonicEnabled = window.localStorage.getItem("biyonic-reading") === "on";
 
     $: {
-        window.sessionStorage.setItem("biyonic-reading", biyonicEnabled? "on" : "off");
+        window.localStorage.setItem("biyonic-reading", biyonicEnabled? "on" : "off");
         toggleBiyonic();
     }
 
@@ -70,12 +70,9 @@
 <style lang="scss">
     @use "../styles/util.scss";
     #settings-panel {
-        @media screen and (orientation: portrait) and (min-width: 768px), screen and (orientation: landscape) and (min-width: 1024px) {
-            display: flex;
-        }  
+        display: flex;
         position: fixed;
         z-index: 555;
-        display: none;
         width: 250px;
         height: 69px;
         bottom: 64px;
