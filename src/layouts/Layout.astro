@@ -18,8 +18,8 @@ const { title } = Astro.props;
 		<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,600;1,400;1,600&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,600;1,400;1,600&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap"></noscript>
+		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,650;1,400;1,650&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,650;1,400;1,650&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap"></noscript>
 		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 		<meta name="generator" content={Astro.generator} />
@@ -46,7 +46,7 @@ const { title } = Astro.props;
 			</div>
 		</nav>
 		<slot />
-		<Settings />
+		<Settings client:only="svelte" />
 	</body>
 </html>
 <style lang="scss">
@@ -129,6 +129,8 @@ const { title } = Astro.props;
 				background-image: linear-gradient(-45deg, transparent 49.9999%, var(--emphasis-color) 50%);
 			}
 			.border-light {
+				display: flex;
+				align-items: center;
 				background-image: url("/img/bolt.svg");
 				background-size: 8px;
 				height: 16px;
