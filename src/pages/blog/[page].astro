@@ -2,22 +2,23 @@
 import type { Page } from "astro";
 import { type CollectionEntry, getCollection } from "astro:content";
 
-import { BLOG_PAGE_SIZE } from "@lib/settings";
+import { BLOG_PAGE_SIZE, HIDE_DRAFTS_IN_DEVELOPMENT } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
 import PostListing from "@lib/layouts/PostListing.astro";
 import CategoryButtons from "@lib/components/CategoryButtons.astro";
 
 export async function getStaticPaths({paginate}: {paginate: any}) {
+    const hideDraftsInDev = true;
     const posts = (await getCollection('blog'))
-        .filter(post => import.meta.env.DEV || !post.data.draft)
-        .sort((a, b) => {
-            const aPub = a.data.pubDate.getTime();
-            const bPub = b.data.pubDate.getTime();
-            const aEdt = a.data.updatedDate?.getTime() ?? 0;
-            const bEdt = b.data.updatedDate?.getTime() ?? 0;
-            return Math.max(bEdt, bPub) - Math.max(aPub, aEdt);
-        })
+    .filter(post => (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft)
+    .sort((a, b) => {
+        const aPub = a.data.pubDate.getTime();
+        const bPub = b.data.pubDate.getTime();
+        const aEdt = a.data.updatedDate?.getTime() ?? 0;
+        const bEdt = b.data.updatedDate?.getTime() ?? 0;
+        return Math.max(bEdt, bPub) - Math.max(aPub, aEdt);
+    })
     return paginate(posts, { pageSize: BLOG_PAGE_SIZE});
 }
 
@@ -34,6 +35,6 @@ interface Props {
 <Layout title="Posts">
     <main>
         <CategoryButtons />
-        <PostListing {posts} currentPage={page.currentPage} lastPage={page.lastPage} baseUrl="/blog" />
+        <PostListing posts={posts.filter(post => import.meta.env.DEV || !post.data.draft)} currentPage={page.currentPage} lastPage={page.lastPage} baseUrl="/blog" />
     </main>
 </Layout>

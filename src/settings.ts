@@ -1,5 +1,6 @@
 export const BLOG_PAGE_SIZE = 5;
 export const CATEGORY_IDS = ["development", "gaming", "creations", "outside", "blog", "misc"] as const;
+export const HIDE_DRAFTS_IN_DEVELOPMENT = false;
 
 export type CategoryId = typeof CATEGORY_IDS[number];
 

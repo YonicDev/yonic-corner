@@ -1,14 +1,14 @@
 ---
 import { getCollection } from "astro:content";
 
-import { BLOG_PAGE_SIZE } from "@lib/settings";
+import { BLOG_PAGE_SIZE, HIDE_DRAFTS_IN_DEVELOPMENT } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
 import PostListing from "@lib/layouts/PostListing.astro";
 import CategoryButtons from "@lib/components/CategoryButtons.astro";
 
 const posts = (await getCollection('blog'))
-    .filter(post => import.meta.env.DEV || !post.data.draft)
+    .filter(post => (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft)
     .sort((a, b) => {
         const aPub = a.data.pubDate.getTime();
         const bPub = b.data.pubDate.getTime();
@@ -19,7 +19,7 @@ const posts = (await getCollection('blog'))
 
 
 //Math.ceil won't guarantee that last page will be Page 1.
-const lastPage = Math.floor(posts.length/BLOG_PAGE_SIZE)+1;
+const lastPage = Math.floor(posts.length/(BLOG_PAGE_SIZE+1))+1;
 
 posts.length = BLOG_PAGE_SIZE;
 
@@ -28,6 +28,6 @@ posts.length = BLOG_PAGE_SIZE;
 <Layout title="Posts">
     <main>
         <CategoryButtons />
-        <PostListing {posts} currentPage={1} lastPage={lastPage} baseUrl="/blog" />
+        <PostListing posts={posts.filter(post => (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft)} currentPage={1} lastPage={lastPage} baseUrl="/blog" />
     </main>
 </Layout>
