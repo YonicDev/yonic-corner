@@ -1,16 +1,17 @@
 ---
-const {id, title, description} = Astro.props;
+const {id, title, description, instance} = Astro.props;
 
 interface Props {
     id: string;
     title?: string;
     description?: string;
+    instance: string;
 }
 
-const INVIDIOUS_INSTANCE = "https://inv.tux.pizza";
+const INVIDIOUS_DEFAULT_INSTANCE = "https://inv.tux.pizza";
 ---
 
-<iframe title="Video player" src={`${INVIDIOUS_INSTANCE}/embed/${id}`}/>
+<iframe title="Video player" src={`${instance ?? INVIDIOUS_DEFAULT_INSTANCE}/embed/${id}`}/>
 <p class="videoCaption biyonic">
     <b>{title ?? "Untitled video"}</b>
     {description && <i>{description}</i>}

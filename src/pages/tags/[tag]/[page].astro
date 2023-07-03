@@ -8,7 +8,7 @@ import PostListing from "@lib/layouts/PostListing.astro";
 
 export const getStaticPaths: GetStaticPaths = async ({paginate}) => {
     const allPosts = (await getCollection('blog'))
-    .filter(post => !post.data.draft)
+    .filter(post => import.meta.env.DEV || !post.data.draft)
     .sort((a, b) => {
         const aPub = a.data.pubDate.getTime();
         const bPub = b.data.pubDate.getTime();

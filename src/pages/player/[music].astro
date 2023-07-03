@@ -1,0 +1,83 @@
+---
+import SongList from "@lib/song-list";
+
+export async function getStaticPaths() {
+    return Object.keys(SongList).map((song) => {
+        return {
+            params: { music: song }
+        }
+    });
+}
+
+const { music: musicId } = Astro.params;
+const {title, sources, author, album} = SongList[musicId!];
+---
+
+<html>
+    <head>
+        <meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,600;1,400;1,600&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,600;1,400;1,600&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap"></noscript>
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+		<meta name="generator" content={Astro.generator} />
+    </head>
+    <body>
+        <p>{[title, album, author].filter(data => data!=null).join(" | ")}</p>
+        <audio controls autoplay loop>
+            { sources.map(source => <source src={source.src} type={source.type} /> ) }
+        </audio>
+    </body>
+</html>
+
+<style lang="scss">
+    html, body {
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        width: 100%;
+        font-family: 'Asap', 'Helvetica Condensed', 'Arial Narrow', Verdana, sans-serif;
+        height: 100%;
+        color: #00423A;
+        position: relative;
+        cursor: url('/img/cursors/arrow.png'), default!important;
+
+        p {
+            display: inline-block;
+            width: max-content;
+            margin: 0.25rem;
+            animation: marquee 10s linear infinite;
+            word-break: keep-all;
+            overflow-wrap: normal;
+            white-space: nowrap;
+            padding-left: 100%;
+            /* show the marquee just outside the paragraph */
+            will-change: transform;
+            animation: marquee 15s linear infinite;
+        }
+        
+        audio {
+            width: 100%;
+        
+            &::-webkit-media-controls-panel {
+                height: 40px;
+                border-radius: 0;
+                background-color: #fcfcfc;
+            }
+
+            &::-webkit-media-controls-enclosure {
+                border-radius: 0;
+                background-color: transparent;
+            }
+        }
+    }
+
+    @keyframes marquee {
+        0% { transform: translate(0) }
+        100% { transform: translate(-100%) }
+    }
+</style>

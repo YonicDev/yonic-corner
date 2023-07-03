@@ -24,6 +24,7 @@ export default defineConfig({
         mdxCodeBlockAutoImport("@lib/components/CodeBlock.astro"),
         '@lib/components/TextBubble.astro',
         '@lib/components/Chara.astro',
+        '@lib/components/PlayerLink.astro',
         '@lib/components/biyonic/Paragraph.astro',
         '@lib/components/biyonic/ListItem.astro',
         {
@@ -39,6 +40,6 @@ export default defineConfig({
     assets: true,
   },
   image: {
-    service: 'astro/assets/services/sharp',
+    service: { entrypoint: 'astro/assets/services/sharp' },
   }
 });

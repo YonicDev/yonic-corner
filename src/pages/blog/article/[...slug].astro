@@ -6,10 +6,11 @@ import { categories } from '@lib/settings';
 import Layout from '@lib/layouts/Layout.astro';
 import QuickLinks from '@lib/components/QuickLinks.astro';
 import Tag from '@lib/components/Tag.astro';
+import HTMLMusicPlayer from '@lib/components/HTMLMusicPlayer.svelte';
 
 export async function getStaticPaths() {
 	const posts = (await getCollection('blog')).filter(post => {
-        return !post.data.draft && post.data.pubDate < new Date();
+        return import.meta.env.DEV || !post.data.draft;
     }).sort((a, b) => {
         const aPub = a.data.pubDate.getTime();
         const bPub = b.data.pubDate.getTime();
@@ -69,7 +70,7 @@ const hero = await getHeroImage();
     <main>
         <article>
             {hero && <Image class:list={["cover", post.data.heroPosition]} alt="Cover image" src={hero} width={768} height={432} />}
-            <h1>{post.data.title}</h1>
+            <h1>{post.data.title}{ post.data.draft && <sup>[draft]</sup>}</h1>
             <p class="metadata dates">
                 <img alt="Published" title="Publish date" class="icon" src="/img/icons/post.svg" height="28" width="28" />
                 <span>{dateFormat.format(pubDate)}</span>
@@ -88,6 +89,7 @@ const hero = await getHeroImage();
             <hr/>
             <Content />
         </article>
+        <HTMLMusicPlayer client:idle />
         <div class="rainbow">
             <div class="rainbow-side">
                 {rainbowColors.map((strip) => (
@@ -133,6 +135,10 @@ const hero = await getHeroImage();
         hr {
             border: none;
             border-bottom: 3px solid var(--emphasis-color);
+        }
+
+        sup {
+            font-size: 16px;
         }
 
         .cover {
