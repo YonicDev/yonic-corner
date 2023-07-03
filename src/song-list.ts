@@ -30,6 +30,17 @@ const SongList: Record<string, Music> = {
                 type: "audio/mpeg",
             }
         ]
+    },
+    "paper-mario-ttyd_chara": {
+        title: "Teaching new stuff!",
+        album: "Paper Mario: The Thousand-Year Door",
+        cover: "ttyd",
+        sources: [
+            {
+                src: "https://fi.zophar.net/soundfiles/nintendo-gamecube-gcn/paper-mario-the-thousand-year-door/evt_lec1_32k.mp3",
+                type: "audio/mpeg"
+            }
+        ]
     }
 }
 
