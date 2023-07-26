@@ -9,7 +9,7 @@
 }
 
 html, body {
-    font-family: 'Asap', 'Helvetica Condensed', 'Arial Narrow', Verdana, sans-serif;
+    font-family: 'Asap', Helvetica, Arial, Verdana, sans-serif;
     background-color: var(--base-color);
     background-image: url("/img/pattern.svg");
     background-size: 24px;
@@ -19,7 +19,7 @@ html, body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Blinker', Helvetica, Arial, Verdana, sans-serif;
+    font-family: 'Blinker', 'Helvetica Condensed', 'Arial Narrow', Verdana, sans-serif;
     color: var(--emphasis-color);
 }
 

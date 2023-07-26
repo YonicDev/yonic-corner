@@ -26,7 +26,7 @@ const blurb = "Welcome to your just around the corner blog."
 					</div>
 				</div>
 			</h1>
-			<div class="raised biyonic" style="max-width: 600px; width:75vw;">
+			<div class="raised biyonic">
 				<p>{blurb}</p>
 				<p>
 					To start, you can explore all the blog's <b><a href="/blog">Posts</a></b>.<br/>
@@ -44,6 +44,8 @@ const blurb = "Welcome to your just around the corner blog."
 </Layout>
 
 <style lang="scss">
+	@use "../styles/util.scss";
+
 	main {
 		display: flex;
 		align-items: center;
@@ -91,9 +93,10 @@ const blurb = "Welcome to your just around the corner blog."
 	}
 	.raised {
 		background-color: var(--article-color);
-		border: solid var(--emphasis-color);
-		border-width: 2px 8px 8px 2px;
+		border: 2px solid var(--emphasis-color);
+		box-shadow: util.extrude(4);
 		padding: 1rem;
+		margin: 0.5rem;
 		text-align: justify;
 		p:first-of-type {
 			margin-top: 0;
@@ -130,6 +133,12 @@ const blurb = "Welcome to your just around the corner blog."
 		50% {
 			opacity: 0.5;
 			filter: blur(3px);
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		main h1 {
+			font-size: 2rem;
 		}
 	}
 </style>

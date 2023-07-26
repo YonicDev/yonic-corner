@@ -14,7 +14,7 @@ const { title } = Astro.props;
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,13 +28,22 @@ const { title } = Astro.props;
 	<body>
 		<nav>
 			<ul class="links">
-				<li><a href="/" class="logo"><img height=64 width=361 alt="The Yonic Corner" src="/img/desktop-logo.svg"></a></li>
+				<li><a href="/" class="desktop-logo"><img height=64 width=361 alt="The Yonic Corner" src="/img/desktop-logo.svg"></a></li>
+				<li><a href="/" class="mobile-logo">The Yonic Corner</a></li>
 				<li>
 					<ul class="navigation">
 						<li><a href="/blog"><span>Blog</span></a></li>
 						<li><a href="/tags"><span>Tags</span></a></li>
 						<li><a href="/about"><span>About</span></a></li>
 					</ul>
+					<input id="mobile-toggler" type="checkbox" aria-label="Open menu">
+					<div class="mobile-ui">
+						<ul class="navigation">
+							<li><a href="/blog"><span>Blog</span></a></li>
+							<li><a href="/tags"><span>Tags</span></a></li>
+							<li><a href="/about"><span>About</span></a></li>
+						</ul>
+					</div>
 				</li>
 			</ul>
 			<div class="borders">
@@ -50,6 +59,8 @@ const { title } = Astro.props;
 	</body>
 </html>
 <style lang="scss">
+	@use "../styles/util.scss";
+
 	nav {
 		display: flex;
 		flex-direction: column;
@@ -61,8 +72,21 @@ const { title } = Astro.props;
 			justify-content: space-between;
 			align-items: flex-end;
 			margin: 0;
-			.logo > img {
+			.desktop-logo > img {
 				vertical-align: bottom;
+			}
+			.mobile-logo {
+				display: none;
+				position: absolute;
+				top: 0;
+				left: 50%;
+				transform: translate(calc(-8px + -50%), -4px);
+				text-shadow: util.extrude(8, var(--emphasis-color));
+				font-family: Bungee, "Arial Black", Arial, Helvetica, sans-serif;
+				font-size: 24pt;
+				color: var(--base-color);
+				transition: none;
+				white-space: nowrap;
 			}
 			> li {
 				display: block;
@@ -95,6 +119,67 @@ const { title } = Astro.props;
 						span {
 							filter: drop-shadow(2px 2px 0px black);
 						}
+					}
+				}
+			}
+			input#mobile-toggler {
+				appearance: none;
+				display: none;
+				position: relative;
+				z-index: 1000;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: var(--article-color);
+				background-image: url('/img/hamburger.svg');
+				background-size: 18px;
+				background-repeat: no-repeat;
+				background-position: center;
+				cursor: url('/img/cursors/pointer.png'), pointer;
+				border: 2px solid var(--emphasis-color);
+				box-shadow: util.extrude(4, var(--emphasis-color));
+				transform: translate(0, 0);
+				transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+				&:hover {
+					box-shadow: util.extrude(6, var(--emphasis-color));
+					transform: translate(-2px, -2px);
+				}
+				&:active {
+					transform: translate(4px, 4px);
+					box-shadow: none;
+				}
+				&:checked {
+					background-color: var(--nav-color-dark);
+					background-image: url('/img/hamburger-light.svg');
+				}
+			}
+			.mobile-ui {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				background-color: var(--base-color);
+				z-index: 999;
+				.navigation {
+					display: flex;
+					flex-direction: column;
+					justify-content: space-evenly;
+					align-items: stretch;
+					position: absolute;
+					top: 4rem;
+					bottom: 0;
+					width: 100%;
+					a {
+						display: flex;
+						border: 2px solid var(--nav-color-dark);
+						border-radius: 0px;
+						font-size: 24pt;
+						height: auto;
+						transition: none;
+						top: 0;
+						padding: 0 0.75em;
+						box-shadow: util.extrude(4, var(--nav-color-dark));
 					}
 				}
 			}
@@ -137,6 +222,45 @@ const { title } = Astro.props;
 				margin: 12px;
 				flex-grow: 1;
 			}
+		}
+	}
+
+	@media screen and (max-width: 750px) {
+		nav {
+			.links {
+				background-color: var(--nav-color-dark);
+				.navigation {
+					display: none;
+				}
+				input#mobile-toggler {
+					display: block;
+				}
+				.desktop-logo {
+					display: none;
+				}
+				.mobile-logo {
+					display: block;
+				}
+			}
+		}
+
+		input#mobile-toggler:checked {
+			position: fixed!important;
+			top: 1rem;
+			right: 1rem;
+
+			+ .mobile-ui {
+				display: flex;
+			}
+		}
+
+	}
+
+	@media screen and (max-width: 578px) {
+		nav .links .mobile-logo {
+			font-size: 16pt;
+			text-shadow: util.extrude(4);
+			transform: translate(calc(-8px + -50%), calc(25% - 4px));
 		}
 	}
 </style>

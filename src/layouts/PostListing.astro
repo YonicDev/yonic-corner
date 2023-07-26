@@ -80,7 +80,7 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
 <ul class="nav">
     { 
         currentPage > 1 && (
-            <li><a href={`${baseUrl}/1`}>&lt;&lt; First</a></li>
+            <li><a href={`${baseUrl}/1`}>&lt;&lt; <span class="label">First</span></a></li>
         )
     }
     <li><ul class="adjacent">
@@ -100,29 +100,13 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
     </ul></li>
     { 
         currentPage < lastPage && (
-            <li><a href={`${baseUrl}/${lastPage}`}>&gt;&gt; Last</a></li>
+            <li><a href={`${baseUrl}/${lastPage}`}>&gt;&gt; <span class="label">Last</span></a></li>
         )
     }
 </ul>
 
 <style lang="scss">
-    @function extrude($length, $base-color: var(--emphasis-color)) {
-        $shadow: "";
-        /* Iteramos con un ciclo del 1 al 4, cada iteración del siglo $i (una variable) va cambiando su valor */
-        @for $i from 1 through $length {
-
-            /* La posición de la sombra la cambiamos con la variable $i que primero vale 1, luego 2 y así hasta el 4 */
-            $shadow: $shadow + "#{$i}px #{$i}px 0px " + $base-color + ",";
-
-            /*  La función darken, nos permite oscurecer un color, el primer parámetro es el color y el segundo parámetro un valor del 1-100 de cuánto oscurecerá */
-
-        }
-
-        /*  Nuestro ciclo nos devuelve una cadena con una coma demás, con la línea de abajo removemos el último caracter para quitar dicha coma */
-
-        $shadow : str-slice($shadow,0,str-length($shadow)-1);
-        @return unquote($shadow);
-    }
+    @use '../styles/util.scss';
 
     .listing {
         padding: 0;
@@ -139,7 +123,7 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
             gap: 1rem;
             border: 2px solid var(--emphasis-color);
             background-color: var(--article-color);
-            box-shadow: extrude(8);
+            box-shadow: util.extrude(8);
             position: relative;
             .hero, .data {
                 width: 50%;
@@ -222,7 +206,6 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
     .nav {
         display: flex;
         width: 100%;
-        min-width: 400px;
         margin: 1.5rem auto;
         justify-content: center;
         gap: 10px;
@@ -238,7 +221,7 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
                 background: var(--nav-color-dark);
                 color: var(--emphasis-color);
                 font-weight: bold;
-                box-shadow: extrude(4);
+                box-shadow: util.extrude(4);
             }
 
         }
@@ -254,8 +237,29 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
                 background: var(--article-color);
                 font-weight: bold;
                 color: var(--nav-color-dark);
-                box-shadow: extrude(4, var(--nav-color-dark));
+                box-shadow: util.extrude(4, var(--nav-color-dark));
             }
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .listing {
+            .article {
+                flex-direction: column;
+                gap: 0;
+            }
+            .hero {
+                flex-grow: 1;
+                width: auto!important;
+                aspect-ratio: 16 / 9;
+            }
+            .data {
+                width: auto!important;
+                padding: 1rem!important;
+            }
+        }
+        .nav a .label {
+            display: none;
         }
     }
 </style>
