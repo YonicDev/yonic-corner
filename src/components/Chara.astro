@@ -11,17 +11,50 @@ export interface Props {
 const { name, set = "default", sprite, thoughts, height = 200, position = "right" } = Astro.props;
 
 ---
-
-<picture aria-hidden={true} class="chara" title={thoughts} style={{float: position}}>
-    <source srcset={`/chara/${name}/${set}/${sprite}.svg`} type="image/svg+xml" />
-    <img src={`/chara/${name}/${set}/${sprite}.png`} alt={name} {height} style={`float: ${position}`}/>
-</picture>
+<div class="chara-wrapper">
+    <img src={`/chara/${name}/${set}/${sprite}.png`} alt={name} {height} style={`float: ${position}`} class="chara-shadow"/>
+    <picture aria-hidden={true} class="chara" title={thoughts} style={{float: position}}>
+        <source srcset={`/chara/${name}/${set}/${sprite}.svg`} type="image/svg+xml" />
+        <source srcset={`/chara/${name}/${set}/${sprite}.svg`} type="image/svg" />
+        <img src={`/chara/${name}/${set}/${sprite}.png`} alt={name} {height} style={`float: ${position}`} class="chara-legacy"/>
+    </picture>
+</div>
 <br style="clear: both; user-select: none"/>
 
 <style is:global>
+    .chara-wrapper {
+        position: relative;
+        z-index: 0;
+    }
     .chara {
         filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.25));
-        margin: 1rem;
         cursor: url('/img/cursors/think.png') 0 32, help;
+        z-index: 1;
+    }
+    /* IE 5.5 - 8 */
+    .chara-legacy {
+        filter: "dropShadow(color=#367F78,offX=4,offY=4)";
+        filter: "progid:DXImageTransform.Microsoft.dropShadow(color=#367F78,offX=4,offY=4)";
+        z-index: 1;
+    }
+    .chara-shadow {
+        display: none;
+    }
+    /* IE 9-10 */
+    @media screen and (min-width:0\0) {
+        .chara-shadow {
+            display: block;
+            position: absolute;
+            right: 0;
+            margin-top: 4px;
+            margin-right: -4px;
+            filter: grayscale(100);
+            filter: brightness(0) grayscale(100);
+            opacity: 0.25;
+            z-index: -1;
+        }
+        .chara-legacy {
+            filter: none;
+        }
     }
 </style>
