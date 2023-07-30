@@ -4,6 +4,7 @@
     import { categories } from "@lib/settings";
 
     import Tag from "@lib/components/Tag.svelte";
+    import PostIcon from "@lib/components/PostIcon.svelte";
 
     export let posts: CollectionEntry<"blog">[];
     export let currentPage = 1;
@@ -31,12 +32,12 @@
                     <h1>{post.data.title}{#if post.data.draft} <sup>[draft]</sup>{/if}</h1>
                     <span class="metadata">
                         <span class="dataGroup">
-                            <img class="icon" alt="Published" title="Published on" src="/img/icons/post.svg" width={24} height={24} />
+                            <PostIcon title="Published on" icon="post" height={24} width={24} />
                             <span>{dateFormat.format(post.data.pubDate)}</span>
                         </span>
                         {#if post.data.updatedDate}
                             <span class="dataGroup">
-                                <img class="icon" alt="Last updated" title="Last updated on" src="/img/icons/edit.svg" width={22} height={22} />
+                                <PostIcon title="Last updated on" icon="edit" height={22} width={22} />
                                 <span>{dateFormat.format(post.data.updatedDate)}</span>
                             </span>
                         {/if}
@@ -44,7 +45,7 @@
                     <p class="description biyonic-string">{post.data.description}</p>
                     </a>
                 <div class="tags">
-                    <img class="icon" alt="Tags" title="Tags" src="/img/icons/tag.svg" width={22} height={22}/>
+                    <PostIcon title="Tags" icon="tag" height={22} width={22}/>
                     {#if post.data.tags.length > 0}
                         {#each post.data.tags as tag}
                             <Tag {tag} />
@@ -140,20 +141,13 @@
                         font-size: 40%;
                     }
                 }
-                .icon {
-                    cursor: url("/img/cursors/help.png"), help;
-                }
                 .dataGroup {
                     display: inline-block;
-                    margin: 0.25rem;
-                    > img {
-                        display: inline-block;
-                        vertical-align: middle;
-                        margin-top: -0.5rem;
-                        padding: 0 0.25rem;
-                        &:first-of-type {
-                            padding-left: 0;
-                        }
+                    > span {
+                        margin-right: 1em;
+                    }
+                    &:last-child > span {
+                        margin-right: 0;
                     }
                 }
 
