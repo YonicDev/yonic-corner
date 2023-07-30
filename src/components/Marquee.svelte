@@ -58,6 +58,8 @@
 </ul>
 
 <style lang="scss">
+    @use "../styles/vars.scss" as *;
+
     ul {
         position: absolute;
         display: flex;
@@ -67,7 +69,7 @@
         height: 100%;
         margin: 0;
         padding: 0;
-        color: var(--base-color);
+        color: #{$base-color};
         text-shadow: 0px 2px 2px rgba(26, 255, 232, 0.555);
         animation: marquee 20s linear infinite;
         user-select: none;

@@ -2,14 +2,14 @@
 import type { Page } from "astro";
 import { type CollectionEntry, getCollection } from "astro:content";
 
+import { getHeroImages } from '@lib/util';
 import { BLOG_PAGE_SIZE, HIDE_DRAFTS_IN_DEVELOPMENT } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
-import PostListing from "@lib/layouts/PostListing.astro";
+import PostListing from "@lib/layouts/PostListing.svelte";
 import CategoryButtons from "@lib/components/CategoryButtons.astro";
 
 export async function getStaticPaths({paginate}: {paginate: any}) {
-    const hideDraftsInDev = true;
     const posts = (await getCollection('blog'))
     .filter(post => (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft)
     .sort((a, b) => {
@@ -25,6 +25,7 @@ export async function getStaticPaths({paginate}: {paginate: any}) {
 const { page } = Astro.props;
 const posts = page.data;
 
+const heroImages = await getHeroImages(posts);
 
 interface Props {
     page: Page<CollectionEntry<"blog">>
@@ -35,6 +36,6 @@ interface Props {
 <Layout title="Posts">
     <main>
         <CategoryButtons />
-        <PostListing posts={posts.filter(post => import.meta.env.DEV || !post.data.draft)} currentPage={page.currentPage} lastPage={page.lastPage} baseUrl="/blog" />
+        <PostListing posts={posts.filter(post => import.meta.env.DEV || !post.data.draft)} {heroImages} currentPage={page.currentPage} lastPage={page.lastPage} baseUrl="/blog" />
     </main>
 </Layout>

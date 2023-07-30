@@ -1,112 +1,90 @@
----
-import { getImage } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
+<script lang="ts">
+    import type { CollectionEntry } from 'astro:content';
 
-import { categories } from "@lib/settings";
+    import { categories } from "@lib/settings";
 
-import Tag from "@lib/components/Tag.astro";
+    import Tag from "@lib/components/Tag.svelte";
 
-interface Props {
-    posts: CollectionEntry<"blog">[],
-    currentPage?: number,
-    lastPage: number,
-    baseUrl: string,
-}
+    export let posts: CollectionEntry<"blog">[];
+    export let currentPage = 1;
+    export let lastPage: number;
+    export let baseUrl: string;
+    export let heroImages: (string | null)[];
 
-const { posts, currentPage = 1, lastPage, baseUrl } = Astro.props;
-
-const heroImages = await Promise.all(posts.map(async (post) => {
-    // The images can be of any supported filetype, not just PNG.
-    // But the file *has* to be an article asset named hero.png,
-    // regardless of what the image type actually is.
-    try {
-        const imageMeta: ImageMetadata = (await import(`../assets/articles/${post.slug}/hero.png`)).default;
-        const processedImage = await getImage({ src: imageMeta, width: 550, height: 280, format: "webp"});
-        return Promise.resolve(processedImage.src);
-    } catch (err) {
-        return null;
-    }
-}));
-
-const dateFormat = new Intl.DateTimeFormat('en-US',
-{
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit',
-})
-
----
+    const dateFormat = new Intl.DateTimeFormat('en-US',
+    {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit',
+    })
+</script>
 
 <slot/>
 <ul class="listing">
-{ 
-    // Nested anchor elements are illegal, so instead, we make hit zones in separate layers.
-    posts.map((post, i) => (
+    <!-- Nested anchor elements are illegal, so instead, we make hit zones in separate layers. -->
+    {#each posts as post, i} 
         <li class="article">
-            <a aria-label="Article poster image" class:list={["hero", heroImages[i]==null ? "placeholder" : null]} href={`/blog/article/${post.slug}`} style={`background-image: ${heroImages[i]? `url(${heroImages[i]})` : `url(/img/icons/category-${post.data.category}.svg), url(/img/pattern3.svg); background-color: ${categories[post.data.category].baseColor}`}; background-position: center ${post.data.heroPosition ?? "center"}, top left`}/>
+            <a aria-label="Article poster image" class="hero" class:placeholder={heroImages[i]==null} href={`/blog/article/${post.slug}`} style={`background-image: ${heroImages[i]? `url(${heroImages[i]})` : `url(/img/icons/category-${post.data.category}.svg), url(/img/pattern3.svg); background-color: ${categories[post.data.category].baseColor}`}; background-position: center ${post.data.heroPosition ?? "center"}, top left`}/>
             <div class="data">
                 <a href={`/category/${post.data.category}/1`} class="category">{categories[post.data.category].title.toUpperCase()}</a>
                 <a href={`/blog/article/${post.slug}`}>
-                    <h1>{post.data.title}{post.data.draft && <sup>[draft]</sup>}</h1>
+                    <h1>{post.data.title}{#if post.data.draft} <sup>[draft]</sup>{/if}</h1>
                     <span class="metadata">
                         <span class="dataGroup">
                             <img class="icon" alt="Published" title="Published on" src="/img/icons/post.svg" width={24} height={24} />
                             <span>{dateFormat.format(post.data.pubDate)}</span>
                         </span>
-                        { post.data.updatedDate && 
+                        {#if post.data.updatedDate}
                             <span class="dataGroup">
                                 <img class="icon" alt="Last updated" title="Last updated on" src="/img/icons/edit.svg" width={22} height={22} />
                                 <span>{dateFormat.format(post.data.updatedDate)}</span>
                             </span>
-                        }
+                        {/if}
                     </span>
                     <p class="description biyonic-string">{post.data.description}</p>
                     </a>
                 <div class="tags">
                     <img class="icon" alt="Tags" title="Tags" src="/img/icons/tag.svg" width={22} height={22}/>
-                    {
-                        post.data.tags.length > 0 ? post.data.tags.map(tag => (
+                    {#if post.data.tags.length > 0}
+                        {#each post.data.tags as tag}
                             <Tag {tag} />
-                        )) : <span>None</span>
-                    }
+                        {/each}
+                    {:else}
+                        <span>None</span>
+                    {/if}
                 </div>
             </div>
         </li>
-    ))
-    
-}
+    {/each}
 </ul>
 
 <ul class="nav">
-    { 
-        currentPage > 1 && (
-            <li><a href={`${baseUrl}/1`}>&lt;&lt; <span class="label">First</span></a></li>
-        )
-    }
+    {#if currentPage > 1} 
+        <li><a href={`${baseUrl}/1`}>&lt;&lt; <span class="label">First</span></a></li>
+    {/if}
     <li><ul class="adjacent">
-        {
-            (currentPage - 2) > 0 && <li><a href={`${baseUrl}/${currentPage-2}`}>{currentPage-2}</a></li>
-        }
-        {
-            (currentPage - 1) > 0 && <li><a href={`${baseUrl}/${currentPage-1}`}>{currentPage-1}</a></li>
-        }
+        {#if (currentPage - 2) > 0}
+            <li><a href={`${baseUrl}/${currentPage-2}`}>{currentPage-2}</a></li>
+        {/if}
+        {#if (currentPage - 1) > 0} 
+            <li><a href={`${baseUrl}/${currentPage-1}`}>{currentPage-1}</a></li>
+        {/if}
         <li class="current"><a href={`${baseUrl}/${currentPage}`}>{currentPage}</a></li>
-        {
-            lastPage >= (currentPage +1) && (<li><a href={`${baseUrl}/${currentPage+1}`}>{currentPage+1}</a></li>)
-        }
-        {
-            lastPage >= (currentPage +2) && (<li><a href={`${baseUrl}/${currentPage+2}`}>{currentPage+2}</a></li>)
-        }
+        {#if lastPage >= (currentPage +1)}
+            <li><a href={`${baseUrl}/${currentPage+1}`}>{currentPage+1}</a></li>
+        {/if}
+        {#if lastPage >= (currentPage +2)}
+            <li><a href={`${baseUrl}/${currentPage+2}`}>{currentPage+2}</a></li>
+        {/if}
     </ul></li>
-    { 
-        currentPage < lastPage && (
-            <li><a href={`${baseUrl}/${lastPage}`}>&gt;&gt; <span class="label">Last</span></a></li>
-        )
-    }
+    {#if currentPage < lastPage}
+        <li><a href={`${baseUrl}/${lastPage}`}>&gt;&gt; <span class="label">Last</span></a></li>
+    {/if}
 </ul>
 
 <style lang="scss">
     @use '../styles/util.scss';
+    @use '../styles/vars.scss' as *;
 
     .listing {
         padding: 0;
@@ -121,8 +99,8 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
             display: flex;
             align-items: stretch;
             gap: 1rem;
-            border: 2px solid var(--emphasis-color);
-            background-color: var(--article-color);
+            border: 2px solid #{$emphasis-color};
+            background-color: #{$article-color};
             box-shadow: util.extrude(8);
             position: relative;
             .hero, .data {
@@ -132,7 +110,7 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
             .hero {
                 background-repeat: no-repeat;
                 background-size: cover;
-                background-color: var(--nav-color-dark);
+                background-color: #{$nav-color-dark};
             }
 
 
@@ -143,7 +121,7 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
 
             a {
                 display: block;
-                color: var(--emphasis-color);
+                color: #{$emphasis-color};
                 padding-right: 1rem;
             }
             
@@ -191,7 +169,7 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
                     display: flex;
                     flex-wrap: wrap;
                     align-items: center;
-                    color: var(--emphasis-color);
+                    color: #{$emphasis-color};
                     img {
                         margin-right: 0.25rem;
                     }
@@ -217,9 +195,9 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
                 display: flex;
                 justify-content: center;
                 padding: 10px;
-                border: 2px solid var(--emphasis-color);
-                background: var(--nav-color-dark);
-                color: var(--emphasis-color);
+                border: 2px solid #{$emphasis-color};
+                background: #{$nav-color-dark};
+                color: #{$emphasis-color};
                 font-weight: bold;
                 box-shadow: util.extrude(4);
             }
@@ -233,11 +211,11 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
                 width: 4ch;
             }
             li.current > a {
-                border: 2px solid var(--nav-color-dark);
-                background: var(--article-color);
+                border: 2px solid #{$nav-color-dark};
+                background: #{$article-color};
                 font-weight: bold;
-                color: var(--nav-color-dark);
-                box-shadow: util.extrude(4, var(--nav-color-dark));
+                color: #{$nav-color-dark};
+                box-shadow: util.extrude(4, #{$nav-color-dark});
             }
         }
     }

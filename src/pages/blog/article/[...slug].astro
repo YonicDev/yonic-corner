@@ -5,8 +5,10 @@ import { Image } from 'astro:assets';
 import { categories } from '@lib/settings';
 import Layout from '@lib/layouts/Layout.astro';
 import QuickLinks from '@lib/components/QuickLinks.astro';
-import Tag from '@lib/components/Tag.astro';
+import Tag from '@lib/components/Tag.svelte';
 import HTMLMusicPlayer from '@lib/components/HTMLMusicPlayer.svelte';
+
+import "@lib/styles/article.scss";
 
 export async function getStaticPaths() {
 	const posts = (await getCollection('blog')).filter(post => {
@@ -68,7 +70,7 @@ const hero = await getHeroImage();
 
 <Layout {...post.data}>
     <main>
-        <article>
+        <article class="blog-article">
             {hero && <Image class:list={["cover", post.data.heroPosition]} alt="Cover image" src={hero} width={768} height={432} />}
             <h1>{post.data.title}{ post.data.draft && <sup>[draft]</sup>}</h1>
             <p class="metadata dates">
@@ -121,63 +123,6 @@ const hero = await getHeroImage();
         position: relative;
         overflow: hidden;
         padding-bottom: 96px;
-    }
-    article {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 1rem 3rem;
-        background: var(--article-color);
-        border: 4px solid var(--emphasis-color);
-        box-shadow: util.extrude(8, var(--emphasis-color));
-        font-size: 18px;
-        margin-top: 1rem;
-        position: relative;
-        overflow: auto;
-
-        hr {
-            border: none;
-            border-bottom: 3px solid var(--emphasis-color);
-        }
-
-        sup {
-            font-size: 16px;
-        }
-
-        .cover {
-            object-fit: cover;
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            &.top {
-                object-position: top;
-            }
-            &.bottom {
-                object-position: bottom;
-            }
-        }
-
-        .metadata {
-            margin: 8px 0;
-            .icon {
-                vertical-align: middle;
-                cursor: url("/img/cursors/help.png"), help;
-                margin-top: -4px;
-            }
-            &.dates span {
-                margin: 2px 4px;
-                margin-right: 8px;
-            }
-            .tag {
-                display: inline-block;
-                background-color: var(--base-color);
-                padding: 4px 1em;
-                margin: 2px 4px;
-                border-radius: 999px;
-                font-size: 16px;
-                text-decoration: none;
-                color: var(--emphasis-color);
-            }
-        }
     }
     .rainbow {
         position: absolute;

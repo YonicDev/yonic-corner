@@ -1,13 +1,40 @@
+@use 'sass:list';
+
+$speech-colors: ("yonic": #0071aa #00eeff);
+
+@mixin speech {
+    @each $theme, $colors in $speech-colors {
+        $outline-color: list.nth($colors, 1);
+        $fill-color: list.nth($colors, 2);
+
+        &.#{$theme} {
+            background-color: $fill-color;
+            border-color: $outline-color;
+            .triangle {
+                .static polyline {
+                    stroke: #{$outline-color};
+                    fill: #{$fill-color};
+                }
+                .animated polygon {
+                    fill: #{$outline-color};
+                }
+            }
+        }
+    }
+}
+$fill-color: #ececec;
+$outline-color: black;
+
 .speech {
+    @include speech;
+
     display: block;
     flex-grow: 1;
-    --fill-color: #ececec;
-    --outline-color: black;
-    background-color: var(--fill-color);
+    background-color: $fill-color;
     color: black;
     position: relative;
     padding: 2rem;
-    border: 4px solid var(--outline-color);
+    border: 4px solid #{$outline-color};
     margin-bottom: 3rem;
     border-radius: 24px;
     overflow: visible;
@@ -23,9 +50,8 @@
             left: 0;
             top: 0;
             polyline {
-                // fill: #0071aa;
-                stroke: var(--outline-color);
-                fill: var(--fill-color);
+                stroke: #{$outline-color};
+                fill: #{$fill-color};
                 stroke-width: 4px;
                 stroke-linejoin: round;
             }
@@ -34,7 +60,7 @@
             position: absolute;
             z-index: 1;
             polygon {
-                fill: var(--outline-color);
+                fill: #{$outline-color};
             }
         }
     }
@@ -67,96 +93,6 @@
         left: 50%;
         transform: translateX(-50%);
     }
-
-    // &.bottom.near::before {
-    //     left: 1em;
-    //     transform: translateX(50%) translateY(-50%) rotate(-45deg);
-
-    // }
-
-    // &.bottom.center::before {
-    //     left: 50%;
-    //     transform: translateX(-50%) translateY(-50%) rotate(-45deg);
-    // }
-
-    // &.bottom.far::before {
-    //     right: 1em;
-    //     transform: translateX(-50%) translateY(-50%) rotate(-45deg);
-    // }
-
-    // &.left::before {
-    //     left: 0;
-    // }
-
-    // &.left.near::before {
-    //     top: 1.25em;
-    //     transform: translateX(-50%) translateY(-50%) rotate(-135deg);
-    // }
-
-    // &.left.center::before {
-    //     top: 50%;
-    //     transform: translateX(-50%) translateY(-50%) rotate(-135deg);
-    // }
-
-    // &.left.far::before {
-    //     bottom: 0.5em;
-    //     transform: translateX(-50%) translateY(-50%) rotate(-135deg);
-    // }
-
-    // &.right::before {
-    //     right: 0;
-    // }
-
-    // &.right.near::before {
-    //     top: 1.25em;
-    //     transform: translateX(50%) translateY(-50%) rotate(45deg);
-    // }
-
-    // &.right.center::before {
-    //     top: 50%;
-    //     transform: translateX(50%) translateY(-50%) rotate(45deg);
-    // }
-
-    // &.right.far::before {
-    //     bottom: 0.5em;
-    //     transform: translateX(50%) translateY(-50%) rotate(45deg);
-    // }
-
-    // &.top::before {
-    //     top: 0;
-    // }
-
-    // &.top.near::before {
-    //     left: 1em;
-    //     transform: translateX(50%) translateY(-50%) rotate(-45deg);
-
-    // }
-
-    // &.top.center::before {
-    //     left: 50%;
-    //     transform: translateX(-50%) translateY(-50%) rotate(-45deg);
-    // }
-
-    // &.top.far::before {
-    //     right: 1em;
-    //     transform: translateX(-50%) translateY(-50%) rotate(-45deg);
-    // }
-
-    /** Colors **/
-
-    &.yonic {
-        --outline-color: #0071aa;
-        --fill-color: #0ef;
-    }
-
-    // &.lightblueGradient {
-    //     background-image: linear-gradient(0deg, rgba(47,163,250,1) 0%, rgba(56,168,246,1) 10%, rgba(84,226,255,1) 89%);
-    //     color: #0a3a61;
-    // }
-
-    // &.lightblueGradient::before {
-    //     background-image: linear-gradient(45deg, rgba(31,109,190,1) 0%, rgba(22,137,201,1) 51%, rgba(47,163,250,1) 50%);
-    // }
 }
 
 .speech-container {

@@ -5,8 +5,7 @@
   "license": "GPL-3.0",
   "version": "0.0.1",
   "browserslist": [
-    "last 3 versions",
-    "> 5%"
+    "IE >= 5.5, Firefox >= 1, supports flexbox"
   ],
   "scripts": {
     "dev": "astro dev",

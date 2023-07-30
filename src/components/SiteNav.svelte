@@ -1,0 +1,241 @@
+<script lang="ts">
+    import Marquee from '@lib/components/Marquee.svelte';
+</script>
+
+<nav>
+    <ul class="links">
+        <li><a href="/" class="desktop-logo"><img height=64 width=361 alt="The Yonic Corner" src="/img/desktop-logo.svg"></a></li>
+        <li><a href="/" class="mobile-logo">The Yonic Corner</a></li>
+        <li>
+            <ul class="navigation">
+                <li><a href="/blog"><span>Blog</span></a></li>
+                <li><a href="/tags"><span>Tags</span></a></li>
+                <li><a href="/about"><span>About</span></a></li>
+            </ul>
+            <input id="mobile-toggler" type="checkbox" aria-label="Open menu">
+            <div class="mobile-ui">
+                <ul class="navigation">
+                    <li><a href="/blog"><span>Blog</span></a></li>
+                    <li><a href="/tags"><span>Tags</span></a></li>
+                    <li><a href="/about"><span>About</span></a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+    <div class="borders">
+        <div class="border-dark">
+            <Marquee />
+        </div>
+        <div class="border-transition" />
+        <div class="border-light" />
+    </div>
+</nav>
+
+<style lang="scss">
+	@use "../styles/util.scss";
+	@use "../styles/vars.scss" as *;
+
+
+	nav {
+		display: flex;
+		flex-direction: column;
+		background-color: #{$base-color};
+		.links {
+			display: flex;
+			padding: 1em;
+			padding-bottom: 0;
+			justify-content: space-between;
+			align-items: flex-end;
+			margin: 0;
+			.desktop-logo > img {
+				vertical-align: bottom;
+			}
+			.mobile-logo {
+				display: none;
+				position: absolute;
+				top: 0;
+				left: 50%;
+				transform: translate(calc(-8px + -50%), -4px);
+				text-shadow: util.extrude(8, #{$emphasis-color});
+				font-family: Bungee, "Arial Black", Arial, Helvetica, sans-serif;
+				font-size: 24pt;
+				color: #{$base-color};
+				transition: none;
+				white-space: nowrap;
+			}
+			> li {
+				display: block;
+			}
+			.navigation {
+				display: flex;
+				flex-direction: row;
+				gap: 12px;
+				margin: 0;
+				padding: 0;
+				font-size: 16pt;
+				font-family: Bungee, "Arial Black", Arial, Helvetica, sans-serif;
+				> li {
+					display: inline-block;
+					overflow: hidden;
+					a {
+						display: block;
+						position: relative;
+						top: 14px;
+						padding: 0 16px;
+						background-color: #{$emphasis-color};
+						border-radius: 24px 24px 0 0;
+						text-decoration: none;
+						color: #{$base-color};
+						height: 64px;
+						transition: all 0.1s ease-out;
+						&:hover {
+							top: 0;
+						}
+						span {
+							filter: drop-shadow(2px 2px 0px black);
+						}
+					}
+				}
+			}
+			input#mobile-toggler {
+				appearance: none;
+				display: none;
+				position: relative;
+				z-index: 1000;
+				width: 2.5rem;
+				height: 2.5rem;
+				background-color: #{$article-color};
+				background-image: url('/img/hamburger.svg');
+				background-size: 18px;
+				background-repeat: no-repeat;
+				background-position: center;
+				cursor: url('/img/cursors/pointer.png'), pointer;
+				border: 2px solid #{$emphasis-color};
+				box-shadow: util.extrude(4, #{$emphasis-color});
+				transform: translate(0, 0);
+				transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+				&:hover {
+					box-shadow: util.extrude(6, #{$emphasis-color});
+					transform: translate(-2px, -2px);
+				}
+				&:active {
+					transform: translate(4px, 4px);
+					box-shadow: none;
+				}
+				&:checked {
+					background-color: #{$nav-color-dark};
+					background-image: url('/img/hamburger-light.svg');
+				}
+			}
+			.mobile-ui {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				background-color: #{$base-color};
+				z-index: 999;
+				.navigation {
+					display: flex;
+					flex-direction: column;
+					justify-content: space-evenly;
+					align-items: stretch;
+					position: absolute;
+					top: 4rem;
+					bottom: 0;
+					width: 100%;
+					a {
+						display: flex;
+						border: 2px solid #{$nav-color-dark};
+						border-radius: 0px;
+						font-size: 24pt;
+						height: auto;
+						transition: none;
+						top: 0;
+						padding: 0 0.75em;
+						box-shadow: util.extrude(4, #{$nav-color-dark});
+					}
+				}
+			}
+		}
+		.borders {
+			display: flex;
+			align-items: center;
+			height: 30px;
+			background-color: #{$nav-color-dark};
+			.border-dark {
+				position: relative;
+				background-color: #{$emphasis-color};
+				width: 40vw;
+				height: 100%;
+				overflow-x: hidden;
+				z-index: 0;
+				&::before {
+					content: "";
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: linear-gradient(90deg, #{$emphasis-color} 2%, rgba(#00423A, 0) 7%, rgba(#00423A, 0) 95%, #{$emphasis-color} 99%);
+					z-index: 1;
+				}
+			}
+			.border-transition {
+				width: 30px;
+				height: 100%;
+				background: transparent;
+				background-image: linear-gradient(-45deg, transparent 49.9999%, #{$emphasis-color} 50%);
+			}
+			.border-light {
+				display: flex;
+				align-items: center;
+				background-image: url("/img/bolt.svg");
+				background-size: 8px;
+				height: 16px;
+				margin: 12px;
+				flex-grow: 1;
+			}
+		}
+	}
+
+	@media screen and (max-width: 750px) {
+		nav {
+			.links {
+				background-color: #{$nav-color-dark};
+				.navigation {
+					display: none;
+				}
+				input#mobile-toggler {
+					display: block;
+				}
+				.desktop-logo {
+					display: none;
+				}
+				.mobile-logo {
+					display: block;
+				}
+			}
+		}
+
+		input#mobile-toggler:checked {
+			position: fixed!important;
+			top: 1rem;
+			right: 1rem;
+
+			+ .mobile-ui {
+				display: flex;
+			}
+		}
+
+	}
+
+	@media screen and (max-width: 578px) {
+		nav .links .mobile-logo {
+			font-size: 16pt;
+			text-shadow: util.extrude(4);
+			transform: translate(calc(-8px + -50%), calc(25% - 4px));
+		}
+	}
+</style>

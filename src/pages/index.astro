@@ -1,31 +1,38 @@
 ---
+import { getImage } from "astro:assets";
+
 import Layout from '@lib/layouts/Layout.astro';
-import ProfileIcon from "@lib/components/ProfileIcon.astro";
+import ProfileIcon from "@lib/components/ProfileIcon.svelte";
+import MovingLogo from "@lib/components/MovingLogo.svelte";
+
+import StandardSummer from "@assets/img/profile-icon/standard_summer.png"
+import StandardWinter from "@assets/img/profile-icon/standard_winter.png"
+
+async function getProfilePic(src: ImageMetadata, format: "webp"|"png") {
+    const img = await getImage({src, format, width: 200, height: 200});
+    return img.src;
+}
+
+const profileImages: Record<string, {webp: string, png: string}> = {
+    summer: {
+		webp: await getProfilePic(StandardSummer, "webp"),
+		png: await getProfilePic(StandardSummer, "png"),
+	},
+    winter: {
+		webp: await getProfilePic(StandardWinter, "webp"),
+		png: await getProfilePic(StandardWinter, "png"),
+	}
+};
 
 const websiteText = "The Yonic Corner";
 const blurb = "Welcome to your just around the corner blog."
 ---
 
 <Layout title={`Welcome to ${websiteText}`}>
-	<main>
+	<main class="main-wrapper">
 		<div>
-			<ProfileIcon />
-			<h1>Welcome to &nbsp;
-				<div class="bungee-container">
-					{websiteText.split("").map((char, i) => {
-						if(char === " ")
-							return <span class="bungee" style={`--i: ${i}`} translate="no">&nbsp;</span>
-						return <span class="bungee" style={`--i: ${i}`} translate="no">{char}</span>
-					})}
-					<div class="bungee-shadow">
-						{websiteText.split("").map((char, i) => {
-							if(char === " ")
-								return <span style={`--i: ${i}`} translate="no">&nbsp;</span>
-							return <span style={`--i: ${i}`} translate="no">{char}</span>
-						})}
-					</div>
-				</div>
-			</h1>
+			<ProfileIcon images={profileImages} />
+			<MovingLogo {websiteText} />
 			<div class="raised biyonic">
 				<p>{blurb}</p>
 				<p>
@@ -40,57 +47,14 @@ const blurb = "Welcome to your just around the corner blog."
 				</div>
 			</noscript>
 		</div>
+		<!--[if gte IE 7]> <p class="raised info">You are using an old version of Internet Explorer. I'll try my best to support IE versions 7 through 11, but don't expect it to work perfectly.</p> <![endif]-->
+		<!--[if lt IE 7]> <p class="raised info">You are using a VERY old version of Internet Explorer. I don't think I'll ever plan to support this but you do you! Enjoy the nostalgia!</p> <![endif]-->
 	</main>
 </Layout>
 
 <style lang="scss">
 	@use "../styles/util.scss";
 
-	main {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 1rem;
-		text-align: center;
-		min-height: calc(100vh - 110px);
-		padding: 1.5rem;
-		h1 {
-			font-size: 3rem;
-			font-weight: 800;
-			margin: 0;
-			user-select: none;
-			cursor: url("/img/cursors/arrow.png"), default;
-		}
-	}
-	.bungee-container {
-		position: relative;
-		z-index: 0;
-		cursor: url("/img/cursors/arrow.png"), default;
-		.bungee {
-			display: inline-block;
-			font-family: Bungee, Arial, Helvetica, sans-serif;
-			color: var(--emphasis-color);
-			-webkit-text-stroke: 2px black;
-			animation: logo 2s ease-in-out infinite;
-			animation-delay: calc(.1s * var(--i));
-			text-shadow: 2px 2px 0px black, 4px 4px 0px black;
-			z-index: 1;
-		}
-		.bungee-shadow {
-			position: absolute;
-			display: block;
-			width: 100%;
-			font-family: Bungee, Arial, Helvetica, sans-serif;
-			opacity: 1;
-			top: 4px;
-			left: 4px;
-			z-index: -1;
-			span {
-				animation: shadow 2s ease-in-out infinite;
-				animation-delay: calc(.1s * var(--i));
-			}
-		}
-	}
 	.raised {
 		background-color: var(--article-color);
 		border: 2px solid var(--emphasis-color);
@@ -108,31 +72,6 @@ const blurb = "Welcome to your just around the corner blog."
 		&.info {
 			background-color: silver;
 			border-color: darkslategray;
-		}
-	}
-
-	@keyframes logo {
-		0%, 100% {
-			color: #0b396d;
-			transform: translate3d(0px, 0px, 0px);
-		}
-		25%, 75% {
-			color: #21dfe6;
-		}
-		50% {
-			color: #c0ffdc;
-			transform: translate3d(-15px, -15px, 0px);
-		}
-	}
-
-	@keyframes shadow {
-		0%, 100% {
-			opacity: 1;
-			filter: blur(0px);
-		}
-		50% {
-			opacity: 0.5;
-			filter: blur(3px);
 		}
 	}
 

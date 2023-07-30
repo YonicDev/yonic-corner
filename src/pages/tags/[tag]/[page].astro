@@ -1,10 +1,12 @@
 ---
-import type { GetStaticPaths, Page } from "astro";
 import { CollectionEntry, getCollection } from "astro:content";
+import type { GetStaticPaths, Page } from "astro";
+
+import { getHeroImages } from '@lib/util';
 import { BLOG_PAGE_SIZE } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
-import PostListing from "@lib/layouts/PostListing.astro";
+import PostListing from "@lib/layouts/PostListing.svelte";
 
 export const getStaticPaths: GetStaticPaths = async ({paginate}) => {
     const allPosts = (await getCollection('blog'))
@@ -35,6 +37,8 @@ const { page } = Astro.props;
 const posts: CollectionEntry<'blog'>[] = page.data;
 const { tag } = Astro.params;
 
+const heroImages = await getHeroImages(posts);
+
 const rainbowColors = ["#078D70","#26CEAA","#98E8C1","white","#7BADE2","#5049CC","#3D1A78"]
 const bowrainColors = [...rainbowColors].reverse();
 ---
@@ -47,7 +51,7 @@ const bowrainColors = [...rainbowColors].reverse();
         </div>
         <div class="rainbowAnchor">
             <div class="listing">
-                <PostListing baseUrl={`/tags/${tag}`} {posts} lastPage={page.lastPage} />
+                <PostListing baseUrl={`/tags/${tag}`} {posts} lastPage={page.lastPage} {heroImages}/>
             </div>
             <div class="rainbow">
                 <div class="rainbow-side">

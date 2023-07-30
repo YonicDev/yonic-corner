@@ -1,9 +1,12 @@
 ---
-import Layout from "@lib/layouts/Layout.astro";
-import type { GetStaticPaths, Page } from "astro";
-import { CategoryId, categories, BLOG_PAGE_SIZE } from "@lib/settings";
 import { CollectionEntry, getCollection } from "astro:content";
-import PostListing from "@lib/layouts/PostListing.astro";
+import type { GetStaticPaths, Page } from "astro";
+
+import { getHeroImages } from '@lib/util';
+import { CategoryId, categories, BLOG_PAGE_SIZE } from "@lib/settings";
+
+import Layout from "@lib/layouts/Layout.astro";
+import PostListing from "@lib/layouts/PostListing.svelte";
 
 export const getStaticPaths: GetStaticPaths = async ({paginate}) => {
     const ids = Object.keys(categories) as CategoryId[];
@@ -39,6 +42,8 @@ const { category: categoryId } = Astro.params;
 
 const rainbowColors = ["#078D70","#26CEAA","#98E8C1","white","#7BADE2","#5049CC","#3D1A78"]
 const bowrainColors = [...rainbowColors].reverse();
+
+const heroImages = await getHeroImages(posts);
 ---
 
 <Layout title={`${category.title} posts`}>
@@ -52,7 +57,7 @@ const bowrainColors = [...rainbowColors].reverse();
         </div>
         <div class="rainbowAnchor">
             <div class="listing">
-                <PostListing baseUrl={`/category/${categoryId ?? "misc"}`} {posts} lastPage={page.lastPage} />
+                <PostListing baseUrl={`/category/${categoryId ?? "misc"}`} {posts} lastPage={page.lastPage} {heroImages}/>
             </div>
             <div class="rainbow">
                 <div class="rainbow-side">

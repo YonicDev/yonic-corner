@@ -1,10 +1,11 @@
 ---
 import { getCollection } from "astro:content";
 
+import { getHeroImages } from '@lib/util';
 import { BLOG_PAGE_SIZE, HIDE_DRAFTS_IN_DEVELOPMENT } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
-import PostListing from "@lib/layouts/PostListing.astro";
+import PostListing from "@lib/layouts/PostListing.svelte";
 import CategoryButtons from "@lib/components/CategoryButtons.astro";
 
 const posts = (await getCollection('blog'))
@@ -15,8 +16,9 @@ const posts = (await getCollection('blog'))
         const aEdt = a.data.updatedDate?.getTime() ?? 0;
         const bEdt = b.data.updatedDate?.getTime() ?? 0;
         return Math.max(bEdt, bPub) - Math.max(aPub, aEdt) || a.id.localeCompare(b.id);
-    })
+})
 
+const heroImages = await getHeroImages(posts);
 
 //Math.ceil won't guarantee that last page will be Page 1.
 const lastPage = Math.floor(posts.length/(BLOG_PAGE_SIZE+1))+1;
@@ -28,6 +30,6 @@ posts.length = BLOG_PAGE_SIZE;
 <Layout title="Posts">
     <main>
         <CategoryButtons />
-        <PostListing posts={posts.filter(post => (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft)} currentPage={1} lastPage={lastPage} baseUrl="/blog" />
+        <PostListing posts={posts.filter(post => (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft)} {heroImages} currentPage={1} lastPage={lastPage} baseUrl="/blog" />
     </main>
 </Layout>

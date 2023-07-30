@@ -1,4 +1,6 @@
-@function extrude($length, $base-color: var(--emphasis-color)) {
+@use "./vars.scss" as *;
+
+@function extrude($length, $base-color: $emphasis-color) {
     $shadow: "";
     /* Iteramos con un ciclo del 1 al 4, cada iteración del siglo $i (una variable) va cambiando su valor */
     @for $i from 1 through $length {

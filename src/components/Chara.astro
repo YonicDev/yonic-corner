@@ -9,10 +9,14 @@ export interface Props {
 }
 
 const { name, set = "default", sprite, thoughts, height = 200, position = "right" } = Astro.props;
+
 ---
 
-<img aria-hidden={true} class="chara" src={`/chara/${name}/${set}/${sprite}.svg`} alt={name} title={thoughts} {height} style={`float: ${position}`}/>
-<br style="clear: both"/>
+<picture aria-hidden={true} class="chara" title={thoughts} style={{float: position}}>
+    <source srcset={`/chara/${name}/${set}/${sprite}.svg`} type="image/svg+xml" />
+    <img src={`/chara/${name}/${set}/${sprite}.png`} alt={name} {height} style={`float: ${position}`}/>
+</picture>
+<br style="clear: both; user-select: none"/>
 
 <style is:global>
     .chara {

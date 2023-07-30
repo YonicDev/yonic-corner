@@ -32,6 +32,7 @@
 
 <style lang="scss">
     @use "../styles/util.scss";
+    @use "../styles/vars.scss" as *;
     #player {
         @media screen and (orientation: portrait) and (min-width: 768px), screen and (orientation: landscape) and (min-width: 1024px) {
             display: flex;
@@ -46,8 +47,8 @@
         left: 0;
         box-shadow: util.extrude(8);
         transform: translateX(calc(-100% - 8px));
-        background-color: var(--article-color);
-        border: 2px solid var(--emphasis-color);
+        background-color: #{$article-color};
+        border: 2px solid #{$emphasis-color};
         transition: transform 0.5s ease-out;
 
         iframe {
@@ -58,7 +59,7 @@
 
         .music-tab {
             display: flex;
-            background-color: var(--nav-color-dark);
+            background-color: #{$nav-color-dark};
         }
 
         &.nowPlaying, &:hover {
