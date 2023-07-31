@@ -7,7 +7,7 @@ import { BLOG_PAGE_SIZE, HIDE_DRAFTS_IN_DEVELOPMENT } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
 import PostListing from "@lib/layouts/PostListing.svelte";
-import CategoryButtons from "@lib/components/CategoryButtons.astro";
+import CategoryButtons from "@lib/components/CategoryButtons.svelte";
 
 export async function getStaticPaths({paginate}: {paginate: any}) {
     const posts = (await getCollection('blog'))
