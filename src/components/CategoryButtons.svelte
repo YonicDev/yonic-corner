@@ -18,15 +18,6 @@ import { categories } from "@lib/settings";
     @use "../styles/util.scss";
     @use "../styles/vars.scss" as *;
 
-    $categories: (
-        "development": #156CEA #00086D, 
-        "gaming": #EA153E #490500,
-        "creations": #E818B7 #2B002D,
-        "outside": #FFC127 #302700,
-        "blog": #ED7614 #2D0B00,
-        "misc": #32EA85 #003A1E,
-    );
-
     @each $category, $data in $categories {
         .category-list li.link-#{$category} a:hover {
             background-color: list.nth($data, 1);

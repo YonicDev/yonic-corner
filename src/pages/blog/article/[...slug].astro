@@ -4,7 +4,7 @@ import { Image } from 'astro:assets';
 
 import { categories } from '@lib/settings';
 import Layout from '@lib/layouts/Layout.astro';
-import QuickLinks from '@lib/components/QuickLinks.astro';
+import QuickLinks from '@lib/components/QuickLinks.svelte';
 import Tag from '@lib/components/Tag.svelte';
 import HTMLMusicPlayer from '@lib/components/HTMLMusicPlayer.svelte';
 import PostIcon from '@lib/components/PostIcon.svelte';
@@ -113,7 +113,7 @@ const hero = await getHeroImage();
             </div>
         </div>
     </main>
-    <QuickLinks category={categories[post.data.category]} series={`${categories[post.data.category].title} posts`} seriesUrl={`/category/${post.data.category}/1`} prev={postsSameCategory[sameCategoryIndex-1]} next={postsSameCategory[sameCategoryIndex+1]} />
+    <QuickLinks category={post.data.category} series={`${categories[post.data.category].title} posts`} seriesUrl={`/category/${post.data.category}/1`} prev={postsSameCategory[sameCategoryIndex-1]} next={postsSameCategory[sameCategoryIndex+1]} />
     <QuickLinks prev={allPosts[index-1]} next={allPosts[index+1]} />
 </Layout>
 

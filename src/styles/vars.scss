@@ -2,3 +2,12 @@ $base-color: #92F3ED;
 $article-color: #DFFFFB;
 $emphasis-color: #00423A;
 $nav-color-dark: #00A090;
+
+$categories: (
+    "development": #156CEA #00086D #ccdefa, 
+    "gaming": #EA153E #490500 #ffdada,
+    "creations": #E818B7 #2B002D #fdbef8,
+    "outside": #FFC127 #302700 #fff8ce,
+    "blog": #ED7614 #2D0B00 #fae1cc,
+    "misc": #32EA85 #003A1E #b8f5d3,
+);
