@@ -164,9 +164,6 @@
                     flex-wrap: wrap;
                     align-items: center;
                     color: #{$emphasis-color};
-                    img {
-                        margin-right: 0.25rem;
-                    }
                 }
             }
             .category {

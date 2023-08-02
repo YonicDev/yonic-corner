@@ -141,48 +141,6 @@ pre *::selection {
     color: inherit;
 }
 
-.category-list {
-    display: flex;
-    width: 100%;
-    max-width: 1200px;
-    padding: 0;
-    margin: 0 auto;
-    padding: 1rem;
-    gap: 0.5em;
-    font-weight: bold;
-    flex-wrap: wrap;
-    justify-content: center;
-    li {
-        display: block;
-        margin: 0.1rem 0;
-        a {
-            display: block;
-            position: relative;
-            border: 2px solid var(--emphasis-color);
-            background-color: var(--article-color);
-            padding: 0.5rem 1rem;
-            color: var(--emphasis-color);
-            box-shadow: util.extrude(4);
-            transform: translate3d(0, 0, 0);
-            transition: all 0.1s ease-out;
-            &:hover {
-                transform: translate3d(-4px, -4px, 0);
-                border-color: var(--category-emphasis-color);
-                background-color: var(--category-base-color);
-                color: var(--category-emphasis-color);
-                box-shadow: util.extrude(8, var(--category-emphasis-color));
-            }
-            &:active {
-                transform: translate3d(4px, 4px, 0);
-                border-color: var(--category-emphasis-color);
-                background-color: var(--category-base-color);
-                color: var(--category-emphasis-color);
-                box-shadow: none;
-            }
-        }
-    }
-}
-
 h1, h2, h3, h4, h5, h6, p, code {
     cursor: url("/img/cursors/text.png") 8 8, text;
 }
