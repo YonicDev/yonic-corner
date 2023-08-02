@@ -2,6 +2,8 @@
 import Layout from "@lib/layouts/Layout.astro"
 import { getCollection } from "astro:content";
 
+import "@lib/styles/article.scss";
+
 const post = (await getCollection("about"))[0];
 
 const dateFormat = new Intl.DateTimeFormat('en-US',
@@ -22,7 +24,7 @@ const bowrainColors = [...rainbowColors].reverse();
 
 <Layout {...post.data}>
     <main>
-        <article>
+        <article class="blog-article">
             <h1>{post.data.title}</h1>
             <p class="established">Blog established on {dateFormat.format(established)}</p>
             <hr/>
@@ -57,47 +59,6 @@ const bowrainColors = [...rainbowColors].reverse();
         position: relative;
         overflow: hidden;
         padding-bottom: 96px;
-    }
-    article {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 1rem 3rem;
-        background: var(--article-color);
-        border: 4px solid var(--emphasis-color);
-        box-shadow: util.extrude(8, var(--emphasis-color));
-        border-width: 2px 8px 8px 2px;
-        font-size: 18px;
-        margin-top: 1rem;
-        position: relative;
-        overflow: auto;
-
-        hr {
-            border: none;
-            border-bottom: 3px solid var(--emphasis-color);
-        }
-
-        .metadata {
-            margin: 8px 0;
-            .icon {
-                vertical-align: middle;
-                cursor: url("/img/cursors/help.png"), help;
-                margin-top: -4px;
-            }
-            &.dates span {
-                margin: 2px 4px;
-                margin-right: 8px;
-            }
-            .tag {
-                display: inline-block;
-                background-color: var(--base-color);
-                padding: 4px 1em;
-                margin: 2px 4px;
-                border-radius: 999px;
-                font-size: 16px;
-                text-decoration: none;
-                color: var(--emphasis-color);
-            }
-        }
     }
     .rainbow {
         position: absolute;
@@ -157,13 +118,6 @@ const bowrainColors = [...rainbowColors].reverse();
     @media screen and (max-width: 750px) {
         .rainbow {
             display: none;
-        }
-        article {
-            box-shadow: none;
-            border-left: none;
-            border-right: none;
-            border-width: 4px 0 2px 0;
-            margin: 0;
         }
         main {
             padding: 0;

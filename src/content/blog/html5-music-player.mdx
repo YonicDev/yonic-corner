@@ -1,7 +1,7 @@
 ---
 title: Create a music player with only HTML5 (no JavaScript)
 description: "I've always wanted to include a music player into my blog to add some spice to the reading experience. But how could I do it so everyone could enjoy this feature?"
-updatedDate: 27-May-2023
+updatedDate: '2023-08-02T19:36:43.988Z'
 pubDate: '2022-12-17T09:10:23.269Z'
 category: development
 tags: ["web development", "html5", "music"]
@@ -116,7 +116,8 @@ The following link will play music on the blog's music player &mdash;if you don'
 <PlayerLink id="rhythm-heaven_remix4" />
 
 If JavaScript is enabled, the player should fly out automatically. If not, a tab will show up in the left side of the page, and you can mouse over it to make it fly out.
-It even works on IE! (Although currently the CSS doesn't work, so it's not friendly to use)
+
+The player even works on IE! Although the fly out transition doesn't work, as the UI framework I use (Svelte) does not work on IE, and any error in the scripts will cause the execution of everything else to halt. So frustrating!
 
 ## Limitations
 
