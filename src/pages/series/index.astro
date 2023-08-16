@@ -1,18 +1,16 @@
 ---
-import { getImage } from "astro:assets";
-import { getCollection, type CollectionEntry } from "astro:content";
-import type { GetImageResult } from "astro";
-
-import { HIDE_DRAFTS_IN_DEVELOPMENT } from "@lib/settings";
+import { getCollection } from "astro:content";
 
 import Layout from "@lib/layouts/Layout.astro";
+
+import "@lib/styles/series.scss";
 
 const series = await getCollection("series");
 
 ---
 
 <Layout title="Series">
-    <main>
+    <main class="index-series">
         <div class="hero">
             <h1>Series</h1>
             <p>

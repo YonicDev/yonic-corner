@@ -9,6 +9,7 @@
         <li>
             <ul class="navigation">
                 <li><a href="/blog"><span>Blog</span></a></li>
+                <li><a href="/series"><span>Series</span></a></li>
                 <li><a href="/tags"><span>Tags</span></a></li>
                 <li><a href="/about"><span>About</span></a></li>
             </ul>
@@ -16,6 +17,7 @@
             <div class="mobile-ui">
                 <ul class="navigation">
                     <li><a href="/blog"><span>Blog</span></a></li>
+                    <li><a href="/series"><span>Series</span></a></li>
                     <li><a href="/tags"><span>Tags</span></a></li>
                     <li><a href="/about"><span>About</span></a></li>
                 </ul>

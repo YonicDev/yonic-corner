@@ -72,14 +72,6 @@ async function getHeroImage(): Promise<ImageMetadata | null> {
 const hero = await getHeroImage();
 const series = post.data.series ? await getEntry(post.data.series.id) : null;
 
-const seriesCategory: Category = {
-    title: "",
-    description: "",
-    baseColor: "white",
-    emphasisColor: "black",
-    order: -1,
-}
-
 ---
 
 <Layout {...post.data}>
@@ -127,7 +119,7 @@ const seriesCategory: Category = {
         </div>
     </main>
     {
-        post.data.series && series && <QuickLinks category={seriesCategory} series={`Series: ${series.data.title}`} seriesUrl={`/series/${post.data.series.id.id}`} prev={postsSameSeries[sameSeriesIndex - 1]} next={postsSameSeries[sameSeriesIndex + 1]}/>
+        post.data.series && series && <QuickLinks category="series" series={`Series: ${series.data.title}`} seriesUrl={`/series/${post.data.series.id.id}`} prev={postsSameSeries[sameSeriesIndex - 1]} next={postsSameSeries[sameSeriesIndex + 1]}/>
     }
     <QuickLinks category={post.data.category} series={`${categories[post.data.category].title} posts`} seriesUrl={`/category/${post.data.category}/1`} prev={postsSameCategory[sameCategoryIndex-1]} next={postsSameCategory[sameCategoryIndex+1]} />
     <QuickLinks prev={allPosts[index-1]} next={allPosts[index+1]} />
