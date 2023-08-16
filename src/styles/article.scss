@@ -1,6 +1,12 @@
 @use "./util.scss";
 @use "./vars.scss" as *;
 
+main {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 96px;
+}
+
 .blog-article {
     max-width: 800px;
     margin: 0 auto;
