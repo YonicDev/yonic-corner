@@ -1,0 +1,205 @@
+---
+import { getImage } from "astro:assets";
+import { getCollection, type CollectionEntry } from "astro:content";
+import type { GetImageResult } from "astro";
+
+import { HIDE_DRAFTS_IN_DEVELOPMENT } from "@lib/settings";
+
+import Layout from "@lib/layouts/Layout.astro";
+import SeriesListing from "@lib/layouts/SeriesListing.astro";
+
+export const getStaticPaths = async() => {
+    const series = await getCollection("series");
+    const allPosts = (await getCollection('blog'))
+    .filter(post => import.meta.env.DEV || !post.data.draft)
+    .sort((a, b) => {
+        const aPub = a.data.pubDate.getTime();
+        const bPub = b.data.pubDate.getTime();
+        const aEdt = a.data.updatedDate?.getTime() ?? 0;
+        const bEdt = b.data.updatedDate?.getTime() ?? 0;
+        return Math.max(bEdt, bPub) - Math.max(aPub, aEdt);
+    });
+    return series.map(serie => {
+        return {
+            params: { series: serie.id },
+            props: {
+                series: serie.data,
+                posts: allPosts.filter(post => post.data.series?.id.id === serie.id)
+            }
+        }
+    });
+}
+
+interface Props {
+    series: CollectionEntry<"series">["data"],
+    posts: CollectionEntry<"blog">[]
+}
+
+const { posts, series } = Astro.props;
+const { series: seriesId } = Astro.params;
+
+const rainbowColors = ["#078D70","#26CEAA","#98E8C1","white","#7BADE2","#5049CC","#3D1A78"]
+const bowrainColors = [...rainbowColors].reverse();
+
+let imageMeta: ImageMetadata | undefined;
+let processedImage: GetImageResult | undefined;
+if(seriesId) {
+    try {
+        imageMeta = (await import(`../assets/series/${seriesId}.png`)).default;
+        processedImage = await getImage({ src: imageMeta!, width: 800, format: "webp", quality: seriesId? "mid" : "max"});
+    } catch {
+        imageMeta = undefined;
+    }
+}
+const heroImage = processedImage? `url("${processedImage.src}")` : "url('/img/series-hero.svg')";
+---
+
+<Layout title="Posts">
+    <main>
+        <div class="heroContainer">
+            <div class="data">
+                <h1>{series.title}</h1>
+                <p class="biyonic-string">{series.description}</p>
+            </div>
+            <div class="hero" style={{backgroundImage: heroImage}}/>
+        </div>
+        <div class="rainbowAnchor">
+            <div class="listing">
+                <SeriesListing posts={posts.filter(post => (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft)} baseUrl="/blog" />
+            </div>
+            <div class="rainbow">
+                <div class="rainbow-side">
+                    {rainbowColors.map((strip) => (
+                        <div class="strip" style={`background: ${strip}`}/>
+                    ))}
+                </div>
+                <div class="rainbow-end">
+                    <div class="rainbow-corner">
+                        {rainbowColors.map((strip, i) => (
+                            <div class="rainbow-round" style={`background: ${strip}; --radius: calc(64px - ${i} * (64px / 7))`}/>
+                        ))}
+                    </div>
+                    <div class="rainbow-horizontal">
+                        {bowrainColors.map((strip) => (
+                            <div class="strip" style={`background: ${strip}`}/>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>
+
+<style lang="scss">
+    @use "../../styles/util.scss";
+
+    .heroContainer {
+        display: flex;
+        position: relative;
+        width: calc(100% - 3rem);
+        max-width: 1600px;
+        margin: 1rem auto;
+        border: 4px solid var(--emphasis-color);
+        background-color: var(--article-color);
+        box-shadow: util.extrude(12);
+        z-index: 2;
+        div {
+            padding: 0.5rem 1rem;
+            flex-grow: 1;
+            width: 100%;
+        }
+        .data {
+            h1 {
+                display: inline-block;
+                word-break: break-word;
+                font-size: 38pt;
+            }
+            p {
+                font-size: 14pt;
+                min-height: 5em;
+            }
+        }
+        .hero {
+            padding: 20px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+    .rainbowAnchor {
+        position: relative;
+        overflow: hidden;
+        top: -5px;
+        .listing {
+            position: relative;
+            width: 80%;
+            max-width: 1000px;
+            margin: 0 auto;
+            z-index: 1;
+        }
+    }
+    .rainbow {
+        position: absolute;
+        left: calc(50% - 24px);
+        top: -4rem;
+        width: calc(100% + 64px);
+        height: calc(100% - 16px);
+        overflow-x: hidden;
+        pointer-events: none;
+        .rainbow-side {
+            display: flex;
+            width: 64px;
+            height: calc(100% - 64px);
+        }
+        .strip {
+            width: 100%;
+            height: 100%;
+        }
+        .rainbow-end {
+            position: absolute;
+            bottom: 0;
+            height: 64px;
+            width: 120vw;
+            display: flex;
+            align-items: flex-start;
+        }
+        .rainbow-corner {
+            display: inline-block;
+            position: relative;
+            width: 64px;
+            height: 64px;
+        }
+        .rainbow-round {
+            position: absolute;
+            right: 0;
+            width: var(--radius, 64px);
+            height: var(--radius, 64px);
+            border-bottom-left-radius: 100%;
+        }
+        .rainbow-horizontal {
+            width: 100vw;
+            height: 64px;
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    @media screen and (max-width: 750px) {
+        .heroContainer {
+            flex-direction: column-reverse;
+            height: 500px;
+            h1 {
+                margin: 0.25rem 0;
+            }
+            div {
+                width: auto;
+            }
+            .data > p {
+                min-height: 0;
+            }
+            .hero {
+                flex-grow: 1;
+            }
+        }
+    }
+</style>

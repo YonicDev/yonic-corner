@@ -1,0 +1,250 @@
+---
+import { getImage } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+import { categories } from "@lib/settings";
+
+import Tag from "@lib/components/Tag.astro";
+
+interface Props {
+    posts: CollectionEntry<"blog">[],
+    baseUrl: string,
+}
+
+const { posts, baseUrl } = Astro.props;
+
+const heroImages = await Promise.all(posts.map(async (post) => {
+    // The images can be of any supported filetype, not just PNG.
+    // But the file *has* to be an article asset named hero.png,
+    // regardless of what the image type actually is.
+    try {
+        const imageMeta: ImageMetadata = (await import(`../assets/articles/${post.slug}/hero.png`)).default;
+        const processedImage = await getImage({ src: imageMeta, width: 550, height: 280, format: "webp"});
+        return Promise.resolve(processedImage.src);
+    } catch (err) {
+        return null;
+    }
+}));
+
+const dateFormat = new Intl.DateTimeFormat('en-US',
+{
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+})
+
+---
+
+<slot/>
+<ul class="listing">
+{ 
+    // Nested anchor elements are illegal, so instead, we make hit zones in separate layers.
+    posts.map((post, i) => (
+        <li class="article">
+            <span class="number">#{i+1}</span>
+            <a aria-label="Article poster image" class:list={["hero", heroImages[i]==null ? "placeholder" : null]} href={`/blog/article/${post.slug}`} style={`background-image: ${heroImages[i]? `url(${heroImages[i]})` : `url(/img/icons/category-${post.data.category}.svg), url(/img/pattern3.svg); background-color: ${categories[post.data.category].baseColor}`}; background-position: center ${post.data.heroPosition ?? "center"}, top left`}/>
+            <div class="data">
+                <a href={`/category/${post.data.category}/1`} class="category">{categories[post.data.category].title.toUpperCase()}</a>
+                <a href={`/blog/article/${post.slug}`}>
+                    <h1>{post.data.title}{post.data.draft && <sup>[draft]</sup>}</h1>
+                    <span class="metadata">
+                        <span class="dataGroup">
+                            <img class="icon" alt="Published" title="Published on" src="/img/icons/post.svg" width={24} height={24} />
+                            <span>{dateFormat.format(post.data.pubDate)}</span>
+                        </span>
+                        { post.data.updatedDate && 
+                            <span class="dataGroup">
+                                <img class="icon" alt="Last updated" title="Last updated on" src="/img/icons/edit.svg" width={22} height={22} />
+                                <span>{dateFormat.format(post.data.updatedDate)}</span>
+                            </span>
+                        }
+                    </span>
+                    <p class="description biyonic-string">{post.data.description}</p>
+                    </a>
+                <div class="tags">
+                    <img class="icon" alt="Tags" title="Tags" src="/img/icons/tag.svg" width={22} height={22}/>
+                    {
+                        post.data.tags.length > 0 ? post.data.tags.map(tag => (
+                            <Tag {tag} />
+                        )) : <span>None</span>
+                    }
+                </div>
+            </div>
+        </li>
+    ))
+    
+}
+</ul>
+
+<style lang="scss">
+    @use '../styles/util.scss';
+
+    .listing {
+        padding: 0;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 1200px;
+        li {
+            display: block;
+            margin: 1rem;
+        }
+        .article {
+            display: flex;
+            align-items: stretch;
+            gap: 1rem;
+            border: 2px solid var(--emphasis-color);
+            background-color: var(--article-color);
+            box-shadow: util.extrude(8);
+            position: relative;
+            
+            .number {
+                position: absolute;
+                background-color: var(--article-color);
+                padding: 0.5em;
+                top: 1em;
+                left: -1em;
+                border: 2px solid var(--emphasis-color);
+                box-shadow: util.extrude(4);
+                font-size: 16pt;
+                font-weight: bold;
+                color: var(--emphasis-color);
+            }
+
+            .hero, .data {
+                width: 50%;
+            }
+
+            .hero {
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-color: var(--nav-color-dark);
+            }
+
+
+            .hero.placeholder {
+                background-repeat: no-repeat, repeat;
+                background-size: contain, 16px;
+            }
+
+            a {
+                display: block;
+                color: var(--emphasis-color);
+                padding-right: 1rem;
+            }
+            
+            .data {
+                padding: 1rem 0;
+                h1 {
+                    display: -webkit-box;
+                    font-size: 24pt;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    margin: 0;
+                    padding: 0.5rem 0;
+                    sup {
+                        font-size: 40%;
+                    }
+                }
+                .icon {
+                    cursor: url("/img/cursors/help.png"), help;
+                }
+                .dataGroup {
+                    display: inline-block;
+                    margin: 0.25rem;
+                    > img {
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin-top: -0.5rem;
+                        padding: 0 0.25rem;
+                        &:first-of-type {
+                            padding-left: 0;
+                        }
+                    }
+                }
+
+                .description {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 5;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    height: 90px;
+                }
+
+                .tags {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    color: var(--emphasis-color);
+                    img {
+                        margin-right: 0.25rem;
+                    }
+                }
+            }
+            .category {
+                font-weight: bold;
+            }
+        }
+    }
+
+    .nav {
+        display: flex;
+        width: 100%;
+        margin: 1.5rem auto;
+        justify-content: center;
+        gap: 10px;
+        padding: 0;
+        li {
+            display: block;
+            
+            a {
+                display: flex;
+                justify-content: center;
+                padding: 10px;
+                border: 2px solid var(--emphasis-color);
+                background: var(--nav-color-dark);
+                color: var(--emphasis-color);
+                font-weight: bold;
+                box-shadow: util.extrude(4);
+            }
+
+        }
+        .adjacent {
+            display: flex;
+            gap: 6px;
+            padding: 0;
+            li > a {
+                width: 4ch;
+            }
+            li.current > a {
+                border: 2px solid var(--nav-color-dark);
+                background: var(--article-color);
+                font-weight: bold;
+                color: var(--nav-color-dark);
+                box-shadow: util.extrude(4, var(--nav-color-dark));
+            }
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .listing {
+            .article {
+                flex-direction: column;
+                gap: 0;
+            }
+            .hero {
+                flex-grow: 1;
+                width: auto!important;
+                aspect-ratio: 16 / 9;
+            }
+            .data {
+                width: auto!important;
+                padding: 1rem!important;
+            }
+        }
+        .nav a .label {
+            display: none;
+        }
+    }
+</style>
