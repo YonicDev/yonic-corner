@@ -1,7 +1,7 @@
 ---
 title: Create a music player with only HTML5 (no JavaScript)
 description: "I've always wanted to include a music player into my blog to add some spice to the reading experience. But how could I do it so everyone could enjoy this feature?"
-updatedDate: 27-May-2023
+updatedDate: '2023-08-16T10:06:18.625Z'
 pubDate: '2022-12-17T09:10:23.269Z'
 category: development
 tags: ["web development", "html5", "music"]
@@ -85,21 +85,54 @@ And then, in your main page, have a link that points toward that HTML document.
 Note though, that this is just the **resulting** HTML. You will have to resort to your CMS or HTML rendering capabilities of your SSG to make it output something close to this.
 
 In the SSG I use for my blog (Astro) for example, you can create a dynamic route that
-pulls in the information from a list of songs.
+pulls in the information from a list of songs. This list of songs can harvest the
+power of <a href="https://docs.astro.build/en/guides/content-collections" target="_blank" rel="noopener noreferrer">content collections</a>,
+but if you're not using Astro 2.0 you can import a JSON file with all of the songs.
+
+Below is an example of an implementation close to the one I use on Yonic Corner.
+First, I define the schema that the JSON music data files will use with Zod.
+
+```ts
+// src/content/config.ts
+import { z, defineCollection } from 'astro:content';
+
+const musicCollection = defineCollection({
+    type: "data",
+    schema: z.object({
+        sources: z.array(z.object({
+            src: z.string().url(),
+            type: z.string() // You can add .regex() to check it's formatted as a MIME type
+        }))
+    }).strict()
+})
+
+export const collections = {
+  music: musicCollection,
+};
+```
+
+Then, I set the route that will render the player with the desired music.
 
 ```astro
-// src/pages/player/[song].astro
+// src/pages/player/[...song].astro
 ---
-// SongList is an Record<string, Song> object.
-import SongList from "../../../song-list"
+import { getCollection, type CollectionEntry } from "astro:content";
 
 export async function getStaticPaths() {
-    Object.keys(SongList).map(song => {
-        params: { song }
+    const songList = await getCollection("music");
+    return songList.map(song => {
+        params: { song: song.id.replaceAll("\\", "/") } // Replace Windows backslashes with forward slashes
+        props: { song: song.data }
     })
 }
 
-const { song: songId } = Astro.params;
+// Get the data for the song selected with the song URL param
+const { sources } = Astro.props.song;
+
+// Types for Astro.props
+interface Props {
+    song: CollectionEntry<"music">["data"]
+}
 
 ---
 <audio controls autoplay loop>
@@ -107,13 +140,64 @@ const { song: songId } = Astro.params;
 </audio>
 ```
 
-You can also add all the metadata you want inside that list.
+And then, create the component that will serve as a link to load a song into the player.
+
+```astro
+// src/components/PlayerLink.astro
+---
+import { getEntry } from "astro:content";
+import { getImage } from "astro:assets";
+import path from "path";
+
+interface Props {
+    id: string;
+}
+
+// We need to process the id's slashes to the correct ones per platform
+// Even if Windows supports forward slashes,
+// Astro uses backslashes for the content ids in Windows.
+const osPath = process.platform === 'win32' ? path["win32"] : path["posix"];
+const id = Astro.props.id.split("/").join(osPath.sep);
+
+const {id: musicId, data: music} = (await getEntry('music', id))!;
+---
+<a href={`/player/${musicId.replaceAll("\\","/")}`}>
+    <!-- use the data property here for metadata -->
+    <p>{data.title}</p>
+</a>
+```
+
+Finally, all you have to do is to place the data in a JSON inside the content folder.
+
+```json
+// src/content/music/test/song.json
+{
+    "title": "Test song",
+    "sources": [
+        {
+            "src": "https://cdn.freesound.org/previews/251/251461_4146089-lq.ogg",
+            "type": "audio/ogg"
+        },
+        {
+            "src": "https://cdn.freesound.org/previews/251/251461_4146089-lq.mp3",
+            "type": "audio/mpeg"
+        }
+    ]
+}
+```
+
+Now you can use subdirectories within the `content/music` folder to organize the JSON data files in a more intuitive way,
+and add the player link component anywhere like this:
+
+```jsx
+<PlayerLink id="test/song" />
+```
 
 This is the point where you can really start controlling your media playback: You may add a few extra elements, add some style to the player (outside the actual player controls, that is), you can even add multiple fallback sources.
 
 The following link will play music on the blog's music player &mdash;if you don't see it, don't worry, it'll be explained in a bit.
 
-<PlayerLink id="rhythm-heaven_remix4" />
+<PlayerLink id="rhythm-heaven/remix4" />
 
 If JavaScript is enabled, the player should fly out automatically. If not, a tab will show up in the left side of the page, and you can mouse over it to make it fly out.
 It even works on IE! (Although currently the CSS doesn't work, so it's not friendly to use)
