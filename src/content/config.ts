@@ -68,8 +68,23 @@ const aboutCollection = defineCollection({
     }).strict()
 });
 
+const musicCollection = defineCollection({
+    type: "data",
+    schema: z.object({
+        title: z.string(),
+        author: z.string().optional(),
+        album: z.string().optional(),
+        cover: z.string().optional(),
+        sources: z.array(z.object({
+            src: z.string().url().or(z.literal("")),
+            type: z.string().regex(/audio\/(aac|mpeg|mp3|ogg|x-wav|webm|3gpp)/)
+        }))
+    }).strict()
+})
+
 
 export const collections = {
   blog: blogCollection,
   about: aboutCollection,
+  music: musicCollection,
 };

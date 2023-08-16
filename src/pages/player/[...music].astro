@@ -1,18 +1,23 @@
 ---
-import SongList from "@lib/song-list";
+import { getCollection, type CollectionEntry } from "astro:content";
 
 import "@lib/styles/player.scss";
 
 export async function getStaticPaths() {
-    return Object.keys(SongList).map((song) => {
+    const songList = await getCollection("music");
+    return songList.map((song) => {
         return {
-            params: { music: song }
+            params: { music: song.id.replaceAll("\\", "/") },
+            props: { music: song.data }
         }
     });
 }
 
-const { music: musicId } = Astro.params;
-const {title, sources, author, album} = SongList[musicId!];
+const {title, sources, author, album} = Astro.props.music;
+
+interface Props {
+    music: CollectionEntry<"music">["data"]
+}
 ---
 
 <html>

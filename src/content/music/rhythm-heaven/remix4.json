@@ -1,0 +1,12 @@
+{
+    "title": "Remix 4",
+    "author": "TSUNKU♂",
+    "album": "Rhythm Heaven",
+    "cover": "rhythm-heaven",
+    "sources": [
+        {
+            "src": "https://fi.zophar.net/soundfiles/nintendo-ds-2sf/rhythm-heaven/STRM_BGM_MEROMERO_COCOA.mp3",
+            "type": "audio/mpeg"
+        }
+    ]
+}
