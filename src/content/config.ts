@@ -1,5 +1,5 @@
 // 1. Import utilities from `astro:content`
-import { z, defineCollection } from 'astro:content';
+import { z, defineCollection, reference } from 'astro:content';
 import type { ZodNever, Primitive, ZodLiteral, } from 'astro/zod';
 
 import { CATEGORY_IDS } from '@lib/settings';
@@ -58,6 +58,10 @@ const blogCollection = defineCollection({
             .or(z.date())
 			.optional()
 			.transform((str) => (str ? new Date(str) : undefined)),
+        series: z.object({
+            id: reference("series"),
+            order: z.number().int()
+        }).strict().optional()
     }).strict()
 });
 
@@ -82,9 +86,18 @@ const musicCollection = defineCollection({
     }).strict()
 })
 
+const seriesCollection = defineCollection({
+  type: "data",
+  schema: z.object({
+    title: z.string(),
+    description: z.string()
+  }).strict()
+});
+
 
 export const collections = {
   blog: blogCollection,
   about: aboutCollection,
   music: musicCollection,
+  series: seriesCollection
 };

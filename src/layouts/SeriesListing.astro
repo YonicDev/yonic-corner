@@ -1,6 +1,6 @@
 ---
 import { getImage } from 'astro:assets';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
 import { categories } from "@lib/settings";
 
@@ -8,12 +8,10 @@ import Tag from "@lib/components/Tag.astro";
 
 interface Props {
     posts: CollectionEntry<"blog">[],
-    currentPage?: number,
-    lastPage: number,
     baseUrl: string,
 }
 
-const { posts, currentPage = 1, lastPage, baseUrl } = Astro.props;
+const { posts, baseUrl } = Astro.props;
 
 const heroImages = await Promise.all(posts.map(async (post) => {
     // The images can be of any supported filetype, not just PNG.
@@ -35,24 +33,18 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
     day: '2-digit',
 })
 
-const series = await getCollection("series");
-
 ---
 
 <slot/>
 <ul class="listing">
 { 
     // Nested anchor elements are illegal, so instead, we make hit zones in separate layers.
-    posts.map((post, i) => {
-        const referredSeries = series.find(serie => serie.id === post.data.series?.id.id);
-        return (<li class="article">
+    posts.map((post, i) => (
+        <li class="article">
+            <span class="number">#{i+1}</span>
             <a aria-label="Article poster image" class:list={["hero", heroImages[i]==null ? "placeholder" : null]} href={`/blog/article/${post.slug}`} style={`background-image: ${heroImages[i]? `url(${heroImages[i]})` : `url(/img/icons/category-${post.data.category}.svg), url(/img/pattern3.svg); background-color: ${categories[post.data.category].baseColor}`}; background-position: center ${post.data.heroPosition ?? "center"}, top left`}/>
             <div class="data">
-                <div class="series">
-                    <a href={`/category/${post.data.category}/1`}>{categories[post.data.category].title.toUpperCase()}</a>
-                    <br/>
-                    { referredSeries && <a href={`/series/${referredSeries.id}`}>{"SERIES: "+referredSeries.data.title.toUpperCase()}</span> }
-                </div>
+                <a href={`/category/${post.data.category}/1`} class="category">{categories[post.data.category].title.toUpperCase()}</a>
                 <a href={`/blog/article/${post.slug}`}>
                     <h1>{post.data.title}{post.data.draft && <sup>[draft]</sup>}</h1>
                     <span class="metadata">
@@ -78,38 +70,10 @@ const series = await getCollection("series");
                     }
                 </div>
             </div>
-        </li>)
-    })
+        </li>
+    ))
     
 }
-</ul>
-
-<ul class="nav">
-    { 
-        currentPage > 1 && (
-            <li><a href={`${baseUrl}/1`}>&lt;&lt; <span class="label">First</span></a></li>
-        )
-    }
-    <li><ul class="adjacent">
-        {
-            (currentPage - 2) > 0 && <li><a href={`${baseUrl}/${currentPage-2}`}>{currentPage-2}</a></li>
-        }
-        {
-            (currentPage - 1) > 0 && <li><a href={`${baseUrl}/${currentPage-1}`}>{currentPage-1}</a></li>
-        }
-        <li class="current"><a href={`${baseUrl}/${currentPage}`}>{currentPage}</a></li>
-        {
-            lastPage >= (currentPage +1) && (<li><a href={`${baseUrl}/${currentPage+1}`}>{currentPage+1}</a></li>)
-        }
-        {
-            lastPage >= (currentPage +2) && (<li><a href={`${baseUrl}/${currentPage+2}`}>{currentPage+2}</a></li>)
-        }
-    </ul></li>
-    { 
-        currentPage < lastPage && (
-            <li><a href={`${baseUrl}/${lastPage}`}>&gt;&gt; <span class="label">Last</span></a></li>
-        )
-    }
 </ul>
 
 <style lang="scss">
@@ -132,6 +96,20 @@ const series = await getCollection("series");
             background-color: var(--article-color);
             box-shadow: util.extrude(8);
             position: relative;
+            
+            .number {
+                position: absolute;
+                background-color: var(--article-color);
+                padding: 0.5em;
+                top: 1em;
+                left: -1em;
+                border: 2px solid var(--emphasis-color);
+                box-shadow: util.extrude(4);
+                font-size: 16pt;
+                font-weight: bold;
+                color: var(--emphasis-color);
+            }
+
             .hero, .data {
                 width: 50%;
             }
@@ -152,12 +130,6 @@ const series = await getCollection("series");
                 display: block;
                 color: var(--emphasis-color);
                 padding-right: 1rem;
-            }
-
-            .series a {
-                display: inline;
-                font-weight: bold;
-                padding: 0;
             }
             
             .data {
@@ -209,6 +181,9 @@ const series = await getCollection("series");
                         margin-right: 0.25rem;
                     }
                 }
+            }
+            .category {
+                font-weight: bold;
             }
         }
     }

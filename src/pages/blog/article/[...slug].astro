@@ -1,5 +1,5 @@
 ---
-import { CollectionEntry, getCollection } from 'astro:content';
+import { CollectionEntry, getCollection, getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 
 import { categories } from '@lib/settings';
@@ -7,6 +7,12 @@ import Layout from '@lib/layouts/Layout.astro';
 import QuickLinks from '@lib/components/QuickLinks.astro';
 import Tag from '@lib/components/Tag.astro';
 import HTMLMusicPlayer from '@lib/components/HTMLMusicPlayer.svelte';
+
+interface Props {
+    post: CollectionEntry<'blog'>,
+    allPosts: CollectionEntry<'blog'>[],
+    index: number
+}
 
 export async function getStaticPaths() {
 	const posts = (await getCollection('blog')).filter(post => {
@@ -24,15 +30,13 @@ export async function getStaticPaths() {
 		props: {post, allPosts: posts, index: i },
 	}));
 }
-interface Props {
-    post: CollectionEntry<'blog'>,
-    allPosts: CollectionEntry<'blog'>[],
-    index: number
-}
 
 const { post, allPosts, index } = Astro.props;
 const postsSameCategory = allPosts.filter(other => post.data.category === other.data.category);
+const postsSameSeries = allPosts.filter(other => post.data.series && other.data.series && post.data.series.id === other.data.series.id)
+    .sort((a, b) => a.data.series!.order - b.data.series!.order);
 const sameCategoryIndex = postsSameCategory.indexOf(post);
+const sameSeriesIndex = postsSameSeries.indexOf(post)
 
 const {pubDate, updatedDate, tags} = post.data;
 const { Content } = await post.render();
@@ -63,6 +67,15 @@ async function getHeroImage(): Promise<ImageMetadata | null> {
 }
 
 const hero = await getHeroImage();
+const series = post.data.series ? await getEntry(post.data.series.id) : null;
+
+const seriesCategory: Category = {
+    title: "",
+    description: "",
+    baseColor: "white",
+    emphasisColor: "black",
+    order: -1,
+}
 
 ---
 
@@ -110,6 +123,9 @@ const hero = await getHeroImage();
             </div>
         </div>
     </main>
+    {
+        post.data.series && series && <QuickLinks category={seriesCategory} series={`Series: ${series.data.title}`} seriesUrl={`/series/${post.data.series.id.id}`} prev={postsSameSeries[sameSeriesIndex - 1]} next={postsSameSeries[sameSeriesIndex + 1]}/>
+    }
     <QuickLinks category={categories[post.data.category]} series={`${categories[post.data.category].title} posts`} seriesUrl={`/category/${post.data.category}/1`} prev={postsSameCategory[sameCategoryIndex-1]} next={postsSameCategory[sameCategoryIndex+1]} />
     <QuickLinks prev={allPosts[index-1]} next={allPosts[index+1]} />
 </Layout>
