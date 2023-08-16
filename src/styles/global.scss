@@ -34,41 +34,6 @@ h1 {
     box-sizing: border-box;
 }
 
-code {
-    font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-        Bitstream Vera Sans Mono, Courier New, monospace;
-    counter-reset: step;
-    counter-increment: step 0;
-    font-family: 'Fira Code', 'Courier New', Courier, monospace;
-}
-
-code .line::before {
-    content: counter(step);
-    counter-increment: step;
-    width: 1rem;
-    margin-right: 1.5rem;
-    display: inline-block;
-    text-align: right;
-    color: rgba(115,138,148,.6);
-    text-shadow: none;
-    user-select: none;
-}
-
-.code-button {
-    font-family: inherit;
-}
-
-pre {
-    margin-top: 0;
-    border: solid var(--emphasis-color);
-    border-width: 2px 8px 8px 2px;
-    font-size: 16px;
-}
-
-code .line {
-    margin-left: 1rem;
-}
-
 .filename {
     background-color: darken(aqua, 20%);
     padding: 0.25rem 0.75rem;
@@ -82,40 +47,6 @@ code .line {
     z-index: 1;
     border-bottom: none;
     font-size: 16px;
-}
-
-.code-block > div {
-    position: relative;
-    z-index: 1;
-}
-.code-block button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 10px;
-    margin-right: 1rem;
-    border: solid var(--emphasis-color);
-    border-width: 2px;
-    border-radius: 5px;
-    background: var(--base-color);
-    color: var(--emphasis-color);
-    text-shadow: none;
-    box-shadow: 1px 1px 0px #00423A;
-    transition: all 0.1s ease-out;
-    padding: 0.5em;
-    cursor: url('/img/cursors/pointer.png'), pointer;
-    &:hover {
-        box-shadow: 3px 3px 0px #00423A, 2px 2px 0px #00423A, 1px 1px 0px #00423A;
-        transform: translate(-2px, -2px);
-    }
-    &:active {
-        transform: translate(0);
-        box-shadow: none;
-    }
-}
-pre {
-    padding: 1ch 0;
-    text-shadow: 0px 0px 2px rgba(4, 205, 255, 0.425), 0px 0px 50px rgba(163, 255, 250, 0.653);
 }
 
 a {
