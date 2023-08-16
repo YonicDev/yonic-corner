@@ -84,63 +84,6 @@
             background-position: center;
         }
     }
-    .rainbowAnchor {
-        position: relative;
-        overflow: hidden;
-        top: -5px;
-        .listing {
-            position: relative;
-            width: 80%;
-            max-width: 1000px;
-            margin: 0 auto;
-            z-index: 1;
-        }
-    }
-    .rainbow {
-        position: absolute;
-        left: calc(50% - 24px);
-        top: -4rem;
-        width: calc(100% + 64px);
-        height: calc(100% - 16px);
-        overflow-x: hidden;
-        pointer-events: none;
-        .rainbow-side {
-            display: flex;
-            width: 64px;
-            height: calc(100% - 64px);
-        }
-        .strip {
-            width: 100%;
-            height: 100%;
-        }
-        .rainbow-end {
-            position: absolute;
-            bottom: 0;
-            height: 64px;
-            width: 120vw;
-            display: flex;
-            align-items: flex-start;
-        }
-        .rainbow-corner {
-            display: inline-block;
-            position: relative;
-            width: 64px;
-            height: 64px;
-        }
-        .rainbow-round {
-            position: absolute;
-            right: 0;
-            width: var(--radius, 64px);
-            height: var(--radius, 64px);
-            border-bottom-left-radius: 100%;
-        }
-        .rainbow-horizontal {
-            width: 100vw;
-            height: 64px;
-            display: flex;
-            flex-direction: column;
-        }
-    }
 
     @media screen and (max-width: 750px) {
         .heroContainer {

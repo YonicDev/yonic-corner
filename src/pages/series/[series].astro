@@ -9,6 +9,7 @@ import Layout from "@lib/layouts/Layout.astro";
 import SeriesListing from "@lib/layouts/SeriesListing.astro";
 
 import "@lib/styles/series.scss";
+import "@lib/styles/rainbow.scss";
 
 export const getStaticPaths = async() => {
     const series = await getCollection("series");
@@ -77,8 +78,8 @@ const heroImage = processedImage? `url("${processedImage.src}")` : "url('/img/se
                 </div>
                 <div class="rainbow-end">
                     <div class="rainbow-corner">
-                        {rainbowColors.map((strip, i) => (
-                            <div class="rainbow-round" style={`background: ${strip}; --radius: calc(64px - ${i} * (64px / 7))`}/>
+                        {rainbowColors.map(_ => (
+                            <div class="rainbow-round" />
                         ))}
                     </div>
                     <div class="rainbow-horizontal">

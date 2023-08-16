@@ -1,0 +1,69 @@
+@use "sass:math";
+
+.rainbowAnchor {
+    position: relative;
+    overflow: hidden;
+    top: -5px;
+    .listing {
+        position: relative;
+        width: 80%;
+        max-width: 1000px;
+        margin: 0 auto;
+        z-index: 1;
+    }
+}
+.rainbow {
+    position: absolute;
+    left: calc(50% - 24px);
+    top: -4rem;
+    width: calc(100% + 64px);
+    height: calc(100% - 16px);
+    overflow-x: hidden;
+    pointer-events: none;
+    .rainbow-side {
+        display: flex;
+        width: 64px;
+        height: calc(100% - 64px);
+    }
+    .strip {
+        width: 100%;
+        height: 100%;
+    }
+    .rainbow-end {
+        position: absolute;
+        bottom: 0;
+        height: 64px;
+        width: 120vw;
+        display: flex;
+        align-items: flex-start;
+    }
+    .rainbow-corner {
+        display: inline-block;
+        position: relative;
+        width: 64px;
+        height: 64px;
+    }
+    .rainbow-round {
+        position: absolute;
+        right: 0;
+        border-bottom-left-radius: 100%;
+    }
+    .rainbow-horizontal {
+        width: 100vw;
+        height: 64px;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+$rainbow-colors: #078D70 #26CEAA #98E8C1 white #7BADE2 #5049CC #3D1A78;
+@each $rainbow-color in $rainbow-colors {
+    $i: index($rainbow-colors, $rainbow-color);
+    .rainbow .rainbow-round:nth-child(#{$i}) {
+        background-color: $rainbow-color;
+        width: #{64px - ($i - 1) * math.div(64px, 7)};
+        height: #{64px - ($i - 1) * math.div(64px, 7)};
+        width: calc(64px - #{$i - 1} * math.div(64px, 7));
+        height: calc(64px - #{$i - 1} * math.div(64px, 7));
+    }
+}
