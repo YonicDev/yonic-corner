@@ -37,6 +37,7 @@ export default defineConfig({
     mdx(), 
     sitemap()
   ],
+  scopedStyleStrategy: "class",
   experimental: {
     assets: true,
   },
