@@ -24,12 +24,12 @@ const bowrainColors = [...rainbowColors].reverse();
 
 <Layout {...post.data}>
     <main>
-        <article class="blog-article">
+        <div class="blog-article">
             <h1>{post.data.title}</h1>
             <p class="established">Blog established on {dateFormat.format(established)}</p>
             <hr/>
             <Content />
-        </article>
+        </div>
         <div class="rainbow">
             <div class="rainbow-side">
                 {rainbowColors.map((strip) => (
@@ -53,6 +53,7 @@ const bowrainColors = [...rainbowColors].reverse();
 </Layout>
 
 <style lang="scss">
+    @use "sass:math";
     @use "../styles/util.scss";
 
     main {
@@ -95,23 +96,25 @@ const bowrainColors = [...rainbowColors].reverse();
         .rainbow-round {
             position: absolute;
             right: 0;
-            width: var(--radius, 64px);
-            height: var(--radius, 64px);
             border-bottom-left-radius: 100%;
-            &.one {
-                background-color: green;
-                --radius: 64px;
-            }
-            &.two {
-                background-color: #1c2469;
-                --radius: 32px;
-            }
         }
         .rainbow-horizontal {
             width: 100vw;
             height: 64px;
             display: flex;
             flex-direction: column;
+        }
+    }
+
+    $rainbow-colors: #078D70 #26CEAA #98E8C1 white #7BADE2 #5049CC #3D1A78;
+    @each $rainbow-color in $rainbow-colors {
+        $i: index($rainbow-colors, $rainbow-color);
+        .rainbow .rainbow-round:nth-child(#{$i}) {
+            background-color: $rainbow-color;
+            width: #{64px - ($i - 1) * math.div(64px, 7)};
+            height: #{64px - ($i - 1) * math.div(64px, 7)};
+            width: calc(64px - #{$i - 1} * math.div(64px, 7));
+            height: calc(64px - #{$i - 1} * math.div(64px, 7));
         }
     }
 
