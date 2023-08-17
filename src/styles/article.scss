@@ -2,6 +2,7 @@
 @use "./vars.scss" as *;
 
 main {
+    display: block;
     position: relative;
     overflow: hidden;
     padding-bottom: 96px;

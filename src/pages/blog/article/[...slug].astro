@@ -126,6 +126,7 @@ const series = post.data.series ? await getEntry(post.data.series.id) : null;
 </Layout>
 
 <style lang="scss">
+    @use "sass:math";
     @use "../../../styles/util.scss";
 
     .rainbow {
@@ -180,6 +181,18 @@ const series = post.data.series ? await getEntry(post.data.series.id) : null;
             height: 64px;
             display: flex;
             flex-direction: column;
+        }
+    }
+
+    $rainbow-colors: #078D70 #26CEAA #98E8C1 white #7BADE2 #5049CC #3D1A78;
+    @each $rainbow-color in $rainbow-colors {
+        $i: index($rainbow-colors, $rainbow-color);
+        .rainbow .rainbow-round:nth-child(#{$i}) {
+            background-color: $rainbow-color;
+            width: #{64px - ($i - 1) * math.div(64px, 7)};
+            height: #{64px - ($i - 1) * math.div(64px, 7)};
+            width: calc(64px - #{$i - 1} * math.div(64px, 7));
+            height: calc(64px - #{$i - 1} * math.div(64px, 7));
         }
     }
 
