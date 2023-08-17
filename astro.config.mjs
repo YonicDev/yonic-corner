@@ -24,6 +24,7 @@ export default defineConfig({
         mdxCodeBlockAutoImport("@lib/components/CodeBlock.astro"),
         '@lib/components/TextBubble.astro',
         '@lib/components/Chara.astro',
+        '@lib/components/Anchor.astro',
         '@lib/components/PlayerLink.astro',
         '@lib/components/biyonic/Paragraph.astro',
         '@lib/components/biyonic/ListItem.astro',
