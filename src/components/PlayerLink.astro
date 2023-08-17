@@ -14,7 +14,7 @@ const id = Astro.props.id.split("/").join(osPath.sep);
 const {id: musicId, data: music} = (await getEntry('music', id))!;
 
 const coverImport = music.cover != null ? (await import(`../assets/covers/${music.cover}.png`)).default as ImageMetadata : null;
-const coverImage = coverImport != null ? await getImage({src: coverImport, width: 100, height: 100, format: "webp"}) : null;
+const coverImage = coverImport != null ? await getImage({src: coverImport, width: 64, format: "jpg"}) : null;
 
 ---
 
@@ -30,3 +30,74 @@ const coverImage = coverImport != null ? await getImage({src: coverImport, width
         <span>{[music.album, music.author].filter(field => field != null).join(" | ")}</span>
     </div>
 </a>
+
+<style lang="scss">
+    @use "../styles/util.scss";
+    @use "../styles/vars.scss" as *;
+
+    .playerLink {
+        @media screen and (min-width: 768px) {
+            display: flex;
+        }
+        display: none;
+        text-decoration: none;
+        overflow: hidden;
+        box-sizing: border-box;
+        border: 4px solid #{$emphasis-color};
+        box-shadow: util.extrude(8);
+        background-color: #{$base-color};
+        color: #{$emphasis-color};
+
+        .cover {
+            width: 64px;
+            height: 64px;
+            background-color: #{$nav-color-dark};
+            border-right: 0.25rem solid #{$emphasis-color};
+            position: relative;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+
+            .playIcon {
+                @supports(backdrop-filter: blur(5px)) {
+                    background-color: rgba($emphasis-color, 25%);
+                    backdrop-filter: blur(5px);
+                }
+                display: flex;
+                width: 100%;
+                height: 100%;
+                background-color: rgba($emphasis-color, 50%);
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: all 0.2s ease-out;
+                overflow: hidden;
+                img {
+                    width: 16px;
+                    margin: 0;
+                    transition: inherit;
+                }
+            }
+        }
+
+        &:hover {
+            color: #{$emphasis-color};
+        }
+
+        &:hover .cover .playIcon, &:focus .cover .playIcon {
+            opacity: 1;
+            img {
+                width: 32px;
+            }
+        }
+
+        .metadata {
+            padding: 0.5rem;
+            margin: 0;
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            justify-content: center;
+        }
+    }
+</style>
