@@ -7,7 +7,6 @@ import { BLOG_PAGE_SIZE } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
 import PostListing from "@lib/layouts/PostListing.svelte";
-import TagsHeader from "@lib/components/TagsHeader.svelte";
 
 import "@lib/styles/rainbow.scss"
 
@@ -48,7 +47,10 @@ const bowrainColors = [...rainbowColors].reverse();
 
 <Layout title={`Posts with tag '${tag!.replace("-", " ")}'`}>
     <main>
-        <TagsHeader tag={tag!} total={page.total} />
+        <div class="heroContainer">
+            <h1>{page.total} posts tagged with tag "{tag!.replace("-", " ")}"</h1>
+            <p><a href="/tags">&laquo; Check all tags</a></p>
+        </div>
         <div class="rainbowAnchor">
             <div class="listing">
                 <PostListing baseUrl={`/tags/${tag}`} {posts} lastPage={page.lastPage} {heroImages}/>
@@ -75,6 +77,25 @@ const bowrainColors = [...rainbowColors].reverse();
         </div>
     </main>
 </Layout>
+
+<style lang="scss">
+    @use "../../../styles/util.scss";
+    @use "../../../styles/vars.scss" as *;
+    .heroContainer {
+        display: block;
+        width: 90%;
+        position: relative;
+        margin: 1rem auto;
+        border: 4px solid #{$emphasis-color};
+        background-color: $article-color;
+        box-shadow: util.extrude(12);
+        z-index: 2;
+        padding: 0.5rem 1rem;
+        p {
+            font-size: 14pt;
+        }
+    }
+</style>
 
 <style is:inline>
     .nav {
