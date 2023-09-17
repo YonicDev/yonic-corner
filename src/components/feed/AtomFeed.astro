@@ -1,0 +1,71 @@
+---
+import { getImage } from "astro:assets";
+import { getCollection } from "astro:content";
+import getUuid from "uuid-by-string"
+import cheerio from "cheerio";
+import type { GetImageResult } from "astro";
+
+import { HIDE_DRAFTS_IN_DEVELOPMENT } from "@lib/settings";
+import HTMLFeed from "./HTMLFeed.astro";
+
+const posts = (await getCollection('blog'))
+    .filter(post => (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft)
+    .sort((a, b) => {
+        const aPub = a.data.pubDate.getTime();
+        const bPub = b.data.pubDate.getTime();
+        const aEdt = a.data.updatedDate?.getTime() ?? 0;
+        const bEdt = b.data.updatedDate?.getTime() ?? 0;
+        return Math.max(bEdt, bPub) - Math.max(aPub, aEdt) || a.id.localeCompare(b.id);
+})
+
+const atomHeader = `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="/atom/style.xsl" type="text/xsl"?>
+
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss/1.0">
+    <title>The Yonic Corner</title>
+    <subtitle><![CDATA[ A blog about games, technology, and my hobbies ]]></subtitle>
+    <link rel="self" href="${import.meta.env.SITE}/atom/feed.xml" />
+    <link rel="alternate" type="text/html" href="${import.meta.env.SITE}" />
+    <id>urn:uid:${getUuid(import.meta.env.SITE, 5)}</id>
+    <updated>${new Date().toISOString()}</updated>
+    <icon>${import.meta.env.SITE}/favicon-32x32.png</icon>
+    <webfeeds:icon>${import.meta.env.SITE}/favicon.svg</webfeeds:icon>
+    <webfeeds:wordmark>${import.meta.env.SITE}/wordmark.png</webfeeds:wordmark>
+    <image>
+        <url>${import.meta.env.SITE}/favicon.svg</url>
+        <title>The Yonic Corner</title>
+        <link>${import.meta.env.SITE}</link>
+    </image>`;
+
+const atomFooter = `</feed>`
+---
+
+<Fragment set:html={atomHeader} />
+{posts.map(async (post) => {
+    const { Content } = await post.render();
+
+    let heroImage: GetImageResult|null;
+    try {
+        const {default: hero} = await import(`../../assets/articles/${post.slug}/hero.png`);
+        heroImage = await getImage({src: hero, width: 700, format: "jpg", quality: "high"});
+    } catch(err) {
+        heroImage = null;
+    }
+
+    return (
+    <Fragment set:html={`
+        <entry>
+            <title>${post.data.title}</title>
+            <author>
+                <name>Yonic</name>
+            </author>
+            <id>${import.meta.env.SITE + "/blog/article/" + post.slug}</id>
+            <link href="${import.meta.env.SITE + "/blog/article/" + post.slug}" />
+            <link rel="alternate" type="text/html" href="${import.meta.env.SITE + "/blog/" + post.slug}" />
+            <summary><![CDATA[ ${post.data.description} ]]></summary>
+            <published>${post.data.pubDate.toISOString()}</published>
+            <updated>${(post.data.updatedDate ?? post.data.pubDate).toISOString()}</updated>
+            <content type="xhtml"><![CDATA[`}/><HTMLFeed post={post.slug}><Content slot="html"/></HTMLFeed><Fragment set:html={`]]></content>
+    </entry>`} />
+)})}
+<Fragment set:html={atomFooter} />

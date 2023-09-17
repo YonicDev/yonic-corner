@@ -13,13 +13,13 @@ series:
 
 export const components = { p: Paragraph, li: ListItem, code: Code, a: Anchor };
 
-
+<div class="feed-preview">
 As a fan for retro technology, I wished for Yonic Corner to be compatible with legacy browsers,
 while at the same time being able to support somewhat modern features and a modern development environment.
 
 The first version of the Vectarcade design of this blog proved to have some significant hurdles
 that I had to overcome. In the end, the blog works mostly fine with Internet Explorer 11, but older versions still struggle.
-
+</div>
 ## Dear Astro:where(are .you > #going) with this?
 
 The biggest issue with Astro and retrocompatibility was its default behaviour when it comes to scoped CSS.
@@ -28,7 +28,7 @@ By default, it uses the [`:where()` pseudo-class](https://developer.mozilla.org/
 In order to work around this, I ported most UI components I had with scoped CSS to Svelte, which doesn't use `:where()` by default. But when I was almost done doing this, I realized that [this behaviour can be configured in Astro](https://docs.astro.build/en/reference/configuration-reference/#scopedstylestrategy) to use the
 traditional classname approach, that is supported by most legacy browsers.
 
-<TextBubble position="bottom" alignment="near" theme="yonic">
+<TextBubble position="bottom" alignment="near" theme="yonic" name="Yonic">
 Guess I will have to refactor the styles *again* to make it more organized...
 </TextBubble>
 <Chara name="yonic" position="left" set="summer" sprite="annoyed" thoughts="I've worked too hard on this..." />

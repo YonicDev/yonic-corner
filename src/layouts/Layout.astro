@@ -20,6 +20,8 @@ const { title } = Astro.props;
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,650;1,400;1,650&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,650;1,400;1,650&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap"></noscript>
+		<link rel="shortcut icon" href="/favicon.ico">
+		<link rel="icon" type="image/x-icon" href="/favicon.ico">
 		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 		<meta name="generator" content={Astro.generator} />
@@ -29,5 +31,51 @@ const { title } = Astro.props;
 		<SiteNav client:idle />
 		<slot />
 		<Settings client:only="svelte" />
+		<footer>
+			<div class="horizontal">
+				<div class="bolts"></div>
+			</div>
+			<div class="content">
+				<p>Powered by Astro. Using own Vectarcade theme. All wrongs reserved.</p>
+				<p>
+					<a href="https://github.com/YonicDev/yonic-corner-astro" target="_blank" rel="noopener" rel="noreferrer">Source code</a> |
+					<a href="/atom/feed.xml">Subscribe to feed (Atom)</a>
+				</p>
+			</div>
+		</footer>
 	</body>
+	<slot name="feed-writer" />
 </html>
+
+<style lang="scss">
+	@use "../styles/vars.scss" as *;
+	footer {
+		position: relative;
+		bottom: 0;
+		width: 100%;
+		background-color: $emphasis-color;
+		text-align: center;
+		.horizontal {
+			background-color: $nav-color-dark;
+			height: 30px;
+			display: flex;
+			align-items: center;
+			.bolts {
+				background-image: url("/img/bolt.svg");
+				background-size: 8px;
+				height: 16px;
+				flex-grow: 1;
+			}
+		}
+		.content {
+			color: $article-color;
+			p {
+				margin: 0;
+				padding: 0.75em;
+			}
+			a {
+				color: $base-color;
+			}
+		}
+	}
+</style>
