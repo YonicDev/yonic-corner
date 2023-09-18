@@ -1,0 +1,11 @@
+{
+    "title": "Meta Ridley (soundtrack version)",
+    "album": "Metroid Prime Trilogy",
+    "cover": "mpt-disc",
+    "sources": [
+        {
+            "src": "http://metroid.retropixel.net/games/mprime/music/mp59.mp3",
+            "type": "audio/mpeg"
+        }
+    ]
+}

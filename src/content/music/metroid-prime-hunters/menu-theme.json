@@ -1,0 +1,11 @@
+{
+    "title": "Menu Theme",
+    "album": "Metroid Prime: Hunters",
+    "cover": "mph", 
+    "sources": [
+        {
+            "src": "https://fi.zophar.net/soundfiles/nintendo-ds-2sf/metroid-prime-hunters/29%20BGM%20%2329%20%5BSEQ_CHUTNEY%5D.mp3",
+            "type": "audio/mpeg"
+        }
+    ]
+}

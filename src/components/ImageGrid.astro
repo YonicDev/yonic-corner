@@ -1,0 +1,21 @@
+<div class="image-grid">
+    <slot/>
+</div>
+<p class="image-grid-caption"><slot name="caption"></slot></p>
+
+<style lang="scss">
+    .image-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+        :global(img) {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    .image-grid-caption {
+        font-style: italic;
+    }
+</style>
