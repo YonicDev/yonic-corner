@@ -22,7 +22,7 @@ const bowrainColors = [...rainbowColors].reverse();
 
 ---
 
-<Layout {...post.data}>
+<Layout {...post.data} openGraph={{type: "article", article: {pubDate: established, category: "About", tags: []}}} keywords={["yonic corner", "about", "blog", "info"]}>
     <main>
         <div class="blog-article">
             <h1>{post.data.title}</h1>

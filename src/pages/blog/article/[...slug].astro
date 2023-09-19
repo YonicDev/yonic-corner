@@ -1,6 +1,6 @@
 ---
 import { CollectionEntry, getCollection, getEntry } from 'astro:content';
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
 
 import { categories } from '@lib/settings';
 import Layout from '@lib/layouts/Layout.astro';
@@ -74,7 +74,7 @@ const series = post.data.series ? await getEntry(post.data.series.id) : null;
 
 ---
 
-<Layout {...post.data}>
+<Layout {...post.data} twitterCard="summary_large_image" description={post.data.description} coverImage={hero? `${Astro.url.protocol}//${Astro.url.host}${(await getImage({src: hero, width: 600, format: "jpg"})).src}` : undefined} openGraph={{type: "article", article: {pubDate, updatedDate, category: post.data.category, tags}}} keywords={tags}>
     <main>
         <div class="blog-article">
             {hero && <Image class:list={["cover", post.data.heroPosition]} alt="Cover image" src={hero} width={768} height={432} />}

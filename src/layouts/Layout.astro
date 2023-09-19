@@ -1,31 +1,92 @@
 ---
+import { SEO, type Meta, type TwitterCardType } from "astro-seo";
+
 import SiteNav from "@lib/components/SiteNav.svelte";
 import Settings from '@lib/components/Settings.svelte';
 import '../styles/global.scss';
 
-export interface Props {
-	title: string;
+type OpenGraph = {
+	type: string,
+	keywords?: string[],
+	article?: {
+		pubDate: Date,
+		updatedDate?: Date
+		category: string,
+		tags: string[]
+	}
 }
 
-const { title } = Astro.props;
+export interface Props {
+	title: string,
+	coverImage?: string,
+	description?: string,
+	keywords?: string[],
+	twitterCard?: TwitterCardType,
+	openGraph?: Partial<OpenGraph>
+}
+
+const defaultOpenGraph = {
+	type: "website",
+	keywords: [] as string[],
+	article: undefined
+}
+
+const { title, description = "Welcome to my blog.", openGraph = defaultOpenGraph, twitterCard = "summary", coverImage, keywords = openGraph.article?.tags ?? defaultOpenGraph.keywords } = Astro.props;
+
+const extendedMeta: Partial<Meta>[] = [];
+if(keywords.length > 0) {
+	extendedMeta.push({name: "keywords", content: keywords.join(", ")})
+}
 ---
 
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+		<SEO
+			{title}
+			titleTemplate="%s | The Yonic Corner"
+			{description}
+			openGraph={{
+				basic: {
+					title: `${title} | The Yonic Corner`,
+					type: openGraph.type ?? defaultOpenGraph.type,
+					image: coverImage ?? ""
+				},
+				article: openGraph.article,
+				optional: {
+					description,
+					siteName: "The Yonic Corner"
+				}
+			}}
+			twitter={{
+				card: twitterCard,
+				creator: "@Yonikkun",
+				site: "@Yonikkun",
+				image: coverImage ?? "",
+				description
+			}}
+			extend={{
+				link: [
+					{ rel: "icon", type:"image/svg+xml", href: "/favicon.svg"},
+					{ rel: "icon", type:"image/x-icon", href: "/favicon.ico"},
+					{ rel: "icon", type:"image/png", sizes: "16x16" as unknown as DOMTokenList, href: "/favicon-16x16.png"},
+					{ rel: "icon", type:"image/png", sizes: "32x32" as unknown as DOMTokenList, href: "/favicon-32x32.png"},
+					{ rel: "shortcut icon", href: "/favicon.ico"},
+					{ rel: "alternate", type: "application/rss+xml", title:"The Yonic Corner", href: "/atom/feed.xml"}
+				],
+				meta: [
+					{ name: "viewport", content: "width=device-width, initial-scale=1.0"},
+					{ name: "generator", content: Astro.generator},
+					{ name: "theme-color", content: "#92F3ED"},
+					...extendedMeta
+				]
+			}}
+		/>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,650;1,400;1,650&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,650;1,400;1,650&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap"></noscript>
-		<link rel="shortcut icon" href="/favicon.ico">
-		<link rel="icon" type="image/x-icon" href="/favicon.ico">
-		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
 	</head>
 	<body>
 		<SiteNav client:idle />
