@@ -103,11 +103,16 @@ article {
     }
 }
 
+.main-container {
+    min-height: calc(100vh - 110px - 114px);
+    padding: 1rem 0;
+}
+
 .tag-container {
     background-color: #{$article-color};
     border: 4px solid #{$emphasis-color};
     box-shadow: util.extrude(8);
-    margin: 1rem auto;
+    margin: 0 auto;
     padding: 1rem;
     width: 75%;
     h1 {

@@ -34,7 +34,7 @@ interface Props {
 ---
 
 <Layout title="Posts">
-    <main>
+    <main class="main-container">
         <CategoryButtons />
         <PostListing posts={posts.filter(post => import.meta.env.DEV || !post.data.draft)} {heroImages} currentPage={page.currentPage} lastPage={page.lastPage} baseUrl="/blog" />
     </main>

@@ -50,7 +50,7 @@ const heroImages = await getHeroImages(posts);
 ---
 
 <Layout title={`${category.title} posts`}>
-    <main>
+    <main class="main-container">
         <CategoryHero categoryId={categoryId ?? ""} {category} />
         <div class="rainbowAnchor">
             <div class="listing">

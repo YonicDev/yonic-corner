@@ -18,8 +18,10 @@ for (const tag of tags) {
 ---
 
 <Layout title="All tags">
-    <div class="tag-container">
-        <h1>Tags</h1>
-        { tags.map(tag => <Tag {tag} total={occurrences[tag]} />) }
+    <div class="main-container">
+        <div class="tag-container">
+            <h1>Tags</h1>
+            { tags.map(tag => <Tag {tag} total={occurrences[tag]} />) }
+        </div>
     </div>
 </Layout>
