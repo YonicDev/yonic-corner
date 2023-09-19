@@ -7,17 +7,15 @@ import "@lib/styles/series.scss";
 
 const series = await getCollection("series");
 
+const description = "Ever had problems trying to locate the next part of a post? In my blog, I've implemented a way to group all posts in Series that tell a whole story so you can read it more conveniently."
+
 ---
 
-<Layout title="Series">
+<Layout title="Series" {description} coverImage={`${Astro.url.protocol}//${Astro.url.host}/img/seo/series.png`} keywords={["blog","navigation","search","sequence","article","series"]}>
     <main class="index-series">
         <div class="hero">
             <h1>Series</h1>
-            <p>
-                Ever had problems trying to locate the next part of a post? 
-                In my blog, I've implemented a way to group all posts in Series that tell a whole story
-                so you can read it more conveniently.
-            </p>
+            <p>{description}</p>
         </div>
         <ul class="grid">
             {

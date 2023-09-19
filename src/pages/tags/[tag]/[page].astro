@@ -45,7 +45,7 @@ const rainbowColors = ["#078D70","#26CEAA","#98E8C1","white","#7BADE2","#5049CC"
 const bowrainColors = [...rainbowColors].reverse();
 ---
 
-<Layout title={`Posts with tag '${tag!.replace("-", " ")}'`}>
+<Layout title={`Posts with tag '${tag!.replace("-", " ")}'`} keywords={["blog","search",tag!]}>
     <main>
         <div class="heroContainer">
             <h1>{page.total} posts tagged with tag "{tag!.replace("-", " ")}"</h1>

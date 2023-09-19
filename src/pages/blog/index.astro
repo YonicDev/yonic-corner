@@ -27,7 +27,7 @@ posts.length = BLOG_PAGE_SIZE;
 
 ---
 
-<Layout title="Posts">
+<Layout title="All posts" description="Browse all the posts from my blog." keywords={["blog", "posts", "navigation", "list", "index"]}>
     <main class="main-container">
         <CategoryButtons />
         <PostListing posts={posts.filter(post => (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft)} {heroImages} currentPage={1} lastPage={lastPage} baseUrl="/blog" />

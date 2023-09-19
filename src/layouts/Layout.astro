@@ -31,7 +31,14 @@ const defaultOpenGraph = {
 	article: undefined
 }
 
-const { title, description = "Welcome to my blog.", openGraph = defaultOpenGraph, twitterCard = "summary", coverImage, keywords = openGraph.article?.tags ?? defaultOpenGraph.keywords } = Astro.props;
+const { 
+	title, 
+	description = "Welcome to my blog.", 
+	openGraph = defaultOpenGraph, 
+	twitterCard = "summary", 
+	coverImage = `${Astro.url.protocol}//${Astro.url.host}/img/seo/generic.png`, 
+	keywords = openGraph.article?.tags ?? defaultOpenGraph.keywords 
+} = Astro.props;
 
 const extendedMeta: Partial<Meta>[] = [];
 if(keywords.length > 0) {
@@ -51,7 +58,7 @@ if(keywords.length > 0) {
 				basic: {
 					title: `${title} | The Yonic Corner`,
 					type: openGraph.type ?? defaultOpenGraph.type,
-					image: coverImage ?? ""
+					image: coverImage
 				},
 				article: openGraph.article,
 				optional: {
@@ -63,7 +70,7 @@ if(keywords.length > 0) {
 				card: twitterCard,
 				creator: "@Yonikkun",
 				site: "@Yonikkun",
-				image: coverImage ?? "",
+				image: coverImage,
 				description
 			}}
 			extend={{

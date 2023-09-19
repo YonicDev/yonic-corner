@@ -57,7 +57,7 @@ if(seriesId) {
 const heroImage = processedImage? `url("${processedImage.src}")` : "url('/img/series-hero.svg')";
 ---
 
-<Layout title="Posts">
+<Layout title={series.title} description={series.description} twitterCard={processedImage? "summary_large_image" : "summary"} coverImage={processedImage? `${Astro.url.protocol}//${Astro.url.host}${processedImage.src}` : `${Astro.url.protocol}//${Astro.url.host}/img/seo/series.png`}>
     <main class="series-overview">
         <div class="heroContainer">
             <div class="data">
