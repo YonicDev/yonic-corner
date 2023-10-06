@@ -33,7 +33,7 @@ The `src/settings.ts` file contains some properties that control the overall str
 
 ## Content
 
-The Yonic Corner uses Astro content collections for data regarding the site.
+The Yonic Corner uses Astro content collections for handling the actual content of the blog.
 
 ### Blog posts
 
@@ -107,12 +107,17 @@ Located in `content/music`.
 
 These contain the metadata for music tracks to be played in the blog's music player.
 
-Contains JSON data only. Properties in italics are optional. The internal ID is set in the filename.
+This is the only content collection that has subfolders, one for each "track subset", which is included in the track's ID.
+
+Contains JSON data only. Properties in italics are optional.
 
 * `title`: The title of the track
 * *`author`*: The author/composer of the music
 * *`album`*: The album to which the track belongs to. In the Yonic Corner, it also refers to the title of the games the soundtrack belongs to.
 * *`cover`*: The filename of the cover image. Preferably a square image. The image has to be placed in the `/src/assets/covers` folder.
+* `sources`: An array of audio sources for the track, made of objects with all properties mandatory:
+  * `src`: The URL targeting the audio source.
+  * `type`: The MIME type of the source. It must be one of the compatible `audio/` types.
 
 ## Web feeds
 
