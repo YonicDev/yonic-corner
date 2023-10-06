@@ -3,7 +3,7 @@
   "type": "module",
   "private": "true",
   "license": "GPL-3.0",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "browserslist": [
     "IE >= 5.5, Firefox >= 1, supports flexbox"
   ],

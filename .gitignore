@@ -24,3 +24,4 @@ pnpm-debug.log*
 .netlify
 
 src/feeds
+asset-making/
