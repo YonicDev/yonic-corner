@@ -1,0 +1,23 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+    src: ImageMetadata,
+    alt: string,
+    width?: number | string
+}
+
+const {src, alt} = Astro.props;
+let {width = 768} = Astro.props;
+
+if(typeof width === "string")
+    width = parseInt(width);
+
+---
+
+<figure>
+    <Image {src} {alt} {width} />
+    <figcaption class="biyonic">
+        <slot />
+    </figcaption>
+</figure>
