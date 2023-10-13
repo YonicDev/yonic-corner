@@ -1,22 +1,24 @@
 ---
+import type { ImageOutputFormat } from "astro";
 import { Image } from "astro:assets";
 
 interface Props {
     src: ImageMetadata,
     alt: string,
-    width?: number | string
+    width?: number,
+    format?: ImageOutputFormat
 }
 
-const {src, alt} = Astro.props;
-let {width = 768} = Astro.props;
+const defaultWidth = 700;
+const {src, alt, format } = Astro.props;
+const width = Astro.props.width? Math.min(defaultWidth, Astro.props.width) : defaultWidth;
 
-if(typeof width === "string")
-    width = parseInt(width);
+const cssWidth = Astro.props.width? width + 'px' : "auto";
 
 ---
 
-<figure>
-    <Image {src} {alt} {width} />
+<figure class="thumbnail" style={{width: cssWidth}}>
+    <Image {src} {alt} {width} {format} />
     <figcaption class="biyonic">
         <slot />
     </figcaption>

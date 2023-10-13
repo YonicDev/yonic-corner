@@ -30,6 +30,7 @@ export default defineConfig({
         '@lib/components/biyonic/ListItem.astro',
         '@lib/components/biyonic/Code.astro',
         '@lib/components/ImageGrid.astro',
+        '@lib/components/Picture.astro',
         {
           'astro:assets': ['Image']
         },
