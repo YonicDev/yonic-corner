@@ -39,11 +39,18 @@ const bowrainColors = [...rainbowColors].reverse();
 
 let imageMeta: ImageMetadata | undefined;
 let processedImage: GetImageResult | undefined;
+
 if(seriesId) {
     try {
-        imageMeta = (await import(`../assets/series/${seriesId}.png`)).default;
+        imageMeta = (await import(`../../assets/series/${seriesId}.png`)).default;
         processedImage = await getImage({ src: imageMeta!, width: 800, format: "webp", quality: seriesId? "mid" : "max"});
-    } catch {
+    } catch (e) {
+        if(e instanceof Error) {
+            if(e.message.includes("Unknown variable dynamic import"))
+            console.info(`[i] Series with ID ${seriesId} does not have a cover in the assets folder.\nMake sure it is properly named as ${seriesId}.png`);
+            else
+                console.error(e.message);
+        }
         imageMeta = undefined;
     }
 }
@@ -86,9 +93,22 @@ const heroImage = processedImage? `url("${processedImage.src}")` : "url('/img/se
     </main>
 </Layout>
 
-<style>
+<style lang="scss">
     .series-overview {
-        min-height: calc(100vh - 110px - 114px);
+        // min-height: calc(100vh - 110px - 114px);
         padding: 1rem 0;
+        .heroContainer {
+            height: auto;
+        }
+        .hero {
+            padding: 0;
+        }
+    }
+    @media screen and (max-width: 750px) {
+        .series-overview .hero {
+            height: auto;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+        }
     }
 </style>

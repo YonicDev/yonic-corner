@@ -1,5 +1,7 @@
 ---
 import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
+import type { GetImageResult } from "astro";
 
 import Layout from "@lib/layouts/Layout.astro";
 
@@ -20,15 +22,29 @@ const description = "Ever had problems trying to locate the next part of a post?
         <ul class="grid">
             {
                 series.map(async ({id, data}) => {
-                    return (
-                        <li>
-                            <a href={`/series/${id}`}>
-                                <img alt="Cover" src="/img/series-hero.svg" height="200"/>
-                                <h3>{data.title}</h3>
-                                <p>{data.description}</p>
-                            </a>
-                        </li>
-                    )
+                    let coverImage: GetImageResult | undefined;
+                    try {
+                        const {default: src} = await import(`../../assets/series/${id}.png`);
+                        coverImage = await getImage({src, width: 400});
+                    } catch (e) {
+                        if(e instanceof Error) {
+                            if(e.message.includes("Unknown variable dynamic import"))
+                                console.info(`[i] Series with ID ${id} does not have a cover in the assets folder.\nMake sure it is properly named as ${id}.png`);
+                            else
+                                console.error(e.message);
+                        }
+                        coverImage = undefined;
+                    } finally {
+                        return (
+                            <li>
+                                <a href={`/series/${id}`}>
+                                    <img alt="Cover" src={coverImage?.src ?? "/img/series-hero.svg"} height="200"/>
+                                    <h3>{data.title}</h3>
+                                    <p>{data.description}</p>
+                                </a>
+                            </li>
+                        )
+                    }
                 })
             }
         </ul>
@@ -83,7 +99,8 @@ const description = "Ever had problems trying to locate the next part of a post?
                     }
                     img {
                         width: 100%;
-                        object-fit: cover;
+                        height: auto;
+                        aspect-ratio: 16 / 9;
                     }
                 }
             }
