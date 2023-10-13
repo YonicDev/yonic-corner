@@ -15,19 +15,12 @@ export const getStaticPaths = async() => {
     const series = await getCollection("series");
     const allPosts = (await getCollection('blog'))
     .filter(post => import.meta.env.DEV || !post.data.draft)
-    .sort((a, b) => {
-        const aPub = a.data.pubDate.getTime();
-        const bPub = b.data.pubDate.getTime();
-        const aEdt = a.data.updatedDate?.getTime() ?? 0;
-        const bEdt = b.data.updatedDate?.getTime() ?? 0;
-        return Math.max(bEdt, bPub) - Math.max(aPub, aEdt);
-    });
     return series.map(serie => {
         return {
             params: { series: serie.id },
             props: {
                 series: serie.data,
-                posts: allPosts.filter(post => post.data.series?.id.id === serie.id)
+                posts: allPosts.filter(post => post.data.series?.id.id === serie.id).sort((a, b) => a.data.series!.order - b.data.series!.order)
             }
         }
     });
