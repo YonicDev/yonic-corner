@@ -1,15 +1,12 @@
 ---
 import { getEntry } from "astro:content";
 import { getImage } from "astro:assets";
-import path from "path";
 
 interface Props {
     id: string;
 }
 
-const osPath = process.platform === 'win32' ? path["win32"] : path["posix"];
-
-const id = Astro.props.id.split("/").join(osPath.sep);
+const {id} = Astro.props;
 
 const {id: musicId, data: music} = (await getEntry('music', id))!;
 
