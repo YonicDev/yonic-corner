@@ -15,7 +15,7 @@
         {#if prev}
             <a href={`/blog/article/${prev.slug}`}>
                 <b>&larr; PREV</b>
-                <span class="title">{prev.data.title}{#if prev.data.draft}<sup>[draft]</sup>{/if}</span>
+                <span class="title" style="justify-content: flex-start">{prev.data.title}{#if prev.data.draft}<sup>[draft]</sup>{/if}</span>
             </a>
         {/if}
     </div>
@@ -24,7 +24,7 @@
         {#if next}
             <a href={`/blog/article/${next.slug}`}>
                 <b>NEXT &rarr;</b>
-                <span class="title">{next.data.title}{#if next.data.draft}<sup>[draft]</sup>{/if}</span>
+                <span class="title" style="justify-content: flex-end">{next.data.title}{#if next.data.draft}<sup>[draft]</sup>{/if}</span>
             </a>
         {/if}
     </div>
