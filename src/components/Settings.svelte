@@ -2,11 +2,20 @@
     import Toggle from "svelte-toggle";
     import { textVide } from "text-vide";
 
+    const themes = ["light", "dark", "legacy"] as const;
+    type Theme = typeof themes[number];
+
     let biyonicEnabled = window.localStorage.getItem("biyonic-reading") === "on";
+    let theme = (window.localStorage.getItem("theme") ?? "light") as Theme;
 
     $: {
         window.localStorage.setItem("biyonic-reading", biyonicEnabled? "on" : "off");
         toggleBiyonic();
+    }
+    
+    $: {
+        window.localStorage.setItem("theme", theme);
+        document.documentElement.setAttribute("data-theme", theme);
     }
 
     // Elements with HTML inside.
@@ -67,6 +76,14 @@
 <div id="settings-panel">
     <div class="settings-inner">
         <div>
+            <label for="themeSwitcher" class="biyonic-string">Theme:</label><br/>
+            <select id="themeSwitcher" bind:value={theme}>
+                {#each themes as theme}
+                    <option value={theme}>{theme[0].toUpperCase()}{theme.substring(1)}</option>
+                {/each}
+            </select>
+        </div>
+        <div>
             <label for="biyonicToggle">{@html textVide("Biyonic reading", {ignoreHtmlTag: true})} <a href="/blog/article/biyonic-reading" target="_blank" rel="noreferrer">(?)</a></label>
             <Toggle id="biyonicToggle" style="cursor: url('/img/cursors/pointer.png'), pointer;" toggledColor="var(--nav-color-dark)" bind:toggled={biyonicEnabled} hideLabel on="On" off="Off"/>
         </div>
@@ -80,7 +97,6 @@
         display: flex;
         position: fixed;
         z-index: 555;
-        width: 250px;
         height: 69px;
         bottom: 64px;
         left: 0;
@@ -95,6 +111,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
+            gap: 1em;
             padding: 16px;
         }
 

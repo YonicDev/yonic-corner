@@ -1,0 +1,121 @@
+@use "sass:list";
+@use "../vars.scss" as *;
+
+:root[data-theme="legacy"] {
+    $base-color: #A1FFED;
+    $article-color: #C5FFF4;
+    $emphasis-color: #00423A;
+    $nav-color-dark: #009183;
+    body {
+        background: url("https://legacy.yonic.blog/ui/bg.gif");
+    }
+    main {
+        background: none;
+    }
+    main.main-container, main.main-wrapper {
+
+        .infobox {
+            background-color: $article-color;
+            box-shadow: none;
+            border: 3px solid $nav-color-dark;
+        }
+
+        ul.nav > li {
+            a {
+                background-color: #a5cef5!important;
+                border: 3px solid #1e1947!important;
+                box-shadow: none!important;
+                color: #0061bd!important;
+            }
+            li.current a {
+                color: black!important;
+            }
+        }
+    }
+
+    nav {
+        background-color: #03f3ff!important;
+        background-image: url("https://legacy.yonic.blog/ui/bubbles.gif");
+        background-position: top center;
+
+        .navigation li a {
+            border: 3px solid $emphasis-color;
+            border-bottom: none!important;
+            background-color: #056b5a!important;
+            color: $base-color!important;
+        }
+    }
+
+    ul.listing {
+        > li {
+            box-shadow: none!important;
+            border: 3px solid $emphasis-color!important;
+            background: $article-color!important;
+        }
+        a, h1, a a {
+            color: black!important;
+        }
+    }
+
+    .blog-article {
+        background-color: $article-color!important;
+        border: 4px solid $nav-color-dark!important;
+        box-shadow: none!important;
+        .playerLink {
+            box-shadow: none!important;
+            .metadata {
+                background-color: $base-color!important;
+            }
+        }
+    }
+
+    .navigator {
+        box-shadow: none!important;
+        border-width: 3px;
+        &.all {
+            background-color: $base-color!important;
+            .series {
+                background-color: $nav-color-dark!important;
+                color: $article-color!important;
+            }
+        }
+    }
+
+    .tagList .list, .tags .list {
+        background-color: #a5cef5;
+        color: #1768d3!important;
+    }
+
+    .category-list {
+        li a {
+            box-shadow: none!important;
+            transform: none!important;
+            transition: none!important;
+        }
+        @each $category, $data in $categories {
+            li.link-#{$category} a {
+                background-color: list.nth($data, 1);
+                color: list.nth($data, 2);
+                border-color: list.nth($data, 2);
+            }
+        }
+    }
+
+    footer {
+        background-color: #1b1b2f!important;
+        background-image: url("https://legacy.yonic.blog/ui/footer.jpg");
+        .content {
+            color: white!important;
+        }
+    }
+
+    #settings-panel, #player {
+        background-color: $article-color!important;
+        border-color: $emphasis-color!important;
+        border-width: 3px!important;
+        box-shadow: none!important;
+        .settings-tab, .music-tab {
+            background-color: $nav-color-dark!important;
+        }
+    }
+}
