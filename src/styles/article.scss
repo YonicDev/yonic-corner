@@ -64,6 +64,11 @@ main {
             color: #{$emphasis-color};
         }
     }
+
+    img.scalable {
+        width: 100%;
+        height: auto;
+    }
 }
 
 .navigator {
