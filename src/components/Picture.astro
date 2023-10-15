@@ -13,11 +13,11 @@ const defaultWidth = 700;
 const {src, alt, format } = Astro.props;
 const width = Astro.props.width? Math.min(defaultWidth, Astro.props.width) : defaultWidth;
 
-const cssWidth = Astro.props.width? width + 'px' : "auto";
+const cssWidth = Astro.props.width? width + 'px' : undefined;
 
 ---
 
-<figure class="thumbnail" style={{width: cssWidth}}>
+<figure class="thumbnail" style={{maxWidth: cssWidth}}>
     <Image {src} {alt} {width} {format} />
     <figcaption class="biyonic">
         <slot />
