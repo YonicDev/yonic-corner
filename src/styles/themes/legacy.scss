@@ -118,4 +118,52 @@
             background-color: $nav-color-dark!important;
         }
     }
+
+    #profile-image {
+        box-shadow: none!important;
+        border: 10px solid $emphasis-color!important;
+        width: 200px;
+        height: 200px;
+        box-sizing: content-box;
+        padding: 0!important;
+        position: static;
+    }
+
+    $bungee-length: 16;
+
+    .bungee-container > .bungee {
+        animation-name: logo-legacy!important;
+        animation-duration: 2s!important;
+        animation-timing-function: steps(#{$bungee-length}, start)!important;
+        text-shadow: #{util.extrude(6, #00322e)}!important;
+        -webkit-text-stroke: 2.5px #002a26!important;
+    }
+
+    @for $i from 1 through $bungee-length {
+        .bungee-container > .bungee:nth-child(#{$i}) {
+            animation-delay: -#{$i * 0.1}s!important;
+        }
+    }
+
+    .bungee-shadow {
+        display: none!important;
+    }
+}
+
+@keyframes logo-legacy {
+    0%,100% {
+        color: #0041d0;
+        transform: translate3d(0px, 0px, 0px);
+    }
+    50% {
+        color: #00fcff;
+    }
+    85% {
+        color: #00f14c;
+        transform: translate3d(0px, 0px, 0px);
+    }
+    90% {
+        color: #0041d0;
+        transform: translate3d(0, -15px, 0px);
+    }
 }

@@ -76,7 +76,7 @@
 <div id="settings-panel">
     <div class="settings-inner">
         <div>
-            <label for="themeSwitcher" class="biyonic-string">Theme:</label><br/>
+            <label for="themeSwitcher" class="biyonic-string">Theme</label><br/>
             <select id="themeSwitcher" bind:value={theme}>
                 {#each themes as theme}
                     <option value={theme}>{theme[0].toUpperCase()}{theme.substring(1)}</option>
