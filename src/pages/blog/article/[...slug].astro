@@ -2,7 +2,7 @@
 import { CollectionEntry, getCollection, getEntry } from 'astro:content';
 import { getImage, Image } from 'astro:assets';
 
-import { categories } from '@lib/settings';
+import { HIDE_DRAFTS_IN_DEVELOPMENT, categories } from '@lib/settings';
 import Layout from '@lib/layouts/Layout.astro';
 import QuickLinks from '@lib/components/QuickLinks.svelte';
 import Tag from '@lib/components/Tag.svelte';
@@ -19,7 +19,7 @@ interface Props {
 
 export async function getStaticPaths() {
 	const posts = (await getCollection('blog')).filter(post => {
-        return import.meta.env.DEV || !post.data.draft;
+        return (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft;
     }).sort((a, b) => {
         const aPub = a.data.pubDate.getTime();
         const bPub = b.data.pubDate.getTime();
@@ -36,7 +36,7 @@ export async function getStaticPaths() {
 
 const { post, allPosts, index } = Astro.props;
 const postsSameCategory = allPosts.filter(other => post.data.category === other.data.category);
-const postsSameSeries = allPosts.filter(other => post.data.series && other.data.series && post.data.series.id === other.data.series.id)
+const postsSameSeries = allPosts.filter(other => post.data.series && other.data.series && post.data.series.id.id === other.data.series.id.id)
     .sort((a, b) => a.data.series!.order - b.data.series!.order);
 const sameCategoryIndex = postsSameCategory.indexOf(post);
 const sameSeriesIndex = postsSameSeries.indexOf(post)
