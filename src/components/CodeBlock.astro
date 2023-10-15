@@ -33,11 +33,14 @@ const buttonLabel = "Copy code";
         </span>
     }
     <div>
-        <Code code={code} lang={lang} theme="min-light"/>
+        <Code code={code} lang={lang} theme="min-dark"/>
     </div>
 </div>
 
 <style>
+    .code-block {
+        position: relative;
+    }
     .code-block.dark {
         display: none;
     }

@@ -16,6 +16,9 @@
     $: {
         window.localStorage.setItem("theme", theme);
         document.documentElement.setAttribute("data-theme", theme);
+        document.querySelectorAll<HTMLPreElement>(".code-block.dark pre").forEach((element) => {
+            element.style.backgroundColor = theme === "legacy" ? "#003333" : "#1E1E1E";
+        })
     }
 
     // Elements with HTML inside.
