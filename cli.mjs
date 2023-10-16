@@ -18,7 +18,7 @@ program
             category: "misc",
             tags: []
         }
-        let output =`---\n${yaml.stringify(frontmatter)}---\nBody of the post here...`;
+        let output =`---\n${yaml.stringify(frontmatter)}---\n\nImage imports go here...\n\nexport const components = { p: Paragraph, li: ListItem, code: Code, a: Anchor };\n\n<div class="feed-preview">\nAnything inside this element will be inside the content of the RSS feed.\n(No leading whitespaces!)\n</div>\n\nBody of the post here...`;
 
         const id = options.id
             ? options.id.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, "").replace(/\s/, "-").toLowerCase()
