@@ -50,18 +50,22 @@ const blogCollection = defineCollection({
         ]).optional(),
         draft: z.boolean().optional().default(false),
         pubDate: z
-			.string()
-			.or(z.date())
-			.transform((val) => new Date(val)),
-		updatedDate: z
-			.string()
+            .string()
             .or(z.date())
-			.optional()
-			.transform((str) => (str ? new Date(str) : undefined)),
+            .transform((val) => new Date(val)),
+        updatedDate: z
+            .string()
+                .or(z.date())
+            .optional()
+            .transform((str) => (str ? new Date(str) : undefined)),
         series: z.object({
             id: reference("series"),
             order: z.number().int()
-        }).strict().optional()
+        }).strict().optional(),
+        readingTime: z.object({
+            text: z.number().int(),
+            video: z.number().int().default(0)
+        }).optional() // Filled in the reading time Remark plugin
     }).strict()
 });
 
@@ -88,16 +92,16 @@ const musicCollection = defineCollection({
 
 const seriesCollection = defineCollection({
   type: "data",
-  schema: z.object({
-    title: z.string(),
-    description: z.string()
-  }).strict()
+    schema: z.object({
+        title: z.string(),
+        description: z.string()
+    }).strict()
 });
 
 
 export const collections = {
-  blog: blogCollection,
-  about: aboutCollection,
-  music: musicCollection,
-  series: seriesCollection
+    blog: blogCollection,
+    about: aboutCollection,
+    music: musicCollection,
+    series: seriesCollection
 };

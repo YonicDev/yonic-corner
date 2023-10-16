@@ -1,21 +1,22 @@
 ---
-const {id, title, description, instance} = Astro.props;
+const {id, title, description, instance, duration} = Astro.props;
 
 interface Props {
     id: string;
     title?: string;
     description?: string;
     instance: string;
+    duration?: `${number}:${number}`;
 }
 
 const INVIDIOUS_DEFAULT_INSTANCE = "https://inv.tux.pizza";
 ---
 
 <iframe title="Video player" src={`${instance ?? INVIDIOUS_DEFAULT_INSTANCE}/embed/${id}`}/>
-<p class="videoCaption biyonic">
-    <b>{title ?? "Untitled video"}</b>
-    {description && <i>{description}</i>}
-</p>
+<div class="videoCaption">
+    <p><b><u>{title ?? "Untitled video"}</u></b> {duration && <span>({duration})</span>}</p>
+    <p>{description && <i class="biyonic-string">{description}</i>}</p>
+</div>
 
 <style lang="scss">
     @use "../styles/util.scss";
@@ -26,9 +27,6 @@ const INVIDIOUS_DEFAULT_INSTANCE = "https://inv.tux.pizza";
         border: inherit;
         border-width: 2px;
         box-shadow: util.extrude(8);
-    }
-    b, i {
-        display: block;
     }
     b {
         margin-bottom: 1em;

@@ -8,11 +8,14 @@ import MDXCodeBlocks, { mdxCodeBlockAutoImport } from 'astro-mdx-code-blocks';
 
 import absent from "./src/assets/code-themes/absent-light.json";
 
+import readingTime from './src/remark/reading-time.mjs';
+
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://www.yonic.blog",
   markdown: {
+    remarkPlugins: [readingTime],
     shikiConfig: {
       theme: absent
     }

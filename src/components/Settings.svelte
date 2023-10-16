@@ -2,10 +2,12 @@
     import Toggle from "svelte-toggle";
     import { textVide } from "text-vide";
 
-    let biyonicEnabled = window.localStorage.getItem("biyonic-reading") === "on";
+    import { biyonicEnabled } from "@lib/stores"
+
+    $biyonicEnabled = window.localStorage.getItem("biyonic-reading") === "on";
 
     $: {
-        window.localStorage.setItem("biyonic-reading", biyonicEnabled? "on" : "off");
+        window.localStorage.setItem("biyonic-reading", $biyonicEnabled? "on" : "off");
         toggleBiyonic();
     }
 
@@ -23,7 +25,7 @@
 
 
     async function toggleBiyonic() {
-        if(biyonicEnabled) {
+        if($biyonicEnabled) {
             await Promise.all([
                 ...biyonicStrings.map(({element, innerString}) => {
                     return new Promise<void>((resolve) => {
@@ -68,7 +70,7 @@
     <div class="settings-inner">
         <div>
             <label for="biyonicToggle">{@html textVide("Biyonic reading", {ignoreHtmlTag: true})} <a href="/blog/article/biyonic-reading" target="_blank" rel="noreferrer">(?)</a></label>
-            <Toggle id="biyonicToggle" style="cursor: url('/img/cursors/pointer.png'), pointer;" toggledColor="var(--nav-color-dark)" bind:toggled={biyonicEnabled} hideLabel on="On" off="Off"/>
+            <Toggle id="biyonicToggle" style="cursor: url('/img/cursors/pointer.png'), pointer;" toggledColor="var(--nav-color-dark)" bind:toggled={$biyonicEnabled} hideLabel on="On" off="Off"/>
         </div>
     </div>
     <div class="settings-tab"><img alt="Music" src="/img/icons/settings.svg" width="28"/></div>

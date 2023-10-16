@@ -8,6 +8,7 @@ import QuickLinks from '@lib/components/QuickLinks.svelte';
 import Tag from '@lib/components/Tag.svelte';
 import HTMLMusicPlayer from '@lib/components/HTMLMusicPlayer.svelte';
 import PostIcon from '@lib/components/PostIcon.svelte';
+import TimeToRead from '@lib/components/TimeToRead.svelte';
 
 import "@lib/styles/article.scss";
 
@@ -42,7 +43,7 @@ const sameCategoryIndex = postsSameCategory.indexOf(post);
 const sameSeriesIndex = postsSameSeries.indexOf(post)
 
 const {pubDate, updatedDate, tags} = post.data;
-const { Content } = await post.render();
+const { Content, remarkPluginFrontmatter } = await post.render();
 
 const dateFormat = new Intl.DateTimeFormat('en-US',
 {
@@ -87,6 +88,8 @@ const series = post.data.series ? await getEntry(post.data.series.id) : null;
                     <PostIcon title="Last edited" icon="edit" />
                     <span>{dateFormat.format(updatedDate)}</span>)
                 }
+                <PostIcon title="Time to read" icon="time" height={28} width={28}/>
+                <TimeToRead readingTime={remarkPluginFrontmatter.readingTime} client:load />
             </p>
             { tags.length > 0 &&
             <p class="metadata tagList">

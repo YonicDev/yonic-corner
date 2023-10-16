@@ -25,11 +25,15 @@
     "astro-seo": "^0.8.0",
     "autoprefixer": "^10.4.14",
     "cheerio": "^1.0.0-rc.12",
+    "mdast-util-to-string": "^4.0.0",
+    "reading-time": "^1.5.0",
     "sass": "^1.62.0",
     "sharp": "^0.31.3",
     "svelte": "^3.58.0",
     "svelte-toggle": "^3.1.0",
     "text-vide": "^1.7.0",
+    "unist-util-filter": "^5.0.1",
+    "unist-util-visit": "^5.0.0",
     "uuid-by-string": "^4.0.0"
   },
   "devDependencies": {
