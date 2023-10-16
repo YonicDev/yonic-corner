@@ -11,7 +11,7 @@ import absent from "./src/assets/code-themes/absent-light.json";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://yonic-corner-astro.netlify.app",
+  site: "https://www.yonic.blog",
   markdown: {
     shikiConfig: {
       theme: absent
