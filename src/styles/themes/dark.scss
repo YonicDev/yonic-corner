@@ -1,0 +1,5 @@
+@use "./_dark.scss" as theme;
+
+:root[data-theme="dark"] {
+    @include theme.dark;
+}

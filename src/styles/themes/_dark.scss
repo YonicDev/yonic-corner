@@ -1,0 +1,9 @@
+@mixin dark {
+    & {
+        background: black!important;
+    }
+
+    body, main {
+        background: none!important;
+    }
+}

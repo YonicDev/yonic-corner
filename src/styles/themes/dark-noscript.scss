@@ -1,0 +1,7 @@
+@use "./_dark.scss" as theme;
+
+@media screen and (prefers-color-scheme: dark) {
+    :root {
+        @include theme.dark;
+    }
+}
