@@ -15,13 +15,31 @@ npm run preview # run a server in production mode
 
 ### CLI tool
 
-To handle posts easier, a CLI script is included on the repo. It's meant to be run in the root directory of the repository. For now, it only has a `new` command:
+To handle posts easier, a CLI script is included on the repo. It's meant to be run in the root directory of the repository. It has the following commands:
+
+#### `new`
 
 ```bash
-node cli.js new <Title of the post> [--id <id>]
+node cli.mjs new <Title of the post> [--id <id>]
 ```
 
 This will create a MDX file in the blog content folder, and a folder for media like images and video in the assets folder. The ID option defines how both will be named in the filesystem.
+
+#### `publish`
+
+```bash
+node cli.mjs publish <Post id> [-d]
+```
+
+Basically, it marks the post as "not a draft and viable for publishing" and updates the `publishDate` field. The `-d` option prevents this last effect.
+
+#### `update`
+
+```bash
+node cli.mjs update <Post id> [-p | --publish]
+```
+
+Adds or modified the `updatedDate` field of the post. With the `-p` or `--publish` option, it updates the `publishDate` field instead.
 
 ## Configuration
 
