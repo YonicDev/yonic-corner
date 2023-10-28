@@ -1,0 +1,345 @@
+@use "sass:list";
+@use "../vars.scss" as *;
+@use "../util.scss";
+
+:root[data-theme="legacy"] {
+    $base-color: #A1FFED;
+    $article-color: #C5FFF4;
+    $emphasis-color: #00423A;
+    $nav-color-dark: #009183;
+    body {
+        background: url("https://legacy.yonic.blog/ui/bg.gif");
+    }
+    main {
+        background: none;
+    }
+    .main-container, .main-wrapper {
+        .infobox {
+            background-color: $article-color;
+            box-shadow: none;
+            border: 3px solid $nav-color-dark;
+        }
+
+        ul.nav > li {
+            a {
+                background-color: #a5cef5!important;
+                border: 3px solid #1e1947!important;
+                box-shadow: none!important;
+                color: #0061bd!important;
+            }
+            li.current a {
+                color: black!important;
+            }
+        }
+
+        .tag-container {
+            background-color: $base-color;
+            border-color: $emphasis-color;
+            box-shadow: none;
+            h1 {
+                color: black;
+            }
+            a {
+                background-color: #a5cef5;
+                color: #1768d3;
+                span:first-child {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+    .index-series {
+        .hero {
+            background-color: $base-color;
+            border-color: $emphasis-color;
+            box-shadow: none;
+            p, h1 {
+                color: black!important;
+            }
+        }
+        .grid {
+            li {
+                border: 3px solid $nav-color-dark!important;
+                box-shadow: none!important;
+                a {
+                    background-color: $article-color;
+                    h3 { color: $emphasis-color!important }
+                    p {
+                        color: black!important;
+                    }
+                }
+            }
+        }
+    }
+
+    nav {
+        background-color: #03f3ff!important;
+        background-image: url("https://legacy.yonic.blog/ui/bubbles.gif");
+        background-position: top center;
+
+        .navigation li a {
+            border: 3px solid $emphasis-color;
+            border-bottom: none!important;
+            background-color: #056b5a!important;
+            color: $base-color!important;
+        }
+
+        .borders {
+            background-color: #056b5a!important;
+            border: 3px solid $emphasis-color;
+            border-left: none;
+            border-right: none;
+            .border-light {
+                background-image: url("/img/bolt-legacy.svg")!important;
+            }
+            .border-dark {
+                background-color: #57aa9a!important;
+                background-image: url("/img/legacy-marquee.png")!important;
+                image-rendering: pixelated;
+                &::before {
+                    $marquee-color: #e7f3c0;
+                    background: linear-gradient(90deg, #{$marquee-color} 2%, rgba(#00423A, 0) 7%, rgba($marquee-color, 0) 95%, #{$marquee-color} 99%)!important;
+                }
+                ul {
+                    color: black!important;
+                    text-shadow: 0px 0px 5px rgba($emphasis-color, 0.2), 2px 2px 2px rgba(black, 0.5);
+                    font-family: "Fira Code", "Courier New", Courier, monospace;
+                    animation-timing-function: steps(240);
+                }
+            }
+            .border-transition {
+                background-image: url("/img/legacy-marquee-end.png")!important;
+            }
+        }
+    }
+
+    .mobile-ui {
+        background-color: $base-color!important;
+    }
+
+    #mobile-toggler {
+        box-shadow: none!important;
+        transform: none!important;
+    }
+
+    ul.listing {
+        > li {
+            box-shadow: none!important;
+            border: 3px solid $emphasis-color!important;
+            background: $article-color!important;
+        }
+        a, h1, a a {
+            color: black!important;
+        }
+        .number {
+            box-shadow: none;
+            background-color: $emphasis-color;
+            border-color: darken($emphasis-color, 10%);
+            color: $base-color;
+        }
+    }
+
+    .blog-article {
+        background-color: $article-color!important;
+        border: 4px solid $nav-color-dark!important;
+        box-shadow: none!important;
+        .playerLink {
+            box-shadow: none!important;
+            .metadata {
+                background-color: $base-color!important;
+                color: $emphasis-color!important;
+            }
+        }
+        > p, > h1, > h2, > h3, > h4 {
+            color: black;
+        }
+        .code-button {
+            background-color: $base-color!important;
+            color: $emphasis-color!important;
+            border-color: $emphasis-color!important;
+            border-radius: 0!important;
+            box-shadow: none!important;
+            transform: none!important;
+            margin-top: 30px;
+            margin-right: 30px;
+        }
+        .code-block { 
+            display: none!important;
+            .filename {
+                position: absolute;
+                z-index: 2;
+                border: none;
+                font-size: 13px;
+                padding: 0;
+                left: 50%;
+                transform: translate(-50%);
+                top: 2px;
+                background-color: #008e8e;
+                display: flex;
+                align-items: center;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                height: 22px;
+                padding: 0 4px;
+                font-weight: bold;
+                color: $article-color;
+            }
+        }
+        .code-block.legacy {
+            display: block!important;
+            background: transparent!important;
+            pre {
+                border: 25px solid #008e8e;
+                border-image: url("/img/legacy-code-window.png") 25 fill repeat!important;
+                box-shadow: none;
+            }
+        }
+    }
+
+    .navigator {
+        box-shadow: none!important;
+        border-width: 3px;
+        &.all {
+            background-color: $base-color!important;
+            .series {
+                background-color: $nav-color-dark!important;
+                color: $article-color!important;
+            }
+        }
+    }
+
+    .tagList .list, .tags .list {
+        background-color: #a5cef5;
+        color: #1768d3!important;
+    }
+
+    .category-list {
+        li a {
+            box-shadow: none!important;
+            transform: none!important;
+            transition: none!important;
+        }
+        @each $category, $data in $categories {
+            li.link-#{$category} a {
+                background-color: list.nth($data, 1);
+                color: list.nth($data, 2);
+                border-color: list.nth($data, 2);
+            }
+        }
+    }
+
+    .heroContainer {
+        box-shadow: none!important;
+        margin-bottom: 0!important;
+        border-color: $nav-color-dark!important;
+        background-color: $base-color!important;
+        h1, p {
+            color: black!important;
+        }
+    }
+
+    .rainbowAnchor {
+        top: 0;
+    }
+
+    footer {
+        background-color: #1b1b2f!important;
+        background-image: url("https://legacy.yonic.blog/ui/footer.jpg");
+        .content {
+            color: white!important;
+            a {
+                color: #00bfff!important;
+                font-weight: bold;
+            }
+        }
+        .horizontal {
+            background-color: #056b5a!important;
+            border: 3px solid $emphasis-color;
+            border-left: none;
+            border-right: none;
+            .bolts {
+                background-image: url("/img/bolt-legacy.svg")!important;
+            }
+        }
+    }
+
+    #settings-panel, #player {
+        background-color: $article-color!important;
+        border-color: $emphasis-color!important;
+        border-width: 3px!important;
+        box-shadow: none!important;
+        .settings-tab, .music-tab {
+            background-color: $nav-color-dark!important;
+        }
+    }
+
+    #profile-image {
+        box-shadow: none!important;
+        border: 10px solid $emphasis-color!important;
+        width: 200px;
+        height: 200px;
+        box-sizing: content-box;
+        padding: 0!important;
+        position: static;
+    }
+
+    $bungee-length: 16;
+
+    .bungee-container > .bungee {
+        animation-name: logo-legacy!important;
+        animation-duration: 2s!important;
+        animation-timing-function: steps(#{$bungee-length}, start)!important;
+        text-shadow: #{util.extrude(6, #00322e)}!important;
+        -webkit-text-stroke: 2.5px #002a26!important;
+    }
+
+    @for $i from 1 through $bungee-length {
+        .bungee-container > .bungee:nth-child(#{$i}) {
+            animation-delay: -#{$i * 0.1}s!important;
+        }
+    }
+
+    .bungee-shadow {
+        display: none!important;
+    }
+}
+
+@keyframes logo-legacy {
+    0%,100% {
+        color: #0041d0;
+        transform: translate3d(0px, 0px, 0px);
+    }
+    50% {
+        color: #00fcff;
+    }
+    85% {
+        color: #00f14c;
+        transform: translate3d(0px, 0px, 0px);
+    }
+    90% {
+        color: #0041d0;
+        transform: translate3d(0, -15px, 0px);
+    }
+}
+
+@media screen and (max-width: 750px) {
+    :root[data-theme="legacy"] {
+        $base-color: #A1FFED;
+        $article-color: #C5FFF4;
+        $emphasis-color: #00423A;
+        $nav-color-dark: #009183;
+        nav .links {
+            background-color: #03f3ff!important;
+            background-image: url("https://legacy.yonic.blog/ui/bubbles.gif")!important;
+            background-size: cover;
+            background-position: 0 -30px;
+            .mobile-logo {
+                background: linear-gradient(90deg, #0011ff 0%, #13e2ec 50%, #22ff1e 100%);
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                -webkit-text-stroke: 2px $emphasis-color;
+                text-shadow: none!important;
+            }
+        }
+    }
+}

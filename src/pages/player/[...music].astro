@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 
 import "@lib/styles/player.scss";
+import "@lib/styles/themes/dark-player.scss";
 
 export async function getStaticPaths() {
     const songList = await getCollection("music");
@@ -29,9 +30,26 @@ interface Props {
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,600;1,400;1,600&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,600;1,400;1,600&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap"></noscript>
-		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+		<noscript><link rel="stylesheet" href="/static-themes/dark-player.css"/></noscript>
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 		<meta name="generator" content={Astro.generator} />
+        <script is:inline>
+            window.setTheme = function() {
+                var theme = (function() {
+                    if ( typeof localStorage !== "undefined" && localStorage.getItem("theme") ) {
+                        return localStorage.getItem("theme");
+                    }
+                    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                        return "dark";
+                    }
+                    return "light";
+                })()
+    
+                document.documentElement.setAttribute("data-theme", theme);
+            }
+            window.setTheme();
+        </script>
     </head>
     <body>
         <p>{[title, album, author].filter(data => data!=null).join(" | ")}</p>

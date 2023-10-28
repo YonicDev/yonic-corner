@@ -3,9 +3,11 @@ import { SEO, type Meta, type TwitterCardType } from "astro-seo";
 
 import { version } from "../../package.json";
 
-import SiteNav from "@lib/components/SiteNav.svelte";
+import SiteNav from "@lib/components/SiteNav.astro";
 import Settings from '@lib/components/Settings.svelte';
 import '../styles/global.scss';
+import '../styles/themes/legacy.scss';
+import '../styles/themes/dark.scss';
 
 type OpenGraph = {
 	type: string,
@@ -92,13 +94,27 @@ if(keywords.length > 0) {
 				]
 			}}
 		/>
+		<script is:inline>
+			var theme = (function() {
+				if ( typeof localStorage !== "undefined" && localStorage.getItem("theme") ) {
+					return localStorage.getItem("theme");
+				}
+				if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+					return "dark";
+				}
+				return "light";
+			})()
+
+			document.documentElement.setAttribute("data-theme", theme);
+		</script>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,650;1,400;1,650&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,650;1,400;1,650&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap"></noscript>
+		<noscript><link rel="stylesheet" href="/static-themes/dark.css"></noscript>
 	</head>
 	<body>
-		<SiteNav client:idle />
+		<SiteNav />
 		<slot />
 		<Settings client:only="svelte" />
 		<footer>
@@ -115,6 +131,11 @@ if(keywords.length > 0) {
 				<p><a class="badge" href="https://astro.build"><img src="https://astro.badg.es/v2/built-with-astro/tiny.svg" alt="Built with Astro" width="120" height="20"></a> Using own Vectarcade theme.</p>
 			</div>
 		</footer>
+		<script is:inline>
+			if(theme === "dark") {
+				document.getElementById("desktop-logo").src = "/img/desktop-logo-dark.svg";
+			}
+		</script>
 	</body>
 	<slot name="feed-writer" />
 </html>
@@ -147,6 +168,7 @@ if(keywords.length > 0) {
 			}
 			a {
 				color: $base-color;
+				transition: none;
 			}
 		}
 		.badge {

@@ -1,14 +1,38 @@
 <script lang="ts">
     import Toggle from "svelte-toggle";
     import { textVide } from "text-vide";
-
+    
     import { biyonicEnabled } from "@lib/stores"
 
+    const themes = ["light", "dark", "legacy"] as const;
+    type Theme = typeof themes[number];
+
     $biyonicEnabled = window.localStorage.getItem("biyonic-reading") === "on";
+    let theme = (window.localStorage.getItem("theme") ?? "light") as Theme;
+
+    const toggleColor: Record<Theme, string> = {
+      light: "#00A090",
+      dark: "#0e57aa",
+      legacy: "#009183"
+    }
 
     $: {
         window.localStorage.setItem("biyonic-reading", $biyonicEnabled? "on" : "off");
         toggleBiyonic();
+    }
+    
+    $: {
+        window.localStorage.setItem("theme", theme);
+        document.documentElement.setAttribute("data-theme", theme);
+        document.querySelectorAll<HTMLPreElement>(".code-block.dark pre").forEach((element) => {
+            element.style.backgroundColor = theme === "legacy" ? "#003333" : "#1E1E1E";
+        })
+        if(theme === "dark") {
+            (document.getElementById("desktop-logo") as HTMLImageElement).src = "/img/desktop-logo-dark.svg";
+        } else {
+            (document.getElementById("desktop-logo") as HTMLImageElement).src = "/img/desktop-logo.svg";
+        }
+        (document.getElementById("player")?.getElementsByTagName("iframe")[0].contentWindow as any).setTheme();
     }
 
     // Elements with HTML inside.
@@ -69,8 +93,16 @@
 <div id="settings-panel">
     <div class="settings-inner">
         <div>
+            <label for="themeSwitcher" class="biyonic-string">Theme</label><br/>
+            <select id="themeSwitcher" bind:value={theme}>
+                {#each themes as theme}
+                    <option value={theme}>{theme[0].toUpperCase()}{theme.substring(1)}</option>
+                {/each}
+            </select>
+        </div>
+        <div>
             <label for="biyonicToggle">{@html textVide("Biyonic reading", {ignoreHtmlTag: true})} <a href="/blog/article/biyonic-reading" target="_blank" rel="noreferrer">(?)</a></label>
-            <Toggle id="biyonicToggle" style="cursor: url('/img/cursors/pointer.png'), pointer;" toggledColor="var(--nav-color-dark)" bind:toggled={$biyonicEnabled} hideLabel on="On" off="Off"/>
+            <Toggle id="biyonicToggle" style="cursor: url('/img/cursors/pointer.png'), pointer;" toggledColor={toggleColor[theme]} bind:toggled={$biyonicEnabled} hideLabel on="On" off="Off"/>
         </div>
     </div>
     <div class="settings-tab"><img alt="Music" src="/img/icons/settings.svg" width="28"/></div>
@@ -82,7 +114,6 @@
         display: flex;
         position: fixed;
         z-index: 555;
-        width: 250px;
         height: 69px;
         bottom: 64px;
         left: 0;
@@ -97,6 +128,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
+            gap: 1em;
             padding: 16px;
         }
 
@@ -112,6 +144,9 @@
         label {
             font-size: 16px;
             cursor: url("/img/cursors/text.png"), text;
+        }
+        select, option {
+            cursor: url("/img/cursors/arrow.png"), default;
         }
     }
 </style>

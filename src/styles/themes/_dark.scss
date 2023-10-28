@@ -1,0 +1,356 @@
+@use "sass:list";
+@use "../util.scss";
+
+@mixin dark {
+    $base-color: #1e2f66;
+    $article-color: #2f4772;
+    $emphasis-color: #020f1b;
+    $nav-color-dark: #0b2350;
+    $nav-color-light: #0e57aa;
+    $emphasis-light: #76cdff;
+    $text-color: #f1faff;
+    $categories: (
+        "development": #156CEA #00086D #020811, 
+        "gaming": #EA153E #490500 #1d0303,
+        "creations": #E818B7 #2B002D #1d031b,
+        "outside": #FFC127 #302700 #141201,
+        "blog": #ED7614 #2D0B00 #1b0d02,
+        "misc": #32EA85 #003A1E #02180c,
+        "series": #858585 #131313 #0e0e0e,
+    );
+    & {
+        background-color: #001c2d;
+        background-image: url("/img/pattern-dark.png")!important;
+        color-scheme: dark;
+
+        body, main {
+            background: none!important;
+        }
+
+        a {
+            color: #60e2e2;
+            &:hover {
+                color: #2bffb8;
+            }
+        }
+
+        .blog-article {
+            background-color: $article-color;
+            color: $text-color;
+            box-shadow: util.extrude(8, $emphasis-color);
+            border-color: $emphasis-color;
+            h1, h2, h3, h4, h5, h6 {
+                color: $emphasis-light;
+            }
+            hr {
+                border-color: $emphasis-color;
+            }
+            .playerLink {
+                background-color: $base-color!important;
+                color: $text-color;
+                box-shadow: util.extrude(6, $emphasis-color);
+                border-color: $emphasis-color;
+                .cover {
+                    border-color: $emphasis-color;
+                    background-color: $nav-color-dark;
+                    background-image: url("/img/icons/music-dark.svg");
+                    .playIcon {
+                        background-color: rgba($nav-color-light,0.5)!important;
+                        @supports(backdrop-filter: blur(5px)) {
+                            background-color: rgba($nav-color-light,0.25)!important;
+                        }
+                    }
+                }
+            }
+            pre {
+                text-shadow: 0px 0px 2px rgba(4, 121, 255, 0.425), 0px 0px 10px rgba(163, 255, 250, 0.353);
+            }
+            .code-block {
+                display: none;
+            }
+            .code-block.dark {
+                display: block;
+                pre {
+                    border-color: $emphasis-color;
+                    box-shadow: util.extrude(4, $emphasis-color);
+                }
+                .filename {
+                    background-color: $base-color;
+                    color: $emphasis-light;
+                    border-color: $emphasis-color;
+                }
+                .code-button {
+                    background-color: $base-color;
+                    color: $text-color;
+                    border-color: $emphasis-color;
+                    box-shadow: util.extrude(1, $emphasis-color);
+                    &:hover {
+                        box-shadow: util.extrude(4, $emphasis-color);
+                    }
+                    &:active {
+                        box-shadow: none;
+                    }
+                }
+            }
+
+            .tagList > a {
+                background-color: $nav-color-light;
+                color: #b2e3ff;
+            }
+        }
+
+        .main-wrapper {
+            h1 {
+                color: $emphasis-light;
+            }
+            #profile-image {
+                border-color: $emphasis-color;
+                box-shadow: util.extrude(8, $emphasis-color);
+            }
+            .bungee-container span.bungee {
+                color: $emphasis-color;
+            }
+            .bungee-shadow span.bungee {
+                color: $nav-color-dark;
+            }
+        }
+
+        .main-container, .series-overview {
+            .category-list {
+                @each $category, $data in $categories {
+                    li.link-#{$category} a {
+                        background-color: list.nth($data, 2);
+                        color: list.nth($data, 1);
+                        border-color: list.nth($data, 1);
+                        box-shadow: util.extrude(4, list.nth($data, 3));
+                    }
+                }
+            } 
+        }
+        .listing > .article {
+            background-color: $article-color!important;
+            box-shadow: util.extrude(8, $emphasis-color)!important;
+            border-color: $emphasis-color!important;
+            .data {
+                h1 {
+                    color: $emphasis-light!important;
+                }
+                p, a {
+                    color: $text-color!important;
+                }
+                .tags > .list {
+                    background-color: $nav-color-light;
+                    color: #b2e3ff!important;
+                }
+            }
+            .number {
+                background-color: $base-color!important;
+                box-shadow: util.extrude(4, $emphasis-color)!important;
+                border-color: $emphasis-color!important;
+                color: $emphasis-light!important;
+            }
+        }
+        .heroContainer {
+            border-color: $emphasis-color!important;
+            box-shadow: util.extrude(8, $emphasis-color)!important;
+            background-color: $base-color!important;
+            h1 {
+                color: $emphasis-light;
+            }
+        }
+        .index-series {
+            > .hero {
+                border-color: $emphasis-color!important;
+                box-shadow: util.extrude(8, $emphasis-color)!important;
+                background-color: $base-color!important;
+                h1 {
+                    color: $emphasis-light;
+                }
+            }
+            .grid > li {
+                border-color: $emphasis-color!important;
+                box-shadow: util.extrude(8, $emphasis-color)!important;
+                background-color: $article-color!important;
+                a {
+                    h3 {
+                        color: $emphasis-light!important;
+                    }
+                    p {
+                        color: $text-color!important;
+                    }
+                }
+            }
+        }
+
+        .tag-container {
+            border-color: $emphasis-color;
+            box-shadow: util.extrude(8, $emphasis-color);
+            background-color: $base-color;
+            h1 {
+                color: $emphasis-light;
+            }
+            .list {
+                background-color: $nav-color-light;
+                color: #b2e3ff;
+            }
+        }
+
+        ul.nav {
+            .current > a {
+                border-color: $nav-color-light!important;
+                color: $nav-color-light!important;
+                background-color: $emphasis-light!important;
+                box-shadow: util.extrude(4, $nav-color-light)!important;
+            }
+            li > a {
+                border-color: $emphasis-color!important;
+                color: $emphasis-light!important;
+                background-color: $nav-color-light!important;
+                box-shadow: util.extrude(4, $emphasis-color)!important;
+            }
+        }
+
+        .navigator {
+            @each $category, $data in $categories {
+                &.#{$category} {
+                    border-color: list.nth($data, 3)!important;
+                    box-shadow: util.extrude(8, list.nth($data, 3))!important;
+                    background-color: list.nth($data, 2)!important;
+                    .page a {
+                        color: list.nth($data, 1)!important;
+                    }
+                }
+            } 
+            &.all {
+                background-color: $base-color!important;
+                border-color: $emphasis-color!important;
+                box-shadow: util.extrude(8, $emphasis-color)!important;
+                .series {
+                    background-color: $nav-color-dark!important;
+                    border-color: $emphasis-color!important;
+                }
+                a {
+                    color: $emphasis-light!important;
+                }
+            }
+        }
+
+        nav {
+            background-color: $emphasis-color!important;
+            .borders {
+                background-color: $nav-color-light!important;
+                .border-dark {
+                    background-color: $nav-color-dark!important;
+                    ul {
+                        color: $emphasis-light!important;
+                        text-shadow: 0px 2px 2px rgba($emphasis-light,0.75)!important; 
+                    }
+                    &::before {
+                        background: linear-gradient(90deg, $nav-color-dark 2%, rgba(0, 66, 58, 0) 7%, rgba($nav-color-dark, 0) 95%, $nav-color-dark 99%)!important;
+                    }
+                }
+                .border-transition {
+                    background-image: linear-gradient(-45deg, transparent 49.9999%, #{$nav-color-dark} 50%)!important;
+                }
+                .border-light {
+                    background-image: url("/img/bolt-dark.svg")!important;
+                }
+            }
+            .links {
+                .navigation li a {
+                    background-color: $nav-color-dark!important;
+                    span {
+                        color: $emphasis-light;
+                        filter: none!important;
+                    }
+                }
+                .mobile-ui {
+                    background-color: #020f1b;
+                    .navigation li a {
+                        background-color: $base-color!important;
+                        border-color: $emphasis-color;
+                    }
+                }
+                .mobile-logo {
+                    color: $emphasis-light!important;
+                    text-shadow: util.extrude(8, $emphasis-color);
+                }
+                input#mobile-toggler {
+                    background-color: $nav-color-light;
+                    background-image: url("/img/hamburger-dark.svg");
+                    border-color: $emphasis-color;
+                    box-shadow: util.extrude(4, $emphasis-color);
+                    &:hover {
+                        box-shadow: util.extrude(6, $emphasis-color);
+                    }
+                    &:active {
+                        box-shadow: none;
+                    }
+                    &:checked {
+                        background-color: $emphasis-color;
+                        background-image: url("/img/hamburger-light.svg");
+                        border-color: $emphasis-light;
+                        box-shadow: util.extrude(4, $emphasis-light);
+                        &:hover {
+                            box-shadow: util.extrude(6, $emphasis-light);
+                        }
+                        &:active {
+                            box-shadow: none;
+                        }
+                    }
+                }
+            }
+        }
+        footer {
+            background-color: $emphasis-color;
+            .horizontal {
+                background-color: $nav-color-light!important;
+                border-color: $emphasis-color!important;
+                .bolts {
+                    background-image: url("/img/bolt-dark.svg")!important;
+                }
+            }
+            .content {
+                color: $text-color!important;
+                a {
+                    color: #60e2e2!important;
+                }
+            }
+        }
+    }
+    #settings-panel, #player {
+        box-shadow: util.extrude(8, $emphasis-color)!important;
+        border-color: $emphasis-color!important;
+        background-color: $base-color!important;
+        .settings-inner {
+            background-color: $base-color!important;
+            color: $text-color;
+        }
+        .settings-tab, .music-tab {
+            background-color: $nav-color-light!important;
+        }
+        iframe {
+            color-scheme: light;
+            color: $text-color!important;
+        }
+    }
+
+    .infobox {
+        background-color: $article-color;
+        border-color: $emphasis-color;
+        box-shadow: util.extrude(4, $emphasis-color);
+    }
+
+    @media screen and (max-width:750px) {
+        nav .links {
+            background-color: #020f1b;
+        }
+    }
+}
+
+@mixin player {
+    $text-color: #76cdff;
+    body {
+        color: $text-color!important;
+    }
+}

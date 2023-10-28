@@ -42,8 +42,9 @@
 			font-family: Bungee, Arial, Helvetica, sans-serif;
 			color: #{$emphasis-color};
 			-webkit-text-stroke: 2px black;
+			transform: translate3d(0px, 0px, 0px);
 			animation: logo 2s ease-in-out infinite;
-			text-shadow: 2px 2px 0px black, 4px 4px 0px black;
+			text-shadow: util.extrude(4, black);
 			z-index: 1;
 		}
 		.bungee-shadow {
