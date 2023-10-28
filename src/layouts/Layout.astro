@@ -3,7 +3,7 @@ import { SEO, type Meta, type TwitterCardType } from "astro-seo";
 
 import { version } from "../../package.json";
 
-import SiteNav from "@lib/components/SiteNav.svelte";
+import SiteNav from "@lib/components/SiteNav.astro";
 import Settings from '@lib/components/Settings.svelte';
 import '../styles/global.scss';
 import '../styles/themes/legacy.scss';
@@ -114,7 +114,7 @@ if(keywords.length > 0) {
 		<noscript><link rel="stylesheet" href="/static-themes/dark.css"></noscript>
 	</head>
 	<body>
-		<SiteNav client:idle />
+		<SiteNav />
 		<slot />
 		<Settings client:only="svelte" />
 		<footer>
@@ -131,6 +131,11 @@ if(keywords.length > 0) {
 				<p><a class="badge" href="https://astro.build"><img src="https://astro.badg.es/v2/built-with-astro/tiny.svg" alt="Built with Astro" width="120" height="20"></a> Using own Vectarcade theme.</p>
 			</div>
 		</footer>
+		<script is:inline>
+			if(theme === "dark") {
+				document.getElementById("desktop-logo").src = "/img/desktop-logo-dark.svg";
+			}
+		</script>
 	</body>
 	<slot name="feed-writer" />
 </html>

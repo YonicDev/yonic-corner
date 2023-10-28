@@ -1,9 +1,6 @@
 ---
 import { Code } from 'astro/components';
 
-import absent from "@assets/code-themes/absent-light.json"
-// import noctis from "@assets/code-themes/noctis.json"
-
 const {
     code,
     lang,
@@ -25,6 +22,18 @@ const buttonLabel = "Copy code";
     </div>
 </div>
 <div class="code-block dark" data-button-label={buttonLabel}>
+    {
+        filename &&
+        <span class="filename">
+            <span class="icon"></span>
+            {filename}
+        </span>
+    }
+    <div>
+        <Code code={code} lang={lang} theme="poimandres"/>
+    </div>
+</div>
+<div class="code-block legacy" data-button-label={buttonLabel}>
     {
         filename &&
         <span class="filename">

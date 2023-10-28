@@ -1,10 +1,13 @@
-<script lang="ts">
+---
     import Marquee from '@lib/components/Marquee.svelte';
-</script>
+---
 
 <nav>
     <ul class="links">
-        <li><a href="/" class="desktop-logo"><img height=64 width=361 alt="The Yonic Corner" src="/img/desktop-logo.svg"></a></li>
+        <li><a href="/" class="desktop-logo">
+			<img id="desktop-logo" height=64 width=361 alt="The Yonic Corner" src="/img/desktop-logo.svg">
+			<noscript><img id="desktop-logo-dark" height=64 width=361 alt="The Yonic Corner" src="/img/desktop-logo-dark.svg"></noscript>
+		</a></li>
         <li><a href="/" class="mobile-logo">The Yonic Corner</a></li>
         <li>
             <ul class="navigation">
@@ -26,16 +29,32 @@
     </ul>
     <div class="borders">
         <div class="border-dark">
-            <Marquee />
+            <Marquee client:idle />
         </div>
         <div class="border-transition" />
         <div class="border-light" />
     </div>
+	<noscript>
+		<style>
+			@media screen and (prefers-color-scheme: dark) {
+				#desktop-logo {
+					display: none;
+				}
+				#desktop-logo-dark {
+					display: block;
+				}
+			}
+		</style>
+	</noscript>
 </nav>
 
-<style lang="scss">
+<style lang="scss" is:global>
 	@use "../styles/util.scss";
 	@use "../styles/vars.scss" as *;
+
+	#desktop-logo-dark {
+		display: block;
+	}
 
 
 	nav {

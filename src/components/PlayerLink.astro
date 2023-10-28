@@ -17,7 +17,7 @@ const coverImage = coverImport != null ? await getImage({src: coverImport, width
 
 
 <a class="playerLink music" href={`/player/${musicId.replaceAll("\\", "/")}`} target="music-player" aria-hidden="true">
-    <div class="cover" style={`background-image: url(${coverImage?.src ?? "/img/icons/music.svg"})`}>
+    <div class="cover" style={coverImage? `background-image: url(${coverImage.src ?? "/img/icons/music.svg"})` : undefined}>
         <div class="playIcon">
             <img alt="Play" src="/img/icons/play.svg"/>
         </div>
@@ -49,6 +49,7 @@ const coverImage = coverImport != null ? await getImage({src: coverImport, width
             width: 68px;
             height: 64px;
             background-color: #{$nav-color-dark};
+            background-image: url("/img/icons/music.svg");
             border-right: 0.25rem solid #{$emphasis-color};
             position: relative;
             background-position: center;
