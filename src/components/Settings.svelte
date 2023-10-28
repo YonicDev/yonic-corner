@@ -8,6 +8,12 @@
     let biyonicEnabled = window.localStorage.getItem("biyonic-reading") === "on";
     let theme = (window.localStorage.getItem("theme") ?? "light") as Theme;
 
+    const toggleColor: Record<Theme, string> = {
+      light: "#00A090",
+      dark: "#0e57aa",
+      legacy: "#009183"
+    }
+
     $: {
         window.localStorage.setItem("biyonic-reading", biyonicEnabled? "on" : "off");
         toggleBiyonic();
@@ -94,7 +100,7 @@
         </div>
         <div>
             <label for="biyonicToggle">{@html textVide("Biyonic reading", {ignoreHtmlTag: true})} <a href="/blog/article/biyonic-reading" target="_blank" rel="noreferrer">(?)</a></label>
-            <Toggle id="biyonicToggle" style="cursor: url('/img/cursors/pointer.png'), pointer;" toggledColor="var(--nav-color-dark)" bind:toggled={biyonicEnabled} hideLabel on="On" off="Off"/>
+            <Toggle id="biyonicToggle" style="cursor: url('/img/cursors/pointer.png'), pointer;" toggledColor={toggleColor[theme]} bind:toggled={biyonicEnabled} hideLabel on="On" off="Off"/>
         </div>
     </div>
     <div class="settings-tab"><img alt="Music" src="/img/icons/settings.svg" width="28"/></div>
