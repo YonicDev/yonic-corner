@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import Toggle from "svelte-toggle";
     import { textVide } from "text-vide";
     
@@ -7,49 +8,57 @@
     const themes = ["light", "dark", "legacy"] as const;
     type Theme = typeof themes[number];
 
-    $biyonicEnabled = window.localStorage.getItem("biyonic-reading") === "on";
-    let theme = (window.localStorage.getItem("theme") ?? "light") as Theme;
+    let theme: Theme;
+
+    let biyonicHTML: {element: HTMLElement, innerHTML: string}[];
+    let biyonicStrings: {element: HTMLElement, innerString: string}[];
+
+    onMount(() => {
+        document.getElementById("settings-panel")!.style.display = "flex";
+        // Elements with HTML inside.
+        const biyonicElements = Array.from(document.getElementsByClassName("biyonic")) as HTMLElement[];
+        biyonicHTML = biyonicElements.map(element => {
+            return {element, innerHTML: element.innerHTML}
+        });
+        // String only elements.
+        const biyonicStringElements = Array.from(document.getElementsByClassName("biyonic-string")) as HTMLElement[];
+        biyonicStrings = biyonicStringElements.map(element => {
+            return {element, innerString: element.innerHTML}
+        });
+
+        biyonicEnabled.set(window.localStorage.getItem("biyonic-reading") === "on");
+        theme = (window.localStorage.getItem("theme") ?? "light") as Theme;
+
+        biyonicEnabled.subscribe((enabled) => {
+            window.localStorage.setItem("biyonic-reading", enabled? "on" : "off");
+            toggleBiyonic(enabled);
+        })
+    })
 
     const toggleColor: Record<Theme, string> = {
-      light: "#00A090",
-      dark: "#0e57aa",
-      legacy: "#009183"
-    }
-
-    $: {
-        window.localStorage.setItem("biyonic-reading", $biyonicEnabled? "on" : "off");
-        toggleBiyonic();
+        light: "#00A090",
+        dark: "#0e57aa",
+        legacy: "#009183"
     }
     
     $: {
-        window.localStorage.setItem("theme", theme);
-        document.documentElement.setAttribute("data-theme", theme);
-        document.querySelectorAll<HTMLPreElement>(".code-block.dark pre").forEach((element) => {
-            element.style.backgroundColor = theme === "legacy" ? "#003333" : "#1E1E1E";
-        })
-        if(theme === "dark") {
-            (document.getElementById("desktop-logo") as HTMLImageElement).src = "/img/desktop-logo-dark.svg";
-        } else {
-            (document.getElementById("desktop-logo") as HTMLImageElement).src = "/img/desktop-logo.svg";
+        if(theme != null) {
+            window.localStorage.setItem("theme", theme);
+            document.documentElement.setAttribute("data-theme", theme);
+            document.querySelectorAll<HTMLPreElement>(".code-block.dark pre").forEach((element) => {
+                element.style.backgroundColor = theme === "legacy" ? "#003333" : "#1E1E1E";
+            })
+            if(theme === "dark") {
+                (document.getElementById("desktop-logo") as HTMLImageElement).src = "/img/desktop-logo-dark.svg";
+            } else {
+                (document.getElementById("desktop-logo") as HTMLImageElement).src = "/img/desktop-logo.svg";
+            }
+            (document.getElementById("player")?.getElementsByTagName("iframe")[0].contentWindow as any).setTheme();
         }
-        (document.getElementById("player")?.getElementsByTagName("iframe")[0].contentWindow as any).setTheme();
     }
 
-    // Elements with HTML inside.
-    const biyonicElements = Array.from(document.getElementsByClassName("biyonic")) as HTMLElement[];
-    const biyonicHTML = biyonicElements.map(element => {
-        return {element, innerHTML: element.innerHTML}
-    });
-    
-    // String only elements.
-    const biyonicStringElements = Array.from(document.getElementsByClassName("biyonic-string")) as HTMLElement[];
-    const biyonicStrings = biyonicStringElements.map(element => {
-        return {element, innerString: element.innerHTML}
-    });
-
-
-    async function toggleBiyonic() {
-        if($biyonicEnabled) {
+    async function toggleBiyonic(enabled: boolean) {
+        if(enabled) {
             await Promise.all([
                 ...biyonicStrings.map(({element, innerString}) => {
                     return new Promise<void>((resolve) => {
@@ -111,7 +120,7 @@
 <style lang="scss">
     @use "../styles/util.scss";
     #settings-panel {
-        display: flex;
+        display: none;
         position: fixed;
         z-index: 555;
         height: 69px;
