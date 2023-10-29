@@ -47,12 +47,7 @@
             document.documentElement.setAttribute("data-theme", theme);
             document.querySelectorAll<HTMLPreElement>(".code-block.dark pre").forEach((element) => {
                 element.style.backgroundColor = theme === "legacy" ? "#003333" : "#1E1E1E";
-            })
-            if(theme === "dark") {
-                (document.getElementById("desktop-logo") as HTMLImageElement).src = "/img/desktop-logo-dark.svg";
-            } else {
-                (document.getElementById("desktop-logo") as HTMLImageElement).src = "/img/desktop-logo.svg";
-            }
+            });
             (document.getElementById("player")?.getElementsByTagName("iframe")[0].contentWindow as any).setTheme();
         }
     }

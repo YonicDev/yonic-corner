@@ -6,7 +6,7 @@
     <ul class="links">
         <li><a href="/" class="desktop-logo">
 			<img id="desktop-logo" height=64 width=361 alt="The Yonic Corner" src="/img/desktop-logo.svg">
-			<noscript><img id="desktop-logo-dark" height=64 width=361 alt="The Yonic Corner" src="/img/desktop-logo-dark.svg"></noscript>
+			<img id="desktop-logo-dark" height=64 width=361 alt="The Yonic Corner" src="/img/desktop-logo-dark.svg">
 		</a></li>
         <li><a href="/" class="mobile-logo">The Yonic Corner</a></li>
         <li>
@@ -34,18 +34,6 @@
         <div class="border-transition" />
         <div class="border-light" />
     </div>
-	<noscript>
-		<style>
-			@media screen and (prefers-color-scheme: dark) {
-				#desktop-logo {
-					display: none;
-				}
-				#desktop-logo-dark {
-					display: block;
-				}
-			}
-		</style>
-	</noscript>
 </nav>
 
 <style lang="scss" is:global>
@@ -53,7 +41,7 @@
 	@use "../styles/vars.scss" as *;
 
 	#desktop-logo-dark {
-		display: block;
+		display: none;
 	}
 
 

@@ -256,6 +256,12 @@
                     background-image: url("/img/bolt-dark.svg")!important;
                 }
             }
+            #desktop-logo {
+                display: none;
+            }
+            #desktop-logo-dark {
+                display: block;
+            }
             .links {
                 .navigation li a {
                     background-color: $nav-color-dark!important;
@@ -302,7 +308,7 @@
             }
         }
         footer {
-            background-color: $emphasis-color;
+            background-color: $emphasis-color!important;
             .horizontal {
                 background-color: $nav-color-light!important;
                 border-color: $emphasis-color!important;
@@ -339,6 +345,10 @@
         background-color: $article-color;
         border-color: $emphasis-color;
         box-shadow: util.extrude(4, $emphasis-color);
+
+        &.info {
+            color: black;
+        }
     }
 
     @media screen and (max-width:750px) {
