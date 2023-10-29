@@ -17,7 +17,7 @@ export let total: number | undefined = undefined;
         gap: 1rem;
         background-color: #{$base-color};
         padding: 4px 1em;
-        margin: 2px 4px;
+        margin: 2px 4px!important;
         border-radius: 999px;
         font-size: 16px;
         text-decoration: none;
