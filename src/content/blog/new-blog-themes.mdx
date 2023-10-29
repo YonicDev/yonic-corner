@@ -1,0 +1,56 @@
+---
+title: New themes for The Yonic Corner
+description: "This blog is now available in three tasty flavors: Mint Light, Blueberry Dark, and the classic Blue Moon Legacy."
+pubDate: '2023-10-29T13:11:21.339Z'
+category: blog
+tags: [yonic-corner, web-design]
+---
+
+import MovingLogo from "@lib/components/MovingLogo.svelte"
+
+export const components = { p: Paragraph, li: ListItem, a: Anchor };
+
+<div class="feed-preview">
+Now that the interface and most of the features of the blog have been implemented, it was about time I took on adding a feature I've been looking forward for a long time:
+**Having a dark theme.**
+
+What I thought would be a simple thing turned into an unexpected challenge because of the way this blog was designed. But alas, it's finally completed, but I also took the time to add even a third theme.
+
+In the settings panel (there's a gear icon on the lower left of your screen) you can choose between the three:
+
+1. **Light**: This is the original theme that was implemented on the site.
+2. **Dark**: A "dark mode" version of the Light theme. It uses blue colors as a basis instead of green.
+3. **Legacy**: Based on the [Legacy Version](http://legacy.yonic.blog) of this blog.
+
+If it's the first time you visit the site, or you browse with JavaScript disabled, the blog will automatically choose between the light and dark theme depending on whether you're using the light or the dark mode in your system.
+</div>
+
+So why did it take so much effort to have it working? From a web developer perspective, I probably shot myself in the foot [with the decisions I took for the blog](/blog/article/ie-compatibility-1), because I was no longer able to use CSS variables, and had to rely on SCSS for most of the work.
+
+I also did a couple hacks with Astro, such as **inlining SCSS as an URL** that points to **server endpoints** that take *some* time to render. The theme stylesheets ended up becoming **globally scoped** and a bit hard to handle as a result.
+
+<TextBubble theme="yonic" position="bottom" alignment="near">
+    This will surely come to bite me whenever I want to add new features...
+</TextBubble>
+<Chara name="yonic" set="winter" sprite="annoyed" position="left" thoughts="On the other hand, I got a new suit! I will use it during the colder seasons."/>
+
+At any rate, I really like the new themes. I used the main colors that represent me the most: Green and blue. Since the green was used for the light theme, I went with the darker blue for the dark theme.
+
+As for the Legacy theme, it tries to recreate the overall look of the Legacy blog while maintaining the same UI. Funny enough, I like to use the Legacy theme over the Light one &mdash;that's also why I added it in the first place.
+
+<TextBubble theme="yonic" position="bottom" alignment="far">
+
+I even recreated the logo animation from the Legacy website for the Legacy theme!
+
+<center>
+<span style="font-size: 36pt; line-height: 40px;"><MovingLogo theme="legacy"/></span>
+
+<p style="margin: 1rem">The logo used in this blog.</p>
+
+<img alt="Old logo" src="https://legacy.yonic.blog/yonic-corner.gif" width="500" height="72"/>
+<p style="margin: 1rem">The logo used in the Legacy Version.</p>
+</center>
+</TextBubble>
+<Chara name="yonic" set="winter" sprite="normal" position="right" thoughts="It works with CSS animations, so it looks great on all resolutions!"/>
+
+With this, I'm pretty confident to announce that (for now) **The Yonic Corner is feature complete**! There's still one new feature I haven't talked about yet, but it's become available for quite a while. I don't want to flood my recent posts with blog updates, so that will wait for some time. You can find it in the lowermost part of the blog!
