@@ -6,22 +6,27 @@
         png: string
     }>;
 
-    let profilePicture: HTMLSourceElement;
-    let profileImage: HTMLImageElement;
+    
+    function selectSource(currentDate: Date): keyof typeof images {
+        const month = currentDate.getUTCMonth();
+        if(images.special != null)
+            return "special";
+        if(month >= 9 || month <= 2)
+            return "winter";
+        return "summer";
+    }
+
+    let profileSource = images[selectSource(new Date())]
 
     onMount(() => {
-        const currentMonth = new Date().getMonth();
-        if(currentMonth >= 9 || currentMonth <= 2) {
-            profileImage.src = images.winter.png;
-            profilePicture.src = images.winter.webp;
-        }
+        profileSource = images[selectSource(new Date())];
     })
     
 </script>
 
 <picture id="profile-image">
-    <source bind:this={profilePicture} srcset={images.summer.webp} type="image/webp" />
-    <img bind:this={profileImage} alt="Profile icon" src={images.summer.png} width=200 height=200 />
+    <source srcset={profileSource.webp} type="image/webp" />
+    <img alt="Profile icon" src={profileSource.png} width=200 height=200 />
 </picture>
 
 <style lang="scss">

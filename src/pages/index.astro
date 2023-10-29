@@ -33,7 +33,7 @@ const blurb = "Welcome to your just around the corner blog."
 <Layout title={`Welcome to ${websiteText}`}>
 	<main class="main-wrapper">
 		<div>
-			<ProfileIcon images={profileImages} />
+			<ProfileIcon images={profileImages} client:load />
 			<MovingLogo {websiteText} />
 			<div class="infobox biyonic">
 				<p>{blurb}</p>
