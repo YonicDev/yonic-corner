@@ -78,7 +78,7 @@ const series = post.data.series ? await getEntry(post.data.series.id) : null;
 <Layout {...post.data} twitterCard="summary_large_image" description={post.data.description} coverImage={hero? `${Astro.url.protocol}//${Astro.url.host}${(await getImage({src: hero, width: 600, format: "jpg"})).src}` : `${Astro.url.protocol}//${Astro.url.host}/img/seo/hero-${post.data.category}.png`} openGraph={{type: "article", article: {pubDate, updatedDate, category: post.data.category, tags}}} keywords={tags}>
     <main>
         <div class="blog-article">
-            {hero && <Image class:list={["cover", post.data.heroPosition]} alt="Cover image" src={hero} width={768} height={432} />}
+            {hero && <Image class:list={["cover", post.data.heroPosition]} alt="Cover image" src={hero} width={768} height={432} loading="eager" />}
             <h1>{post.data.title}{ post.data.draft && <sup>[draft]</sup>}</h1>
             <p class="metadata dates">
                 <PostIcon title="Publish date" icon="post" height={28} width={28}/>
