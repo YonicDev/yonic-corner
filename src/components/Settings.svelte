@@ -27,7 +27,7 @@
         });
 
         biyonicEnabled.set(window.localStorage.getItem("biyonic-reading") === "on");
-        theme = (window.localStorage.getItem("theme") ?? "light") as Theme;
+        theme = (window.localStorage.getItem("theme") ?? (window.matchMedia("(prefers-color-scheme: dark)").matches? "dark" : "light")) as Theme;
 
         biyonicEnabled.subscribe((enabled) => {
             window.localStorage.setItem("biyonic-reading", enabled? "on" : "off");
