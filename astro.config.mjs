@@ -48,6 +48,9 @@ export default defineConfig({
   vite: {
     build: {
       target: "es2018"
+    },
+    resolve: {
+      preserveSymlinks: true
     }
   }
 });
