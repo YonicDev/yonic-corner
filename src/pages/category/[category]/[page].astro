@@ -1,9 +1,9 @@
 ---
-import { CollectionEntry, getCollection } from "astro:content";
+import { getCollection } from "astro:content";
 import type { GetStaticPaths, Page } from "astro";
 
 import { getHeroImages } from '@lib/util';
-import { CategoryId, categories, BLOG_PAGE_SIZE } from "@lib/settings";
+import { type CategoryId, categories, BLOG_PAGE_SIZE } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
 import PostListing from "@lib/layouts/PostListing.svelte";
@@ -14,7 +14,7 @@ import "@lib/styles/rainbow.scss";
 export const getStaticPaths: GetStaticPaths = async ({paginate}) => {
     const ids = Object.keys(categories) as CategoryId[];
     const allPosts = await getCollection('blog');
-    return ids.map((catId) => {
+    return ids.flatMap((catId) => {
         const category = categories[catId];
         const posts = allPosts
             .filter(post => post.data.category === catId && (import.meta.env.DEV || !post.data.draft))
@@ -28,19 +28,19 @@ export const getStaticPaths: GetStaticPaths = async ({paginate}) => {
         return paginate(posts, {
             pageSize: BLOG_PAGE_SIZE, 
             params: { category: catId }, 
-            props: { category }
+            props: { category, categoryId: catId }
         });
     });
 }
 
 interface Props {
     category: Category,
+    categoryId: CategoryId,
     page: Page
 }
 
-const { category, page } = Astro.props;
+const { category, page, categoryId } = Astro.props;
 const posts = page.data;
-const { category: categoryId } = Astro.params;
 
 const rainbowColors = ["#078D70","#26CEAA","#98E8C1","white","#7BADE2","#5049CC","#3D1A78"]
 const bowrainColors = [...rainbowColors].reverse();

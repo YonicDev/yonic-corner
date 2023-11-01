@@ -1,5 +1,5 @@
 ---
-import { CollectionEntry, getCollection } from "astro:content";
+import { type CollectionEntry, getCollection } from "astro:content";
 import type { GetStaticPaths, Page } from "astro";
 
 import { getHeroImages } from '@lib/util';
@@ -22,10 +22,11 @@ export const getStaticPaths: GetStaticPaths = async ({paginate}) => {
     });
         
     const tags = [...new Set(allPosts.flatMap(post => post.data.tags))];
-    return tags.map(tag => {
+    return tags.flatMap(tag => {
         const posts = allPosts.filter(post => post.data.tags.indexOf(tag) >= 0)
         return paginate(posts, {
             pageSize: BLOG_PAGE_SIZE, 
+            props: { tag },
             params: { tag }, 
         });
     })
@@ -33,11 +34,11 @@ export const getStaticPaths: GetStaticPaths = async ({paginate}) => {
 
 interface Props {
     page: Page,
+    tag: string,
 }
 
-const { page } = Astro.props;
+const { page, tag } = Astro.props;
 const posts: CollectionEntry<'blog'>[] = page.data;
-const { tag } = Astro.params;
 
 const heroImages = await getHeroImages(posts);
 

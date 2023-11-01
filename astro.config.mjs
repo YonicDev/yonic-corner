@@ -44,12 +44,6 @@ export default defineConfig({
     sitemap()
   ],
   scopedStyleStrategy: "class",
-  experimental: {
-    assets: true,
-  },
-  image: {
-    service: { entrypoint: 'astro/assets/services/sharp' },
-  },
   vite: {
     build: {
       target: "es2018"
