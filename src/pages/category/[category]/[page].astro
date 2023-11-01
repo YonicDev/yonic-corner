@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import type { GetStaticPaths, Page } from "astro";
 
-import { getHeroImages } from '@lib/util';
+import { filterPosts, getHeroImages, sortPosts } from '@lib/util';
 import { type CategoryId, categories, BLOG_PAGE_SIZE } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
@@ -16,15 +16,7 @@ export const getStaticPaths: GetStaticPaths = async ({paginate}) => {
     const allPosts = await getCollection('blog');
     return ids.flatMap((catId) => {
         const category = categories[catId];
-        const posts = allPosts
-            .filter(post => post.data.category === catId && (import.meta.env.DEV || !post.data.draft))
-            .sort((a, b) => {
-                const aPub = a.data.pubDate.getTime();
-                const bPub = b.data.pubDate.getTime();
-                const aEdt = a.data.updatedDate?.getTime() ?? 0;
-                const bEdt = b.data.updatedDate?.getTime() ?? 0;
-                return Math.max(bEdt, bPub) - Math.max(aPub, aEdt);
-            });
+        const posts = allPosts.filter(post => post.data.category === catId).filter(filterPosts).sort(sortPosts);
         return paginate(posts, {
             pageSize: BLOG_PAGE_SIZE, 
             params: { category: catId }, 

@@ -1,11 +1,12 @@
 ---
 import { getCollection } from "astro:content";
 
+import { filterPosts } from "@lib/util";
+
 import Layout from "@lib/layouts/Layout.astro";
 import Tag from "@lib/components/Tag.svelte";
 
-const posts = (await getCollection("blog"))
-    .filter(post => import.meta.env.DEV || !post.data.draft);
+const posts = (await getCollection("blog")).filter(filterPosts);
 
 const allTags = posts.flatMap(post => post.data.tags);
 const tags = [...new Set(allTags)].sort((a, b) => a.localeCompare(b));

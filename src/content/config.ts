@@ -49,6 +49,7 @@ const blogCollection = defineCollection({
             z.literal("bottom")
         ]).optional(),
         draft: z.boolean().optional().default(false),
+        legacy: z.boolean().or(z.literal("only")).default(true),
         pubDate: z
             .string()
             .or(z.date())
@@ -66,13 +67,6 @@ const blogCollection = defineCollection({
             text: z.number().int(),
             video: z.number().int().default(0)
         }).optional() // Filled in the reading time Remark plugin
-    }).strict()
-});
-
-const aboutCollection = defineCollection({
-    schema: z.object({
-        title: z.string(),
-        description: z.string(),
     }).strict()
 });
 
@@ -101,7 +95,6 @@ const seriesCollection = defineCollection({
 
 export const collections = {
     blog: blogCollection,
-    about: aboutCollection,
     music: musicCollection,
     series: seriesCollection
 };

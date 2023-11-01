@@ -2,23 +2,15 @@
 import type { Page } from "astro";
 import { type CollectionEntry, getCollection } from "astro:content";
 
-import { getHeroImages } from '@lib/util';
-import { BLOG_PAGE_SIZE, HIDE_DRAFTS_IN_DEVELOPMENT } from "@lib/settings";
+import { filterPosts, getHeroImages, sortPosts } from '@lib/util';
+import { BLOG_PAGE_SIZE } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
 import PostListing from "@lib/layouts/PostListing.svelte";
 import CategoryButtons from "@lib/components/CategoryButtons.svelte";
 
 export async function getStaticPaths({paginate}: {paginate: any}) {
-    const posts = (await getCollection('blog'))
-    .filter(post => (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft)
-    .sort((a, b) => {
-        const aPub = a.data.pubDate.getTime();
-        const bPub = b.data.pubDate.getTime();
-        const aEdt = a.data.updatedDate?.getTime() ?? 0;
-        const bEdt = b.data.updatedDate?.getTime() ?? 0;
-        return Math.max(bEdt, bPub) - Math.max(aPub, aEdt);
-    })
+    const posts = (await getCollection('blog')).filter(filterPosts).sort(sortPosts);
     return paginate(posts, { pageSize: BLOG_PAGE_SIZE});
 }
 

@@ -3,7 +3,7 @@ import { getImage } from "astro:assets";
 import { getCollection, type CollectionEntry } from "astro:content";
 import type { GetImageResult } from "astro";
 
-import { HIDE_DRAFTS_IN_DEVELOPMENT } from "@lib/settings";
+import { filterPosts, sortPosts } from "@lib/util";
 
 import Layout from "@lib/layouts/Layout.astro";
 import SeriesListing from "@lib/layouts/SeriesListing.astro";
@@ -13,14 +13,13 @@ import "@lib/styles/rainbow.scss";
 
 export const getStaticPaths = async() => {
     const series = await getCollection("series");
-    const allPosts = (await getCollection('blog'))
-    .filter(post => import.meta.env.DEV || !post.data.draft)
+    const allPosts = (await getCollection('blog')).filter(filterPosts);
     return series.map(serie => {
         return {
             params: { series: serie.id },
             props: {
                 series: serie.data,
-                posts: allPosts.filter(post => post.data.series?.id.id === serie.id).sort((a, b) => a.data.series!.order - b.data.series!.order)
+                posts: allPosts.filter(post => post.data.series?.id.id === serie.id).sort((a,b) => a.data.series!.order - b.data.series!.order)
             }
         }
     });
@@ -68,7 +67,7 @@ const heroImage = processedImage? `url("${processedImage.src}")` : "url('/img/se
         </div>
         <div class="rainbowAnchor">
             <div class="listing">
-                <SeriesListing posts={posts.filter(post => (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft)} baseUrl="/blog" />
+                <SeriesListing {posts} baseUrl="/blog" />
             </div>
             <div class="rainbow">
                 <div class="rainbow-side">

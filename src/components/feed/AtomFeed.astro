@@ -2,18 +2,10 @@
 import { getCollection } from "astro:content";
 import getUuid from "uuid-by-string"
 
-import { HIDE_DRAFTS_IN_DEVELOPMENT } from "@lib/settings";
 import HTMLFeed from "./HTMLFeed.astro";
+import { filterPosts, sortPosts } from "@lib/util";
 
-const posts = (await getCollection('blog'))
-    .filter(post => (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft)
-    .sort((a, b) => {
-        const aPub = a.data.pubDate.getTime();
-        const bPub = b.data.pubDate.getTime();
-        const aEdt = a.data.updatedDate?.getTime() ?? 0;
-        const bEdt = b.data.updatedDate?.getTime() ?? 0;
-        return Math.max(bEdt, bPub) - Math.max(aPub, aEdt) || a.id.localeCompare(b.id);
-    }).slice(0,20);
+const posts = (await getCollection('blog')).filter(filterPosts).sort(sortPosts).slice(0,20);
 
 const atomHeader = `<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="/atom/style.xsl" type="text/xsl"?>

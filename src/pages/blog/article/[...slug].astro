@@ -2,7 +2,7 @@
 import { type CollectionEntry, getCollection, getEntry } from 'astro:content';
 import { getImage, Image } from 'astro:assets';
 
-import { HIDE_DRAFTS_IN_DEVELOPMENT, categories } from '@lib/settings';
+import { categories } from '@lib/settings';
 import Layout from '@lib/layouts/Layout.astro';
 import QuickLinks from '@lib/components/QuickLinks.svelte';
 import Tag from '@lib/components/Tag.svelte';
@@ -11,6 +11,7 @@ import PostIcon from '@lib/components/PostIcon.svelte';
 import TimeToRead from '@lib/components/TimeToRead.svelte';
 
 import "@lib/styles/article.scss";
+import { filterPosts, sortPosts } from '@lib/util';
 
 interface Props {
     post: CollectionEntry<'blog'>,
@@ -19,15 +20,7 @@ interface Props {
 }
 
 export async function getStaticPaths() {
-	const posts = (await getCollection('blog')).filter(post => {
-        return (import.meta.env.DEV && !HIDE_DRAFTS_IN_DEVELOPMENT) || !post.data.draft;
-    }).sort((a, b) => {
-        const aPub = a.data.pubDate.getTime();
-        const bPub = b.data.pubDate.getTime();
-        const aEdt = a.data.updatedDate?.getTime() ?? 0;
-        const bEdt = b.data.updatedDate?.getTime() ?? 0;
-        return Math.max(bEdt, bPub) - Math.max(aPub, aEdt) || a.id.localeCompare(b.id);
-    })
+	const posts = (await getCollection('blog')).filter(filterPosts).sort(sortPosts)
     
 	return posts.map((post, i) => ({
 		params: { slug: post.slug },
