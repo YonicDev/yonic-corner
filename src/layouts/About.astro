@@ -1,10 +1,7 @@
 ---
 import Layout from "@lib/layouts/Layout.astro"
-import { getCollection } from "astro:content";
 
 import "@lib/styles/article.scss";
-
-const post = (await getCollection("about"))[0];
 
 const dateFormat = new Intl.DateTimeFormat('en-US',
 {
@@ -13,22 +10,23 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
     day: '2-digit',
 })
 
-const established = new Date("2023-05-16");
+const {frontmatter} = Astro.props;
+const {title, description} = frontmatter;
 
-const { Content } = await post.render();
+const established = new Date("2023-05-16");
 
 const rainbowColors = ["#078D70","#26CEAA","#98E8C1","white","#7BADE2","#5049CC","#3D1A78"]
 const bowrainColors = [...rainbowColors].reverse();
 
 ---
 
-<Layout {...post.data} openGraph={{type: "article", article: {pubDate: established, category: "About", tags: []}}} keywords={["yonic corner", "about", "blog", "info"]}>
+<Layout {title} {description} openGraph={{type: "article", article: {pubDate: established, category: "About", tags: []}}} keywords={["yonic corner", "about", "blog", "info"]}>
     <main>
         <div class="blog-article">
-            <h1>{post.data.title}</h1>
+            <h1>{title}</h1>
             <p class="established">Blog established on {dateFormat.format(established)}</p>
             <hr/>
-            <Content />
+            <slot />
         </div>
         <div class="rainbow">
             <div class="rainbow-side">
