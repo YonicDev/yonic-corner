@@ -8,6 +8,6 @@ const feedsPath = path.resolve(process.cwd(), "src/feeds");
 
 if(!fs.existsSync(feedsPath)) {
     fs.mkdirSync(feedsPath);
-} else if(fs.statSync(feedsPath).isDirectory()) {
+} else if(!fs.statSync(feedsPath).isDirectory()) {
     fs.mkdirSync(feedsPath);
 }
