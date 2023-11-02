@@ -25,8 +25,8 @@
 </div>
 
 <style lang="scss">
-    @use "../styles/util.scss";
-    @use "../styles/vars.scss" as *;
+    @use "../../styles/util.scss";
+    @use "../../styles/vars.scss" as *;
 
 	$bungee-length: 16;
 
