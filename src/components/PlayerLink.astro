@@ -23,7 +23,7 @@ const coverImage = coverImport != null ? await getImage({src: coverImport, width
         </div>
     </div>
     <div class="metadata">
-        <span><b><u>Music:</u> {music.title}</b></span>
+        <span><b><u>Music:</u>{" "}{music.title}</b></span>
         <span>{[music.album, music.author].filter(field => field != null).join(" | ")}</span>
     </div>
 </a>
