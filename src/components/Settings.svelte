@@ -5,7 +5,7 @@
     
     import { biyonicEnabled } from "@lib/stores"
 
-    const themes = ["light", "dark", "legacy"] as const;
+    const themes = ["auto", "light", "dark", "legacy"] as const;
     type Theme = typeof themes[number];
 
     let theme: Theme;
@@ -27,7 +27,7 @@
         });
 
         biyonicEnabled.set(window.localStorage.getItem("biyonic-reading") === "on");
-        theme = (window.localStorage.getItem("theme") ?? (window.matchMedia("(prefers-color-scheme: dark)").matches? "dark" : "light")) as Theme;
+        theme = (window.localStorage.getItem("theme") ?? "auto") as Theme;
 
         biyonicEnabled.subscribe((enabled) => {
             window.localStorage.setItem("biyonic-reading", enabled? "on" : "off");
@@ -35,20 +35,27 @@
         })
     })
 
-    const toggleColor: Record<Theme, string> = {
+    const toggleColor: Record<Exclude<Theme, "auto">, string> = {
         light: "#00A090",
         dark: "#0e57aa",
         legacy: "#009183"
     }
+
+    let toggleTheme: Exclude<Theme, "auto">;
     
     $: {
         if(theme != null) {
             window.localStorage.setItem("theme", theme);
-            document.documentElement.setAttribute("data-theme", theme);
-            document.querySelectorAll<HTMLPreElement>(".code-block.dark pre").forEach((element) => {
-                element.style.backgroundColor = theme === "legacy" ? "#003333" : "#1E1E1E";
-            });
-            (document.getElementById("player")?.getElementsByTagName("iframe")[0].contentWindow as any).setTheme();
+            if(theme === "auto") {
+                const autoTheme = window.matchMedia("(prefers-color-scheme: dark)").matches? "dark" : "light";
+                document.documentElement.setAttribute("data-theme", autoTheme);
+                (document.getElementById("player")?.getElementsByTagName("iframe")[0].contentWindow as any).setTheme(autoTheme)
+                toggleTheme = autoTheme;
+            } else {
+                document.documentElement.setAttribute("data-theme", theme);
+                (document.getElementById("player")?.getElementsByTagName("iframe")[0].contentWindow as any).setTheme();
+                toggleTheme = theme;
+            }
         }
     }
 
@@ -106,7 +113,7 @@
         </div>
         <div>
             <label for="biyonicToggle">{@html textVide("Biyonic reading", {ignoreHtmlTag: true})} <a href="/blog/article/biyonic-reading" target="_blank" rel="noreferrer">(?)</a></label>
-            <Toggle id="biyonicToggle" style="cursor: url('/img/cursors/pointer.png'), pointer;" toggledColor={toggleColor[theme]} bind:toggled={$biyonicEnabled} hideLabel on="On" off="Off"/>
+            <Toggle id="biyonicToggle" style="cursor: url('/img/cursors/pointer.png'), pointer;" toggledColor={toggleColor[toggleTheme]} bind:toggled={$biyonicEnabled} hideLabel on="On" off="Off"/>
         </div>
     </div>
     <div class="settings-tab"><img alt="Music" src="/img/icons/settings.svg" width="28"/></div>

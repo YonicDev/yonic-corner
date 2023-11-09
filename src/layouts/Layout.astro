@@ -104,8 +104,16 @@ if(keywords.length > 0) {
 				}
 				return "light";
 			})()
-
-			document.documentElement.setAttribute("data-theme", theme);
+			if(theme === "auto") {
+				var autoTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+				if(autoTheme) {
+					document.documentElement.setAttribute("data-theme", "dark");
+				} else {
+					document.documentElement.setAttribute("data-theme", "light");
+				}
+			} else {
+				document.documentElement.setAttribute("data-theme", theme);
+			}
 		</script>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

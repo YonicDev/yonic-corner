@@ -10,7 +10,7 @@ import advancedPreset from 'cssnano-preset-advanced';
 import css from "@lib/styles/themes/dark-player-noscript.scss?inline";
 import cssUrl from "@lib/styles/themes/dark-player-noscript.scss?url";
 
-export const get: APIRoute = async () => {
+export const GET: APIRoute = async () => {
     try {
         const minCss = await postcss([cssnano({preset: advancedPreset})]).process(css, {from: cssUrl}).then((res) => res.css);
         return new Response(minCss, { headers: { "Content-Type": "text/css" } });
