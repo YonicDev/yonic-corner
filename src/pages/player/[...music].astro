@@ -37,7 +37,7 @@ interface Props {
         <script is:inline>
             window.setTheme = function() {
                 var theme = (function() {
-                    if ( typeof localStorage !== "undefined" && localStorage.getItem("theme") ) {
+                    if ( typeof localStorage !== "undefined" && localStorage.getItem("theme") != null && localStorage.getItem("theme") !== "auto") {
                         return localStorage.getItem("theme");
                     }
                     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {

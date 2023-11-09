@@ -49,13 +49,12 @@
             if(theme === "auto") {
                 const autoTheme = window.matchMedia("(prefers-color-scheme: dark)").matches? "dark" : "light";
                 document.documentElement.setAttribute("data-theme", autoTheme);
-                (document.getElementById("player")?.getElementsByTagName("iframe")[0].contentWindow as any).setTheme(autoTheme)
                 toggleTheme = autoTheme;
             } else {
                 document.documentElement.setAttribute("data-theme", theme);
-                (document.getElementById("player")?.getElementsByTagName("iframe")[0].contentWindow as any).setTheme();
                 toggleTheme = theme;
             }
+            (document.getElementById("player")?.getElementsByTagName("iframe")[0].contentWindow as any).setTheme();
         }
     }
 

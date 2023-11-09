@@ -47,12 +47,12 @@
             }
             .playerLink {
                 background-color: $base-color!important;
-                color: $text-color;
+                color: $text-color!important;
                 box-shadow: util.extrude(6, $emphasis-color);
                 border-color: $emphasis-color;
                 .cover {
-                    border-color: $emphasis-color;
-                    background-color: $nav-color-dark;
+                    border-color: $emphasis-color!important;
+                    background-color: $nav-color-dark!important;
                     background-image: url("/img/icons/music-dark.svg");
                     .playIcon {
                         background-color: rgba($nav-color-light,0.5)!important;
@@ -131,6 +131,9 @@
             background-color: $article-color!important;
             box-shadow: util.extrude(8, $emphasis-color)!important;
             border-color: $emphasis-color!important;
+            .hero {
+                background-color: $nav-color-dark!important;
+            }
             .data {
                 h1 {
                     color: $emphasis-light!important;

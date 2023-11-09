@@ -25,7 +25,7 @@
     <!-- Nested anchor elements are illegal, so instead, we make hit zones in separate layers. -->
     {#each posts as post, i} 
         <li class="article">
-            <a aria-label="Article poster image" class="hero" class:placeholder={heroImages[i]==null} href={`/blog/article/${post.slug}`} style={`background-image: ${heroImages[i]? `url(${heroImages[i]})` : `url(/img/icons/category-${post.data.category}.svg), url(/img/pattern3.svg); background-color: ${categories[post.data.category].baseColor}`}; background-position: center ${post.data.heroPosition ?? "center"}, top left`}/>
+            <a aria-label="Article poster image" class="hero" class:placeholder={heroImages[i]==null} href={`/blog/article/${post.slug}`} style={`background-image: ${heroImages[i]? `url(${heroImages[i]})` : `url(/img/icons/category-${post.data.category}.svg), url(/img/pattern3.svg); background-color: ${categories[post.data.category].baseColor}!important`}; background-position: center ${post.data.heroPosition ?? "center"}, top left`}/>
             <div class="data">
                 <a href={`/category/${post.data.category}/1`} class="category">{categories[post.data.category].title.toUpperCase()}</a>
                 <a href={`/blog/article/${post.slug}`}>

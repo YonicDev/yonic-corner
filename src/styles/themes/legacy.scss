@@ -132,6 +132,9 @@
         a, h1, a a {
             color: black!important;
         }
+        .hero {
+            background-color: $nav-color-dark!important;
+        }
         .number {
             box-shadow: none;
             background-color: $emphasis-color;
