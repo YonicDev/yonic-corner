@@ -1,0 +1,27 @@
+---
+import type { ImageOutputFormat, ImageQuality } from "astro";
+import { Picture } from "astro:assets";
+
+interface Props {
+    src: ImageMetadata,
+    alt: string,
+    width?: number,
+    fallback?: "jpeg" | "jpg" | "gif" | "png"
+    formats?: ImageOutputFormat[]
+    quality?: ImageQuality
+}
+
+const defaultWidth = 700;
+const {src, alt, formats, fallback, quality} = Astro.props;
+const width = Astro.props.width? Math.min(defaultWidth, Astro.props.width) : defaultWidth;
+
+const cssWidth = (Astro.props.width? width : defaultWidth) + 'px';
+
+---
+
+<figure class="thumbnail" style={{maxWidth: cssWidth}}>
+    <Picture {src} {alt} {quality} widths={[width*0.25, width*0.5, width/1.5, width]} {formats} fallbackFormat={fallback} style="width: 100%; height: auto;" pictureAttributes={{style: "width: 100%"}}/>
+    <figcaption class="biyonic">
+        <slot />
+    </figcaption>
+</figure>
