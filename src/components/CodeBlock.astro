@@ -1,14 +1,21 @@
 ---
 import { Code } from 'astro/components';
+import type { BuiltinLanguage, LanguageRegistration, SpecialLanguage } from 'shikiji';
+
+interface Props {
+    code: string,
+    lang?: BuiltinLanguage | SpecialLanguage | LanguageRegistration,
+    filename?: string
+}
 
 const { code, lang } = Astro.props;
-const filename = Astro.props.filename.trim();
+const filename = Astro.props.filename?.trim();
 
 const buttonLabel = "Copy code";
 ---
 <div class="code-block" data-button-label={buttonLabel}>
     {
-        filename !== "-" &&
+        filename && filename !== "-" &&
         <span class="filename">
             <span class="icon"></span>
             {filename}
@@ -20,7 +27,7 @@ const buttonLabel = "Copy code";
 </div>
 <div class="code-block dark" data-button-label={buttonLabel}>
     {
-        filename !== "-" &&
+        filename && filename !== "-" &&
         <span class="filename">
             <span class="icon"></span>
             {filename}
@@ -32,7 +39,7 @@ const buttonLabel = "Copy code";
 </div>
 <div class="code-block legacy" data-button-label={buttonLabel}>
     {
-        filename !== "-" &&
+        filename && filename !== "-" &&
         <span class="filename">
             <span class="icon"></span>
             {filename}
