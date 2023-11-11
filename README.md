@@ -2,15 +2,23 @@
 
 This is the source code of my personal blog, built with Astro, and uses Svelte components. Apart from a few key differences, it's not much different than any other Astro blog site.
 
+There is another blog expressly designed for extremely old browsers called [Legacy Version][1] that uses nearly the same content.
+
 ## Setup
 
-Clone the repository and run in it:
+Clone the repository and run `npm install` in it.
+
+> ⚠ **The actual contents of The Yonic Corner have been separated to a private monorepo.**
+> 
+> If you want to add some sample content to the blog, you can simply delete the symbolic links in the `src/content` and `src/assets` folders (or "files" if Git for Windows doesn't process them) and copy and merge the contents of the `example` folder to those folders.
+
+Then you can run one of the following commands:
 
 ```bash
 npm install
-npm run dev # development server
+npm run dev # run the development server
 npm run build # make a build
-npm run preview # run a server in production mode
+npm run preview # run a server in production mode with the built site
 ```
 
 ### CLI tool
@@ -66,6 +74,7 @@ This collection is meant for MDX or Markdown posts only. The frontmatter structu
 * *`category`*: Which category the post belongs to. It may only be one the list of set categories.
 * *`tags`*: An array containing the tags the post should have. These are also used as keywords for SEO.
 * *`draft`*: Takes in a boolean. Draft posts will not show on production mode. In development mode, they will have a \[draft\] indicator after the title, unless `HIDE_DRAFTS_IN_DEVELOPMENT` is set to true.
+* *`legacy`*: Determines if this post should be included in the [Legacy Version][1] of the blog. Can be set to `true`, `false` or `only`. If set to `only`, it will be filtered out from this version of the blog (Modern).
 * *`series`*: Set this if the post belongs to a series of posts. It's an object with the following properties (both mandatory).
   * `id`: The internal ID of the series.
   * `order`: An integer number that tells how should this post be ordered in relation to others. Posts with lower order numbers will be placed first.
@@ -79,15 +88,18 @@ When the hero image's aspect ratio is different than 16/9, `heroPosition` contro
 
 ### Built-in components
 
-In MDX posts, the following components are already imported, and can be used right away.
+MDX posts have some components that are already imported, and can be used right away without `import` statements.
+
+**Modern-only** components may only be rendered in the Modern version. This can be guaranteed using the `<VersionBranch>` component.
 
 * `<Bubble>`: Creates a comic-like text bubble.
-* `<Chara>`: Displays a character sprite.
-* `<Picture>`: Displays an image with art direction with an optional `<figcaption>`.
+* `<Chara>`: Displays a character sprite. Used with `<Bubble>`.
+* `<Figure>`: Displays an image with art direction with an optional `<figcaption>`.
 * `<PlayerLink>`: Displays a link to play music on the player.
-* `<ImageGrid>`: Creates a responsive grid to display images, with an optional caption.
+* `<VersionBranch>`: Splits rendering between this version (Modern) and the [Legacy Version][1]. Anything with the `slot` attribute assigned to `modern` will be rendered in this version, while anything in the `legacy` slot will be rendered in the Legacy one.
+* `<ImageGrid>` (**Modern-only**): Creates a responsive grid to display images, with an optional caption.
 
-### Replaceable elements
+#### Replaceable elements
 
 Some built-in components are meant to replace HTML elements to provide additional enhancements.
 
@@ -99,11 +111,18 @@ export const components = { p: Paragraph, li: ListItem, code: Code, a: Anchor };
 
 * `<Paragraph>` and `<ListItem>` enable the text inside for Bi(y)onic reading.
 * `<Anchor>` will make external links open in a new tab or window.
-* `<Code>` customizes the look of the code snippets, as well as adding the possibility of adding a small "filename tag" like this:
+* `<Code>` customizes the look of text that will be shown in monospace text (`like this string`).
+
+### Code blocks
+
+A filename tag can be added to a code block by adding a commented line as the first line, like this:
+
 ```markdown
 ```js
 // src/script.js
 console.log("The // comment in the first line will add a filename tag with the name 'src/script.js'");
+
+// ... rest of blockcode
 ```
 
 ### Series
@@ -137,6 +156,8 @@ Contains JSON data only. Properties in italics are optional.
   * `src`: The URL targeting the audio source.
   * `type`: The MIME type of the source. It must be one of the compatible `audio/` types.
 
+> Only HTTPS audio sources are used. Any other protocol is ignored.
+
 ## Web feeds
 
 This blog generates an Atom feed that's copied into the public folder during post-build. Because of this, the feed is not available when running the development server.
@@ -144,3 +165,5 @@ This blog generates an Atom feed that's copied into the public folder during pos
 ## Issues regarding PostCSS
 
 This blog uses PostCSS with Autoprefixer to extend compatibility with older browsers. Sometimes, if there is an error during build and it takes some time to fix, the pages will error out with "unexpected token" errors. So far the only workaround is to reset the development server.
+
+[1]: https://github.com/YonicDev/yonic-corner-legacy
