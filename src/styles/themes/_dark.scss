@@ -338,10 +338,6 @@
         .settings-tab, .music-tab {
             background-color: $nav-color-light!important;
         }
-        iframe {
-            color-scheme: light;
-            color: $text-color!important;
-        }
     }
 
     .infobox {
@@ -362,8 +358,10 @@
 }
 
 @mixin player {
+    $base-color: #1e2f66;
     $text-color: #76cdff;
-    body {
+    html, body {
+        background-color: $base-color!important;
         color: $text-color!important;
     }
 }
