@@ -101,7 +101,7 @@ MDX posts have some components that are already imported, and can be used right 
 
 #### Replaced elements
 
-Some HTML elements are replaced with built-in components to provide additional enhancements. Since 2.3.0, these are replaced automatically when rendering and don't have to be exported in the MDX posts.
+Some HTML elements are replaced with built-in components to provide additional enhancements. Since 2.2.0, these are replaced automatically when rendering and don't have to be exported in the MDX posts.
 
 * `<Paragraph>` and `<ListItem>` enable the text inside for Bi(y)onic reading.
 * `<Anchor>` will make external links open in a new tab or window.
