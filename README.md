@@ -99,19 +99,13 @@ MDX posts have some components that are already imported, and can be used right 
 * `<VersionBranch>`: Splits rendering between this version (Modern) and the [Legacy Version][1]. Anything with the `slot` attribute assigned to `modern` will be rendered in this version, while anything in the `legacy` slot will be rendered in the Legacy one.
 * `<ImageGrid>` (**Modern-only**): Creates a responsive grid to display images, with an optional caption.
 
-#### Replaceable elements
+#### Replaced elements
 
-Some built-in components are meant to replace HTML elements to provide additional enhancements.
-
-In the body of the post, the following line should be set first to do this.
-
-```js
-export const components = { p: Paragraph, li: ListItem, code: Code, a: Anchor };
-```
+Some HTML elements are replaced with built-in components to provide additional enhancements. Since 2.3.0, these are replaced automatically when rendering and don't have to be exported in the MDX posts.
 
 * `<Paragraph>` and `<ListItem>` enable the text inside for Bi(y)onic reading.
 * `<Anchor>` will make external links open in a new tab or window.
-* `<Code>` customizes the look of text that will be shown in monospace text (`like this string`).
+* `<Code>` disables the text that will be shown in monospace text (`like this string`) for Bi(y)onic reading.
 
 ### Code blocks
 

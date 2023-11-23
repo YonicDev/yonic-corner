@@ -44,8 +44,6 @@ program
         const content =`
 Image imports go here...
 
-export const components = { p: Paragraph, li: ListItem, a: Anchor };
-
 <div class="feed-preview">
 Anything inside this element will be inside the content of the RSS feed.
 (No leading whitespaces!)

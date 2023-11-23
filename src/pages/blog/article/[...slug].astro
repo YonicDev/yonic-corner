@@ -10,6 +10,11 @@ import HTMLMusicPlayer from '@lib/components/HTMLMusicPlayer.svelte';
 import PostIcon from '@lib/components/PostIcon.svelte';
 import TimeToRead from '@lib/components/TimeToRead.svelte';
 
+import Paragraph from '@lib/components/biyonic/Paragraph.astro';
+import ListItem from '@lib/components/biyonic/ListItem.astro';
+import Code from '@lib/components/biyonic/Code.astro';
+import Anchor from '@lib/components/Anchor.astro';
+
 import "@lib/styles/article.scss";
 import { filterPosts, sortPosts } from '@lib/util';
 
@@ -44,6 +49,8 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
     month: 'long',
     day: '2-digit',
 })
+
+const components = { p: Paragraph, li: ListItem, a: Anchor, code: Code };
 
 const rainbowColors = ["#078D70","#26CEAA","#98E8C1","white","#7BADE2","#5049CC","#3D1A78"]
 const bowrainColors = [...rainbowColors].reverse();
@@ -91,7 +98,7 @@ const series = post.data.series ? await getEntry(post.data.series.id) : null;
             </p>
             }
             <hr/>
-            <Content />
+            <Content {components} />
         </div>
         <HTMLMusicPlayer client:idle />
         <div class="rainbow">
