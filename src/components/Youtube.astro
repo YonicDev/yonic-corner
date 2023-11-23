@@ -12,7 +12,7 @@ interface Props {
 const INVIDIOUS_DEFAULT_INSTANCE = "https://inv.tux.pizza";
 ---
 
-<iframe title="Video player" src={`${instance ?? INVIDIOUS_DEFAULT_INSTANCE}/embed/${id}`}/>
+<iframe class="video-player" title="Video player" src={`${instance ?? INVIDIOUS_DEFAULT_INSTANCE}/embed/${id}`}/>
 <div class="videoCaption">
     <p><b><u>{title ?? "Untitled video"}</u></b> {duration && <span>({duration})</span>}</p>
     <p>{description && <i class="biyonic-string">{description}</i>}</p>
@@ -21,7 +21,7 @@ const INVIDIOUS_DEFAULT_INSTANCE = "https://inv.tux.pizza";
 <style lang="scss">
     @use "../styles/util.scss";
 
-    iframe {
+    .video-player {
         width: 100%;
         aspect-ratio: 16 / 9;
         border: inherit;

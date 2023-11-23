@@ -97,6 +97,10 @@
                 background-color: $nav-color-light;
                 color: #b2e3ff;
             }
+
+            .video-player {
+                box-shadow: util.extrude(8, $emphasis-color)!important;
+            }
         }
 
         .main-wrapper {
