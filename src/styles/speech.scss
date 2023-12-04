@@ -1,13 +1,15 @@
 @use 'sass:list';
 
-$speech-colors: ("yonic": #0071aa #00eeff);
+$speech-colors: ("yonic": #0071aa #00eeff black, "raxki": #da1515 #2c0505 #ff9494);
 
 @mixin speech {
     @each $theme, $colors in $speech-colors {
         $outline-color: list.nth($colors, 1);
         $fill-color: list.nth($colors, 2);
+        $text-color: list.nth($colors, 3);
 
         &.#{$theme} {
+            color: $text-color;
             background-color: $fill-color;
             border-color: $outline-color;
             .triangle {
@@ -22,8 +24,10 @@ $speech-colors: ("yonic": #0071aa #00eeff);
         }
     }
 }
+
 $fill-color: #ececec;
 $outline-color: black;
+$text-color: black;
 
 .speech {
     @include speech;
@@ -31,7 +35,6 @@ $outline-color: black;
     display: block;
     flex-grow: 1;
     background-color: $fill-color;
-    color: black;
     position: relative;
     padding: 2rem;
     border: 4px solid #{$outline-color};
