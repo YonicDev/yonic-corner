@@ -354,6 +354,12 @@
         }
     }
 
+    .speech {
+        &.yonic a {
+            color: #016b3a;
+        }
+    }
+
     @media screen and (max-width:750px) {
         nav .links {
             background-color: #020f1b;

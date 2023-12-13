@@ -124,6 +124,7 @@
                 display: block;
                 color: #{$emphasis-color};
                 padding-right: 1rem;
+                text-decoration: none;
             }
             
             .data {
@@ -191,6 +192,7 @@
                 color: #{$emphasis-color};
                 font-weight: bold;
                 box-shadow: util.extrude(4);
+                text-decoration: none;
             }
 
         }

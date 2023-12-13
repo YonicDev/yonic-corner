@@ -31,6 +31,7 @@
                 width: 100%;
                 height: 100%;
                 display: block;
+                text-decoration: none;
                 h3, p {
                     margin: 0.5rem 1rem;
                     color: #{emphasis-color};
@@ -157,6 +158,7 @@
             display: block;
             color: $emphasis-color;
             padding-right: 1rem;
+            text-decoration: none;
         }
         
         .data {

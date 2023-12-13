@@ -46,8 +46,8 @@ import { categories } from "@lib/settings";
         flex-wrap: wrap;
         justify-content: center;
         li {
-            display: inline;
-            margin: 0.2rem 0;
+            display: inline-block;
+            margin: 0.2rem 0.3rem;
             a {
                 display: inline-block;
                 position: relative;
@@ -58,6 +58,7 @@ import { categories } from "@lib/settings";
                 box-shadow: util.extrude(4);
                 transform: translate3d(0, 0, 0);
                 transition: all 0.1s ease-out;
+                text-decoration: none;
                 &:hover {
                     transform: translate3d(-4px, -4px, 0);
                 }
