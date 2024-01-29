@@ -146,11 +146,25 @@ Contains JSON data only. Properties in italics are optional.
 * *`author`*: The author/composer of the music
 * *`album`*: The album to which the track belongs to. In the Yonic Corner, it also refers to the title of the games the soundtrack belongs to.
 * *`cover`*: The filename of the cover image. Preferably a square image. The image has to be placed in the `/src/assets/covers` folder.
-* `sources`: An array of audio sources for the track, made of objects with all properties mandatory:
+* `sources`: An array of audio sources for the track.
+
+The audio sources can be of two types: Direct source or YouTube sourced.
+
+#### Direct source
+
   * `src`: The URL targeting the audio source.
   * `type`: The MIME type of the source. It must be one of the compatible `audio/` types.
 
 > Only HTTPS audio sources are used. Any other protocol is ignored.
+
+#### YouTube sourced *(experimental)*
+
+The Yonic Corner can rely on the Invidious API to get several audio stream sources from any YouTube video with publicly available playback.
+
+* `type`: Set to `'youtube'`.
+* `src`: The ID of the YouTube video.
+
+> These sources will be ignored in the Legacy version and should always be accompanied by at least one direct source.
 
 ## Web feeds
 

@@ -1,6 +1,8 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 
+import { INVIDIOUS_DEFAULT_INSTANCE } from "@lib/settings"
+
 import "@lib/styles/player.scss";
 import "@lib/styles/themes/dark-player.scss";
 
@@ -15,6 +17,14 @@ export async function getStaticPaths() {
 }
 
 const {title, sources, author, album} = Astro.props.music;
+
+const adaptiveFields = [
+    { itag: 251, type: 'audio/webm; codecs="opus"'},
+    { itag: 250, type: 'audio/webm; codecs="opus"'},
+    { itag: 249, type: 'audio/webm; codecs="opus"'},
+    { itag: 140, type: 'audio/mp4; codecs="mp4a.40.2"'},
+    { itag: 139, type: 'audio/mp4; codecs="mp4a.40.5"'},
+]
 
 interface Props {
     music: CollectionEntry<"music">["data"]
@@ -61,7 +71,13 @@ interface Props {
     <body>
         <p>{[title, album, author].filter(data => data!=null).join(" | ")}</p>
         <audio controls autoplay loop>
-            { sources.map(source => <source src={source.src} type={source.type} /> ) }
+            { sources.flatMap((source) => { 
+                if(source.type !== "youtube")
+                    return <source src={source.src} type={source.type} />
+                return adaptiveFields.map(({itag, type}) => {
+                    return <source src={`${INVIDIOUS_DEFAULT_INSTANCE}/latest_version?id=${source.src}&itag=${itag}`} {type} />
+                })
+            }) }
         </audio>
     </body>
 </html>
