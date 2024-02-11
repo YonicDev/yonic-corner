@@ -1,4 +1,6 @@
 ---
+import { INVIDIOUS_DEFAULT_INSTANCE } from "@lib/settings"
+
 const {id, title, description, instance, duration} = Astro.props;
 
 interface Props {
@@ -9,7 +11,7 @@ interface Props {
     duration?: `${number}:${number}`;
 }
 
-const INVIDIOUS_DEFAULT_INSTANCE = "https://inv.tux.pizza";
+
 ---
 
 <iframe class="video-player" title="Video player" src={`${instance ?? INVIDIOUS_DEFAULT_INSTANCE}/embed/${id}`}/>
