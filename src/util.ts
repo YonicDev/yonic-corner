@@ -9,7 +9,7 @@ export async function getHeroImages(posts: CollectionEntry<"blog">[]) {
         // But the file *has* to be an article asset named hero.png,
         // regardless of what the image type actually is.
         try {
-            const imageMeta: ImageMetadata = (await import(`./assets/articles/${post.slug}/hero.png`)).default;
+            const imageMeta: ImageMetadata = post.data.hero?.modern ?? (await import(`./assets/articles/${post.slug}/hero.png`)).default;
             const processedImage = await getImage({ src: imageMeta, width: 550, height: 280, format: "webp"});
             return Promise.resolve(processedImage.src);
         } catch (err: any) {

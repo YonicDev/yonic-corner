@@ -78,13 +78,16 @@ This collection is meant for MDX or Markdown posts only. The frontmatter structu
 * *`series`*: Set this if the post belongs to a series of posts. It's an object with the following properties (both mandatory).
   * `id`: The internal ID of the series.
   * `order`: An integer number that tells how should this post be ordered in relation to others. Posts with lower order numbers will be placed first.
+* *`hero`*: A set of two images:
+  * *`modern`*: Asset path to the image used in this version.
+  * *`legacy`* Asset path to the image used in the [Legacy Version][1]. It must have a 3:2 aspect ratio, and ideally a resolution of 454x303 pixels.
 * *`heroPosition`*: Takes either `top`, `center` and `bottom`.
 
-Hero images can be set by placing an image named `hero.png` in the post's assets folder.
+If `hero` is not defined, the hero images can be set by placing an image named `hero.png` in a folder with the same name as the post ID in the assets folder.
 
-> Despite its name, it doesn't really need to be a PNG image. JPEG, GIF, WEBP and AVIF images will also work just fine. It only needs to be named `hero.png`.
+> Despite its name, the `hero.png` image doesn't really need to be a PNG image. JPEG, GIF, WEBP and AVIF images will also work just fine. It only needs to be named `hero.png`.
 
-When the hero image's aspect ratio is different than 16/9, `heroPosition` controls how the image should be vertically centered, with either the top, center, or bottom of the image being centered. Hero images are always horizontally centered in the middle. Hero images are used as images for Twitter/X Cards.
+When the modern hero image's aspect ratio is different than 16/9, `heroPosition` controls how the image should be vertically centered, with either the top, center, or bottom of the image being centered. Hero images are always horizontally centered in the middle. Hero images are used as images for Twitter/X Cards.
 
 ### Built-in components
 
@@ -128,9 +131,12 @@ A series is a list of posts set in a chronological order.
 Contains JSON data only. All properties are mandatory. The internal ID is set in the filename.
 
 * `title`: The display title of the series.
+* *`hero`*: A set of two images:
+  * *`modern`*: Asset path to the image used in this version. Unlike posts, the hero image is meant to be 16:9 in aspect ratio and does not align.
+  * *`legacy`* Asset path to the image used in the [Legacy Version][1]. It must have a 3:2 aspect ratio, but it does not need to be in a specific resolution.
 * `description`: Flavor text to be used in the blog and SEO.
 
-A hero image can be set by placing a `hero.png` in its associated `src/assets/series` folder. Unlike posts, the hero image is meant to be 16/9 in aspect ratio and does not align.
+If `hero` is no set, a hero image can be set by placing a `id-of-series.png` in its associated `src/assets/series` folder; much like posts, it does not need to be a PNG file.
 
 ### Music
 
@@ -164,7 +170,7 @@ The Yonic Corner can rely on the Invidious API to get several audio stream sourc
 * `type`: Set to `'youtube'`.
 * `src`: The ID of the YouTube video.
 
-> These sources will be ignored in the Legacy version and should always be accompanied by at least one direct source.
+> These sources will be ignored in the [Legacy Version][1] and should always be accompanied by at least one direct source.
 
 ## Web feeds
 

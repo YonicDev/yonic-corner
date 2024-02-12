@@ -41,7 +41,7 @@ let processedImage: GetImageResult | undefined;
 
 if(seriesId) {
     try {
-        imageMeta = (await import(`../../assets/series/${seriesId}.png`)).default;
+        imageMeta = series.hero?.modern ?? (await import(`../../assets/series/${seriesId}.png`)).default;
         processedImage = await getImage({ src: imageMeta!, width: 800, format: "webp", quality: seriesId? "mid" : "max"});
     } catch (e) {
         if(e instanceof Error) {

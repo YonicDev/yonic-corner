@@ -24,12 +24,12 @@ const description = "Ever had problems trying to locate the next part of a post?
                 series.map(async ({id, data}) => {
                     let coverImage: GetImageResult | undefined;
                     try {
-                        const {default: src} = await import(`../../assets/series/${id}.png`);
+                        const src = data.hero?.modern ?? (await import(`../../assets/series/${id}.png`)).default;
                         coverImage = await getImage({src, width: 400});
                     } catch (e) {
                         if(e instanceof Error) {
                             if(e.message.includes("Unknown variable dynamic import"))
-                                console.info(`[i] Series with ID ${id} does not have a cover in the assets folder.\nMake sure it is properly named as ${id}.png`);
+                                console.info(`[i] Series with ID ${id} does not have a cover in the assets/series folder.\nMake sure it is properly named as ${id}.png or define a hero set in the series JSON.`);
                             else
                                 console.error(e.message);
                         }

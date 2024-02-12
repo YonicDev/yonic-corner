@@ -70,7 +70,7 @@ async function getHeroImage(): Promise<ImageMetadata | null> {
     }
 }
 
-const hero = await getHeroImage();
+const hero = post.data.hero?.modern ?? await getHeroImage();
 const series = post.data.series ? await getEntry(post.data.series.id) : null;
 
 ---
