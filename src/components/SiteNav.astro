@@ -1,5 +1,14 @@
 ---
-    import Marquee from '@lib/components/Marquee.svelte';
+import Marquee from '@lib/components/Marquee.svelte';
+import { getEntry } from 'astro:content';
+
+const {data: commonBlurbs} = await getEntry("blurb", "common");
+const {data: modernBlurbs} = await getEntry("blurb", "modern");
+
+const blurbList: typeof commonBlurbs = {
+	base: [...commonBlurbs.base, ...modernBlurbs.base],
+	timed: [...commonBlurbs.timed, ...modernBlurbs.timed]
+}
 ---
 
 <nav>
@@ -29,7 +38,7 @@
     </ul>
     <div class="borders">
         <div class="border-dark">
-            <Marquee client:idle />
+            <Marquee {blurbList} client:idle />
         </div>
         <div class="border-transition" />
         <div class="border-light" />

@@ -172,6 +172,24 @@ The Yonic Corner can rely on the Invidious API to get several audio stream sourc
 
 > These sources will be ignored in the [Legacy Version][1] and should always be accompanied by at least one direct source.
 
+### Blurbs
+
+Located in `content/blurb`.
+
+These three JSON files contain strings of text that are displayed in the site's marquee. There is one for each version of the blog, and another one for both of them. Some will be randomly selected from a maximum of 6 blurb texts.
+
+* `base`: Array of blurb strings that will always be included in the selection.
+* `timed`: Array of blurb strings that will only be included if the current day falls within the blurb's specified date range. If client-side  JavaScript is disabled, these blurbs will never be included in the selection.
+  * *`singleDate`*: Only for one day. 
+    * `text`: The string for the blurb text.
+    * `date`: The date string specified, in YYYY-MM-DD format.
+    * *`useYear`*: When true, also checks if it falls within the same year.
+  * *`dateRange`*: Check for a specified date range (extremes inclusive):
+    * `text`: The string for the blurb text.
+    * `from`: The starting date specified, in YYYY-MM-DD format.
+    * `dot`: The ending date specified, in YYYY-MM-DD format.
+    * *`useYear`*: When true, also checks if it falls within the year ranges.
+
 ## Web feeds
 
 This blog generates an Atom feed that's copied into the public folder during post-build. Because of this, the feed is not available when running the development server.

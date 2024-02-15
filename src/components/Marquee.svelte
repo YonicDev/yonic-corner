@@ -1,58 +1,50 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import additionalBlurbs from "@assets/blurbs";
 
-    const commonBlurbs: Blurb[] = [
-        {
-            blurb: "Hello! Welcome to my blog!"
-        },
-        {
-            blurb: "This blog works without JavaScript."
-        },
-        {
-            blurb: "Marquees are a thing again!"
-        },
-    ]
+    import { shuffle } from "@lib/util";
+    import type { BlurbList } from "@lib/content/config";
 
-    function shuffle<T>(array: T[]) {
-        let currentIndex = array.length,  randomIndex;
+    export let blurbList: BlurbList;
+    export let maxLength = 6;
 
-        // While there remain elements to shuffle.
-        while (currentIndex != 0) {
+    let blurbs: string[] = ["Hello! Welcome to my blog!", "This website works without JavaScript.", ...shuffle(blurbList.base)];
 
-            // Pick a remaining element.
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-
-            // And swap it with the current element.
-            [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex], array[currentIndex]];
-        }
-
-        return array;
-    }
-
-    let blurbs: Blurb[] = [];
-    onMount(async () => {
-        commonBlurbs[1].blurb = "It's nice to see you here!";
-        const filteredBlurbs = additionalBlurbs.filter(({start, end}) => {
-            if(start == null || end == null)
-                return true;
-            else {
-                const now = new Date();
-                start.setFullYear(now.getFullYear());
-                end.setFullYear(now.getFullYear());
-                return now >= start && now <= end;
+    onMount(() => {
+        const now = new Date();
+        blurbs = [...blurbs, ...shuffle(blurbList.timed).filter((blurb) => {
+            if(blurb.singleDate != null) {
+                const date = new Date(blurb.singleDate.date);
+                const result = (!blurb.singleDate.useYear || date.getUTCFullYear() == now.getUTCFullYear()) && date.getUTCMonth() == now.getUTCMonth() && date.getUTCDate() == now.getUTCDate()
+                return result;
+            } else if (blurb.dateRange != null) {
+                const from = new Date(blurb.dateRange.from);
+                const to = new Date(blurb.dateRange.to);
+                if(blurb.dateRange.useYear) {
+                    return from.getTime() <= now.getTime() && to.getTime() >= now.getTime()
+                } else {
+                    if(now.getUTCMonth() < from.getUTCMonth() || now.getUTCMonth() > to.getUTCMonth()) {
+                        return false;
+                    }
+                    if(now.getUTCMonth() == from.getUTCMonth()) {
+                        return now.getUTCDate() >= from.getUTCDate() && (from.getUTCMonth() != to.getUTCMonth() || now.getUTCDate() <= to.getUTCDate())
+                    } else if(now.getUTCMonth() == to.getUTCMonth()) {
+                        return now.getUTCDate() <= to.getUTCDate() && (from.getUTCMonth() != to.getUTCMonth() || now.getUTCDate() >= from.getUTCDate())
+                    } else {
+                        return false;
+                    }
+                }
+            } else {
+                return false;
             }
-        })
-        blurbs = commonBlurbs.concat(filteredBlurbs);
-        shuffle(blurbs);
-        blurbs.length = 3;
+        }).map(blurb => blurb.text)]
+        blurbs[1] = "It's nice to see you here!";
+        if(blurbs.length > maxLength)
+            blurbs.length = 6;
     });
 </script>
 
 <ul aria-hidden="true">
-    {#each (blurbs.length > 0 ? blurbs : commonBlurbs) as {blurb}}
+    {#each blurbs as blurb}
         <li>{blurb}</li>
     {/each}
 </ul>

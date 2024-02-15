@@ -1,13 +1,13 @@
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
 
-interface Blurb {
+declare interface Blurb {
     blurb: string,
     start?: Date,
     end?: Date
 }
 
-interface Category {
+declare interface Category {
     title: string,
     description: string,
     order: number,
