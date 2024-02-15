@@ -49,4 +49,4 @@ export const categories: Record<CategoryId, Category> = {
     }
 }
 
-export const INVIDIOUS_DEFAULT_INSTANCE = "https://inv.tux.pizza";
+export const INVIDIOUS_DEFAULT_INSTANCE = "https://inv.vern.cc";
