@@ -49,6 +49,13 @@ node cli.mjs update <Post id> [-p | --publish]
 
 Adds or modified the `updatedDate` field of the post. With the `-p` or `--publish` option, it updates the `publishDate` field instead.
 
+## Migrating from 2.1.0
+
+1. Move the `assets` folder associated with a MDX post straight to the `contents` folder and group it by year/month.
+2. In the same folder, put the MDX post with the same ID and rename it `index.mdx`.
+3. Remove the `export components = { ... }` line from the MDX.
+4. Optionally, add a `hero` property in the frontmatter with the `modern` and `legacy` parameters, with values being relative paths pointing to the images.
+
 ## Configuration
 
 The `src/settings.ts` file contains some properties that control the overall structure of the blog.
@@ -63,9 +70,9 @@ The Yonic Corner uses Astro content collections for handling the actual content 
 
 ### Blog posts
 
-Located in `content/blog`.
+Located in `content/blog`. From 2.2.0, these are organized by year and month, although grouping them in a `drafts` folder is also supported.
 
-This collection is meant for MDX or Markdown posts only. The frontmatter structure is as follows (in *italics*, optional):
+This collection is meant for MDX or Markdown posts only and associated assets. The frontmatter structure is as follows (in *italics*, optional):
 
 * `title`: The display title of the post.
 * `description`: Flavor text to be used in the blog and SEO.
@@ -83,9 +90,9 @@ This collection is meant for MDX or Markdown posts only. The frontmatter structu
   * *`legacy`* Asset path to the image used in the [Legacy Version][1]. It must have a 3:2 aspect ratio, and ideally a resolution of 454x303 pixels.
 * *`heroPosition`*: Takes either `top`, `center` and `bottom`.
 
-If `hero` is not defined, the hero images can be set by placing an image named `hero.png` in a folder with the same name as the post ID in the assets folder.
+If `hero` is not defined, the hero images can be set by placing an image named `hero.png` for this version and `hero-legacy.png` for the Legacy one, in the same folder as the MDX post.
 
-> Despite its name, the `hero.png` image doesn't really need to be a PNG image. JPEG, GIF, WEBP and AVIF images will also work just fine. It only needs to be named `hero.png`.
+> Despite their names, hero images don't really need to be a PNG image. JPEG, GIF, WEBP and AVIF images will also work just fine. They only need to be named `hero.png` and `hero-legacy.png`.
 
 When the modern hero image's aspect ratio is different than 16/9, `heroPosition` controls how the image should be vertically centered, with either the top, center, or bottom of the image being centered. Hero images are always horizontally centered in the middle. Hero images are used as images for Twitter/X Cards.
 
