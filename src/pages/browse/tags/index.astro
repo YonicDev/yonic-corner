@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import { filterPosts } from "@lib/util";
 
 import Layout from "@lib/layouts/Layout.astro";
+import Buttoner from "@lib/components/BrowseButtons.astro";
 import Tag from "@lib/components/Tag.svelte";
 
 const posts = (await getCollection("blog")).filter(filterPosts);
@@ -19,6 +20,7 @@ for (const tag of tags) {
 ---
 
 <Layout title="All tags" description="This page shows all the tags used in my blog. You can search specific posts by a specific tag." keywords={['blog','navigation','search','tags','index']}>
+    <Buttoner sites={{tags: "Tags", series: "Series", archive: "Archive"}} />
     <div class="main-container">
         <div class="tag-container">
             <h1>Tags</h1>

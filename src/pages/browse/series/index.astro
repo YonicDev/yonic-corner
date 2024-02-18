@@ -5,6 +5,8 @@ import type { GetImageResult } from "astro";
 
 import Layout from "@lib/layouts/Layout.astro";
 
+import Buttoner from "@lib/components/BrowseButtons.astro";
+
 import "@lib/styles/series.scss";
 
 const series = await getCollection("series");
@@ -15,6 +17,7 @@ const description = "Ever had problems trying to locate the next part of a post?
 
 <Layout title="Series" {description} coverImage={`${Astro.url.protocol}//${Astro.url.host}/img/seo/series.png`} keywords={["blog","navigation","search","sequence","article","series"]}>
     <main class="index-series">
+        <Buttoner sites={{tags: "Tags", series: "Series", archive: "Archive"}} />
         <div class="hero">
             <h1>Series</h1>
             <p>{description}</p>
@@ -24,7 +27,7 @@ const description = "Ever had problems trying to locate the next part of a post?
                 series.map(async ({id, data}) => {
                     let coverImage: GetImageResult | undefined;
                     try {
-                        const src = data.hero?.modern ?? (await import(`../../assets/series/${id}.png`)).default;
+                        const src = data.hero?.modern ?? (await import(`../../../assets/series/${id}.png`)).default;
                         coverImage = await getImage({src, width: 400});
                     } catch (e) {
                         if(e instanceof Error) {
@@ -37,7 +40,7 @@ const description = "Ever had problems trying to locate the next part of a post?
                     } finally {
                         return (
                             <li>
-                                <a href={`/series/${id}`}>
+                                <a href={`/browse/series/${id}`}>
                                     <img alt="Cover" src={coverImage?.src ?? "/img/series-hero.svg"} height="200"/>
                                     <h3>{data.title}</h3>
                                     <p>{data.description}</p>
@@ -52,7 +55,7 @@ const description = "Ever had problems trying to locate the next part of a post?
 </Layout>
 
 <style lang="scss">
-    @use "../../styles/util.scss";
+    @use "../../../styles/util.scss";
 
     main {
         min-height: calc(100vh - 110px - 114px);

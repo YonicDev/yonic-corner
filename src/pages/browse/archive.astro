@@ -1,0 +1,98 @@
+---
+import { getCollection } from "astro:content";
+
+import { filterPosts } from "@lib/util";
+
+import Layout from "@lib/layouts/Layout.astro";
+import Buttoner from "@lib/components/BrowseButtons.astro";
+
+const posts = (await getCollection("blog"))
+    .filter(filterPosts)
+    .filter(post => post.id.split("/")[0] !== "drafts")
+    .sort((a,b) => a.data.pubDate.getTime() - b.data.pubDate.getTime());
+
+const archive: Record<number,typeof posts> = {};
+
+for (const post of posts) {
+    const year = post.data.pubDate.getUTCFullYear();
+    if(!archive[year])
+        archive[year] = [];
+        archive[year] = [...archive[year], post];
+}
+
+const format: Intl.DateTimeFormatOptions = {year: "numeric", month:"long", day:"2-digit" };
+
+const description = "A chronological list of all my posts, ordered by the date they were first published. This also includes all posts that were first ported from the original blog.";
+---
+<Layout title="Archive" {description} keywords={['blog','navigation','search','archive','index']}>
+    <main>
+        <Buttoner sites={{tags: "Tags", series: "Series", archive: "Archive"}} />
+        <div class="archive-container">
+            <h1>Archive</h1>
+            <p class="biyonic-string">{description}</p>
+            {
+                Object.entries(archive).reverse().map(([year, posts]) => <>
+                    <h2>{year}</h2>
+                    <ul>
+                    {
+                        posts.reverse().map(post => <li class="date">
+                            <div class="stamp"><span class="biyonic-string">{post.data.pubDate.toLocaleDateString("en-US", format)}</span></div>
+                            <div class="title">
+                                <a class="biyonic-string" href={`/blog/article/${post.slug}`}>{post.data.title}</a>
+                                { post.data.updatedDate && <small class="biyonic-string">(Last updated: {post.data.updatedDate.toLocaleDateString("en-US", format)})</small> }
+                            </div>
+                        </li> )
+                    }
+                    </ul>
+                </>)
+            }
+        </div>
+    </main>
+</Layout>
+
+<style lang="scss">
+    @use "../../styles/util.scss";
+    @use "../../styles/vars.scss" as *;
+
+    main {
+        min-height: calc(100vh - 110px - 114px);
+        padding: 1em 0;
+        .archive-container {
+            background-color: #{$article-color};
+            border: 4px solid #{$emphasis-color};
+            box-shadow: util.extrude(10);
+            padding: 1em;
+            font-size: 18px;
+            margin: 1rem auto;
+            max-width: 1024px;
+            width: 75%;
+            h1 {
+                margin: 1rem 0;
+            }
+            ul {
+                margin: 0;
+                padding: 0;
+            }
+            .date {
+                display: flex;
+                align-items: center;
+                border-bottom: 2px solid #{$emphasis-color};
+                gap: 1.5rem;
+                > .stamp {
+                    display: block;
+                    min-width: 10em;
+                    text-align: right;
+                }
+                > .title {
+                    flex-grow: 1;
+                    padding: 0.5rem 0rem;
+                    small {
+                        display: inline-block;
+                        font-style: italic;
+                        font-size: 75%;
+                    }
+                }
+            }
+        }
+    }
+</style>

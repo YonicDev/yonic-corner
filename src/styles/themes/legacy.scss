@@ -143,6 +143,31 @@
         }
     }
 
+    .browse-list li a {
+        border: 2px solid #{$emphasis-color}!important;
+        background-color: $nav-color-dark!important;
+        color: $article-color!important;
+        box-shadow: none!important;
+        transform: none!important;
+
+        &.active {
+            background-color: $emphasis-color!important;
+        }
+    }
+
+    .archive-container {
+        background-color: #{$base-color}!important;
+        border: 4px solid #{$emphasis-color}!important;
+        box-shadow: none!important;
+        color: black!important;
+        h1, h2 {
+            color: black!important;
+        }
+        .date {
+            border-color: $emphasis-color!important;
+        }
+    }
+
     .blog-article {
         background-color: $article-color!important;
         border: 4px solid $nav-color-dark!important;

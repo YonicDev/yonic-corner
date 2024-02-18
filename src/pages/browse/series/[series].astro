@@ -3,10 +3,12 @@ import { getImage } from "astro:assets";
 import { getCollection, type CollectionEntry } from "astro:content";
 import type { GetImageResult } from "astro";
 
-import { filterPosts, sortPosts } from "@lib/util";
+import { filterPosts } from "@lib/util";
 
 import Layout from "@lib/layouts/Layout.astro";
 import SeriesListing from "@lib/layouts/SeriesListing.astro";
+
+import Buttoner from "@lib/components/BrowseButtons.astro";
 
 import "@lib/styles/series.scss";
 import "@lib/styles/rainbow.scss";
@@ -41,7 +43,7 @@ let processedImage: GetImageResult | undefined;
 
 if(seriesId) {
     try {
-        imageMeta = series.hero?.modern ?? (await import(`../../assets/series/${seriesId}.png`)).default;
+        imageMeta = series.hero?.modern ?? (await import(`../../../assets/series/${seriesId}.png`)).default;
         processedImage = await getImage({ src: imageMeta!, width: 800, format: "webp", quality: seriesId? "mid" : "max"});
     } catch (e) {
         if(e instanceof Error) {
@@ -58,6 +60,7 @@ const heroImage = processedImage? `url("${processedImage.src}")` : "url('/img/se
 
 <Layout title={series.title} description={series.description} twitterCard={processedImage? "summary_large_image" : "summary"} coverImage={processedImage? `${Astro.url.protocol}//${Astro.url.host}${processedImage.src}` : `${Astro.url.protocol}//${Astro.url.host}/img/seo/series.png`}>
     <main class="series-overview">
+        <Buttoner sites={{tags: "Tags", series: "Series", archive: "Archive"}} />
         <div class="heroContainer">
             <div class="data">
                 <h1>{series.title}</h1>

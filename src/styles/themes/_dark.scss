@@ -131,6 +131,45 @@
                 }
             } 
         }
+
+        .browse-list li a {
+            border: 2px solid #{$nav-color-light}!important;
+            background-color: $nav-color-dark!important;
+            color: $emphasis-light!important;
+            box-shadow: util.extrude(4, $nav-color-light)!important;
+            &:hover {
+                box-shadow: util.extrude(8, $nav-color-light)!important;
+            }
+            &:active {
+                box-shadow: none!important;
+            }
+
+            &.active {
+                border: 2px solid #{$emphasis-color}!important;
+                background-color: $article-color!important;
+                color: $text-color!important;
+                box-shadow: util.extrude(4, $emphasis-color)!important;
+                &:hover {
+                    box-shadow: util.extrude(8, $emphasis-color)!important;
+                }
+                &:active {
+                    box-shadow: none!important;
+                }
+            }
+        }
+
+        .archive-container {
+            background-color: #{$article-color}!important;
+            border: 4px solid #{$emphasis-color}!important;
+            box-shadow: util.extrude(10, $emphasis-color)!important;
+            h1, h2 {
+                color: $emphasis-light!important;
+            }
+            .date {
+                border-color: $emphasis-color!important;
+            }
+        }
+
         .listing > .article {
             background-color: $article-color!important;
             box-shadow: util.extrude(8, $emphasis-color)!important;
