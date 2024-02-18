@@ -1,17 +1,17 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import { shuffle } from "@lib/util";
+    import "@lib/extensions";
     import type { BlurbList } from "@lib/content/config";
 
     export let blurbList: BlurbList;
     export let maxLength = 6;
 
-    let blurbs: string[] = ["Hello! Welcome to my blog!", "This website works without JavaScript.", ...shuffle(blurbList.base)];
+    let blurbs: string[] = ["Hello! Welcome to my blog!", "This website works without JavaScript.", ...blurbList.base.shuffle()];
 
     onMount(() => {
         const now = new Date();
-        blurbs = [...blurbs, ...shuffle(blurbList.timed).filter((blurb) => {
+        blurbs = [...blurbs, ...blurbList.timed.shuffle().filter((blurb) => {
             if(blurb.singleDate != null) {
                 const date = new Date(blurb.singleDate.date);
                 const result = (!blurb.singleDate.useYear || date.getUTCFullYear() == now.getUTCFullYear()) && date.getUTCMonth() == now.getUTCMonth() && date.getUTCDate() == now.getUTCDate()
