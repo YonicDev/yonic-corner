@@ -41,6 +41,9 @@ export default defineConfig({
     sitemap()
   ],
   scopedStyleStrategy: "class",
+  redirects: {
+    '/blog/article/biyonic-reading': '/blog/article/2023/06/biyonic-reading'
+  },
   vite: {
     build: {
       target: "es2018"
