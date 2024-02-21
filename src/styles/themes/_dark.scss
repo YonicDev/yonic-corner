@@ -155,7 +155,7 @@
         }
 
         .archive-container {
-            background-color: #{$article-color}!important;
+            background-color: #{$base-color}!important;
             border: 4px solid #{$emphasis-color}!important;
             box-shadow: util.extrude(10, $emphasis-color)!important;
             h1, h2 {
