@@ -352,6 +352,14 @@
                 }
             }
         }
+
+        #top-scroller {
+            background-color: $nav-color-light!important;
+            color: $text-color!important;
+            border-color: $emphasis-color!important;
+            box-shadow: util.extrude(8, $emphasis-color)!important;
+        }
+
         footer {
             background-color: $emphasis-color!important;
             .horizontal {

@@ -9,6 +9,7 @@ import Tag from '@lib/components/Tag.astro';
 import HTMLMusicPlayer from '@lib/components/HTMLMusicPlayer.svelte';
 import PostIcon from '@lib/components/PostIcon.svelte';
 import TimeToRead from '@lib/components/TimeToRead.svelte';
+import TopButton from '@lib/components/TopButton.svelte';
 
 import Paragraph from '@lib/components/biyonic/Paragraph.astro';
 import ListItem from '@lib/components/biyonic/ListItem.astro';
@@ -80,9 +81,9 @@ const series = post.data.series ? await getEntry(post.data.series.id) : null;
 ---
 
 <Layout {...post.data} twitterCard="summary_large_image" description={post.data.description} coverImage={hero? `${Astro.url.protocol}//${Astro.url.host}${(await getImage({src: hero, width: 600, format: "jpg"})).src}` : `${Astro.url.protocol}//${Astro.url.host}/img/seo/hero-${post.data.category}.png`} openGraph={{type: "article", article: {pubDate, updatedDate, category: post.data.category, tags}}} keywords={tags}>
-    <main>
+    <main id="top">
         <div class="blog-article">
-            {hero && <Picture class:list={["cover", post.data.heroPosition]} alt="Cover image" src={hero} formats={['avif', 'webp']} fallbackFormat='png' widths={[256,400,700]} height={432} loading="eager" />}
+            {hero && <Picture id="hero" class:list={["cover", post.data.heroPosition]} alt="Cover image" src={hero} formats={['avif', 'webp']} fallbackFormat='png' widths={[256,400,700]} height={432} loading="eager" />}
             <h1>{post.data.title}{ post.data.draft && <sup>[draft]</sup>}</h1>
             <p class="metadata dates">
                 <PostIcon title="Publish date" icon="post" height={28} width={28}/>
@@ -101,7 +102,7 @@ const series = post.data.series ? await getEntry(post.data.series.id) : null;
                     {tags.map(tag => <li><Tag {tag} /></li> )}
                 </ul>
             }
-            <hr/>
+            <hr id="separator"/>
             <Content {components} />
         </div>
         <HTMLMusicPlayer client:idle />
@@ -130,6 +131,7 @@ const series = post.data.series ? await getEntry(post.data.series.id) : null;
     }
     <QuickLinks category={post.data.category} series={`${categories[post.data.category].title} posts`} seriesUrl={`/category/${post.data.category}/1`} prev={postsSameCategory[sameCategoryIndex-1]} next={postsSameCategory[sameCategoryIndex+1]} />
     <QuickLinks prev={allPosts[index-1]} next={allPosts[index+1]} />
+    <TopButton client:idle href="#top" targetId='separator'/>
 </Layout>
 
 <style lang="scss">

@@ -273,6 +273,14 @@
         top: 0;
     }
 
+    #top-scroller {
+        background-color: $nav-color-dark!important;
+        color: $article-color!important;
+        border-color: $emphasis-color!important;
+        box-shadow: none!important;
+        transform: none!important;
+    }
+
     footer {
         background-color: #1b1b2f!important;
         background-image: url("https://legacy.yonic.blog/ui/footer.jpg");

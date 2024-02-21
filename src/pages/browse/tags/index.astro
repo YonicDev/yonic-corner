@@ -6,6 +6,7 @@ import { filterPosts } from "@lib/util";
 import Layout from "@lib/layouts/Layout.astro";
 import Buttoner from "@lib/components/BrowseButtons.astro";
 import Tag from "@lib/components/Tag.astro";
+import TopButton from "@lib/components/TopButton.svelte";
 
 const posts = (await getCollection("blog")).filter(filterPosts);
 
@@ -46,6 +47,7 @@ const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split("");
                 })
             }
         </div>
+        <TopButton client:idle href="#link-section" targetId="link-section"/>
     </div>
 </Layout>
 
