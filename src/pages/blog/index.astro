@@ -5,7 +5,7 @@ import { filterPosts, getHeroImages, sortPosts } from '@lib/util';
 import { BLOG_PAGE_SIZE } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
-import PostListing from "@lib/layouts/PostListing.svelte";
+import PostListing from "@lib/layouts/PostListing.astro";
 import CategoryButtons from "@lib/components/CategoryButtons.svelte";
 
 const posts = (await getCollection('blog')).filter(filterPosts).sort(sortPosts)

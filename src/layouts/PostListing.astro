@@ -1,86 +1,75 @@
-<script lang="ts">
-    import type { CollectionEntry } from 'astro:content';
+---
+import type { CollectionEntry } from 'astro:content';
 
-    import { categories } from "@lib/settings";
+import { categories } from "@lib/settings";
 
-    import Tag from "@lib/components/Tag.svelte";
-    import PostIcon from "@lib/components/PostIcon.svelte";
+import Tag from "@lib/components/Tag.astro";
+import PostIcon from "@lib/components/PostIcon.svelte";
 
-    export let posts: CollectionEntry<"blog">[];
-    export let currentPage = 1;
-    export let lastPage: number;
-    export let baseUrl: string;
-    export let heroImages: (string | null)[];
+interface Props {
+    posts: CollectionEntry<"blog">[];
+    currentPage?: number;
+    lastPage: number;
+    baseUrl: string;
+    heroImages: (string | null)[];
+}
 
-    const dateFormat = new Intl.DateTimeFormat('en-US',
-    {
-        year: 'numeric',
-        month: 'long',
-        day: '2-digit',
-    })
-</script>
+const { posts, currentPage = 1, lastPage, baseUrl, heroImages } = Astro.props;
+
+const dateFormat = new Intl.DateTimeFormat('en-US',
+{
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+})
+---
 
 <slot/>
 <ul class="listing">
     <!-- Nested anchor elements are illegal, so instead, we make hit zones in separate layers. -->
-    {#each posts as post, i} 
+    {posts.map((post, i) => ( 
         <li class="article">
-            <a aria-label="Article poster image" class="hero" class:placeholder={heroImages[i]==null} href={`/blog/article/${post.slug}`} style={`background-image: ${heroImages[i]? `url(${heroImages[i]})` : `url(/img/icons/category-${post.data.category}.svg), url(/img/pattern3.svg); background-color: ${categories[post.data.category].baseColor}!important`}; background-position: center ${post.data.heroPosition ?? "center"}, top left`}/>
+            <a aria-label="Article poster image" class:list={["hero", heroImages[i]==null?"placeholder":undefined]} href={`/blog/article/${post.slug}`} style={`background-image: ${heroImages[i]? `url(${heroImages[i]})` : `url(/img/icons/category-${post.data.category}.svg), url(/img/pattern3.svg); background-color: ${categories[post.data.category].baseColor}!important`}; background-position: center ${post.data.heroPosition ?? "center"}, top left`}/>
             <div class="data">
                 <a href={`/category/${post.data.category}/1`} class="category">{categories[post.data.category].title.toUpperCase()}</a>
                 <a href={`/blog/article/${post.slug}`}>
-                    <h1>{post.data.title}{#if post.data.draft} <sup>[draft]</sup>{/if}</h1>
+                    <h1>{post.data.title}{post.data.draft && <sup>[draft]</sup>}</h1>
                     <span class="metadata">
                         <span class="dataGroup">
                             <PostIcon title="Published on" icon="post" height={24} width={24} />
                             <span>{dateFormat.format(post.data.pubDate)}</span>
                         </span>
-                        {#if post.data.updatedDate}
+                        {post.data.updatedDate &&
                             <span class="dataGroup">
                                 <PostIcon title="Last updated on" icon="edit" height={22} width={22} />
                                 <span>{dateFormat.format(post.data.updatedDate)}</span>
                             </span>
-                        {/if}
+                        }
                     </span>
                     <p class="description biyonic-string">{post.data.description}</p>
                     </a>
                 <div class="tags">
                     <PostIcon title="Tags" icon="tag" height={22} width={22}/>
-                    {#if post.data.tags.length > 0}
-                        {#each post.data.tags as tag}
-                            <Tag {tag} />
-                        {/each}
-                    {:else}
-                        <span>None</span>
-                    {/if}
+                    {post.data.tags.length > 0 
+                        ? post.data.tags.map((tag) => <Tag {tag} /> )
+                        :  <span>None</span>
+                    }
                 </div>
             </div>
         </li>
-    {/each}
+    ))}
 </ul>
 
 <ul class="nav">
-    {#if currentPage > 1} 
-        <li><a href={`${baseUrl}/1`}>&lt;&lt; <span class="label">First</span></a></li>
-    {/if}
+    {currentPage > 1 && <li><a href={`${baseUrl}/1`}>&lt;&lt; <span class="label">First</span></a></li>}
     <li><ul class="adjacent">
-        {#if (currentPage - 2) > 0}
-            <li><a href={`${baseUrl}/${currentPage-2}`}>{currentPage-2}</a></li>
-        {/if}
-        {#if (currentPage - 1) > 0} 
-            <li><a href={`${baseUrl}/${currentPage-1}`}>{currentPage-1}</a></li>
-        {/if}
+        { (currentPage - 2) > 0 && <li><a href={`${baseUrl}/${currentPage-2}`}>{currentPage-2}</a></li> }
+        { (currentPage - 1) > 0 && <li><a href={`${baseUrl}/${currentPage-1}`}>{currentPage-1}</a></li> }
         <li class="current"><a href={`${baseUrl}/${currentPage}`}>{currentPage}</a></li>
-        {#if lastPage >= (currentPage +1)}
-            <li><a href={`${baseUrl}/${currentPage+1}`}>{currentPage+1}</a></li>
-        {/if}
-        {#if lastPage >= (currentPage +2)}
-            <li><a href={`${baseUrl}/${currentPage+2}`}>{currentPage+2}</a></li>
-        {/if}
+        {lastPage >= (currentPage + 1) && <li><a href={`${baseUrl}/${currentPage+1}`}>{currentPage+1}</a></li> }
+        {lastPage >= (currentPage + 2) && <li><a href={`${baseUrl}/${currentPage+2}`}>{currentPage+2}</a></li>}
     </ul></li>
-    {#if currentPage < lastPage}
-        <li><a href={`${baseUrl}/${lastPage}`}>&gt;&gt; <span class="label">Last</span></a></li>
-    {/if}
+    {currentPage < lastPage && <li><a href={`${baseUrl}/${lastPage}`}>&gt;&gt; <span class="label">Last</span></a></li> }
 </ul>
 
 <style lang="scss">

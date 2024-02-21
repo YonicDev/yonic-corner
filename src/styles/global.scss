@@ -118,17 +118,6 @@ article {
     h1 {
         margin: 1rem 0;
     }
-    a {
-        display: inline-flex;
-        background-color: #{$base-color};
-        color: #{$emphasis-color};
-        padding: 5px 10px;
-        border-radius: 10px;
-        margin: 1rem 0.25rem;
-        &:hover {
-            color: #{$emphasis-color};
-        }
-    }
 }
 
 .infobox {

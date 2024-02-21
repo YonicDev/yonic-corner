@@ -6,7 +6,7 @@ import { filterPosts, getHeroImages, sortPosts } from '@lib/util';
 import { BLOG_PAGE_SIZE } from "@lib/settings";
 
 import Layout from "@lib/layouts/Layout.astro";
-import PostListing from "@lib/layouts/PostListing.svelte";
+import PostListing from "@lib/layouts/PostListing.astro";
 
 import "@lib/styles/rainbow.scss"
 
@@ -42,7 +42,7 @@ const bowrainColors = [...rainbowColors].reverse();
     <main>
         <div class="heroContainer">
             <h1>{page.total} posts tagged with tag "{tag!.replace("-", " ")}"</h1>
-            <p><a href="/tags">&laquo; Check all tags</a></p>
+            <p><a href="/browse/tags">&laquo; Check all tags</a></p>
         </div>
         <div class="rainbowAnchor">
             <div class="listing">

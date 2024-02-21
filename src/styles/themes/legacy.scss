@@ -39,13 +39,6 @@
             h1 {
                 color: black;
             }
-            a {
-                background-color: #a5cef5;
-                color: #1768d3;
-                span:first-child {
-                    font-weight: bold;
-                }
-            }
         }
     }
 
@@ -240,9 +233,15 @@
         }
     }
 
-    .tagList .list, .tags .list {
-        background-color: #a5cef5;
-        color: #1768d3!important;
+    .tag {
+        > .label {
+            background-color: #a5cef5!important;
+            color: #1768d3!important;
+        }
+        > .count {
+            background-color: #0040aa!important;
+            color: #a5cef5!important;
+        }
     }
 
     .category-list {

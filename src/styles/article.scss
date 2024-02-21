@@ -53,16 +53,6 @@ main {
             margin: 2px 4px;
             margin-right: 8px;
         }
-        .tag {
-            display: inline-block;
-            background-color: #{$base-color};
-            padding: 4px 1em;
-            margin: 2px 4px;
-            border-radius: 999px;
-            font-size: 16px;
-            text-decoration: none;
-            color: #{$emphasis-color};
-        }
     }
 
     img.scalable {

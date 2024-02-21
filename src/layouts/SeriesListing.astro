@@ -4,7 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 
 import { categories } from "@lib/settings";
 
-import Tag from "@lib/components/Tag.svelte";
+import Tag from "@lib/components/Tag.astro";
 
 interface Props {
     posts: CollectionEntry<"blog">[],

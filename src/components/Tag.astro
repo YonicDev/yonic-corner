@@ -1,0 +1,56 @@
+---
+interface Props {
+    tag: string,
+    total?: number
+}
+const { tag, total } = Astro.props;
+---
+
+<a class:list={[tag, "tag", total? "with-count" : undefined]} href={`/browse/tags/${tag}/1`}>
+    <div class="label biyonic-string">{tag.replace("-", " ")}</div>
+    { total && <div class="count">{total}</div> }
+</a>
+
+<style lang="scss">
+    @use "sass:list";
+    @use "../styles/vars.scss" as *;
+
+    .tag {
+        display: inline-flex;
+        align-items: center;
+        margin: 2px 4px!important;
+        color: #{$emphasis-color};
+        font-size: 16px;
+        text-decoration: none;
+        transition: none;
+        > .label {
+            padding: 4px 1em;
+            border-radius: 999px;
+            background-color: $base-color;
+        }
+        &.with-count > .label {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        > .count {
+            background-color: $emphasis-color;
+            color: $base-color;
+            padding: 4px 10px;
+            border-radius: 0 999px 999px 0;
+            text-align: center;
+        }
+    }
+
+    @each $tag-name, $colors in $tags {
+        .tag.#{$tag-name} {
+            > .label {
+                background-color: list.nth($colors, 1)!important;
+                color: list.nth($colors, 2)!important;
+            }
+            > .count {
+                background-color: list.nth($colors, 3)!important;
+                color: list.nth($colors, 4)!important;
+            }
+        }
+    }
+</style>

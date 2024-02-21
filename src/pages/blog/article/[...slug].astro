@@ -5,7 +5,7 @@ import { getImage, Picture } from 'astro:assets';
 import { categories } from '@lib/settings';
 import Layout from '@lib/layouts/Layout.astro';
 import QuickLinks from '@lib/components/QuickLinks.svelte';
-import Tag from '@lib/components/Tag.svelte';
+import Tag from '@lib/components/Tag.astro';
 import HTMLMusicPlayer from '@lib/components/HTMLMusicPlayer.svelte';
 import PostIcon from '@lib/components/PostIcon.svelte';
 import TimeToRead from '@lib/components/TimeToRead.svelte';
@@ -96,10 +96,10 @@ const series = post.data.series ? await getEntry(post.data.series.id) : null;
                 <TimeToRead readingTime={remarkPluginFrontmatter.readingTime} client:load />
             </p>
             { tags.length > 0 &&
-            <p class="metadata tagList">
-                <PostIcon title="Tags" icon="tag" />
-                {tags.map(tag => <Tag {tag} /> )}
-            </p>
+                <ul class="metadata tag-list">
+                    <li><PostIcon title="Tags" icon="tag" /></li>
+                    {tags.map(tag => <li><Tag {tag} /></li> )}
+                </ul>
             }
             <hr/>
             <Content {components} />
@@ -191,9 +191,18 @@ const series = post.data.series ? await getEntry(post.data.series.id) : null;
         }
     }
 
+    .tag-list {
+        margin: 8px 0;
+        padding-left: 4px;
+        > li {
+            display: inline;
+        }
+    }
+
     $rainbow-colors: #078D70 #26CEAA #98E8C1 white #7BADE2 #5049CC #3D1A78;
     @each $rainbow-color in $rainbow-colors {
         $i: index($rainbow-colors, $rainbow-color);
+
         .rainbow .rainbow-round:nth-child(#{$i}) {
             background-color: $rainbow-color;
             width: #{64px - ($i - 1) * math.div(64px, 7)};

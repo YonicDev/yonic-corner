@@ -93,10 +93,6 @@
                 }
             }
 
-            .tagList > a {
-                background-color: $nav-color-light;
-                color: #b2e3ff;
-            }
 
             .video-player {
                 box-shadow: util.extrude(8, $emphasis-color)!important;
@@ -184,10 +180,6 @@
                 p, a {
                     color: $text-color!important;
                 }
-                .tags > .list {
-                    background-color: $nav-color-light;
-                    color: #b2e3ff!important;
-                }
             }
             .number {
                 background-color: $base-color!important;
@@ -232,12 +224,19 @@
             border-color: $emphasis-color;
             box-shadow: util.extrude(8, $emphasis-color);
             background-color: $base-color;
-            h1 {
+            h1, h2 {
                 color: $emphasis-light;
             }
-            .list {
-                background-color: $nav-color-light;
-                color: #b2e3ff;
+        }
+
+        .tag {
+            > .label {
+                background-color: $nav-color-light!important;
+                color: #b2e3ff!important;
+            }
+            > .count {
+                background-color: $nav-color-dark!important;
+                color: $emphasis-light!important;
             }
         }
 

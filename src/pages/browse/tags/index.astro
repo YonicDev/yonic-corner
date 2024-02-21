@@ -5,17 +5,17 @@ import { filterPosts } from "@lib/util";
 
 import Layout from "@lib/layouts/Layout.astro";
 import Buttoner from "@lib/components/BrowseButtons.astro";
-import Tag from "@lib/components/Tag.svelte";
+import Tag from "@lib/components/Tag.astro";
 
 const posts = (await getCollection("blog")).filter(filterPosts);
 
 const allTags = posts.flatMap(post => post.data.tags);
-const tags = [...new Set(allTags)].sort((a, b) => a.localeCompare(b));
-const occurrences: Record<string, number> = {};
+const tags = [...new Set(allTags)];
+const occurrences = tags.map(tag => {
+    return {tag, times: allTags.reduce((acc, tag2) => acc += tag2 === tag? 1 : 0, 0)}
+}).sort((a, b) => b.times - a.times || a.tag.localeCompare(b.tag));
 
-for (const tag of tags) {
-    occurrences[tag] = allTags.reduce((acc, tag2) => acc += tag2 === tag? 1 : 0, 0);
-}
+const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split("");
 
 ---
 
@@ -23,8 +23,41 @@ for (const tag of tags) {
     <Buttoner sites={{tags: "Tags", series: "Series", archive: "Archive"}} />
     <div class="main-container">
         <div class="tag-container">
-            <h1>Tags</h1>
-            { tags.map(tag => <Tag {tag} total={occurrences[tag]} />) }
+            <h1>Tag index</h1>
+            <div id="link-section">
+                {alphabet.map((char, i) => {
+                    const tagsWithHits = occurrences.filter(occ => occ.tag.startsWith(char))
+                    return <>
+                        {
+                            tagsWithHits.length > 0 ? <><a href={`#section-${char}`}>{char.toUpperCase()}</a>{i < alphabet.length -1 ? " \u2022 ": ""}</> : <span><b>{char.toUpperCase()}</b>{i < alphabet.length -1 ? " \u2022 ": ""}</span>
+                        }
+                    </>
+                })}
+            </div>
+            {
+                alphabet.map(char => {
+                    const tagsWithHits = occurrences.filter(occ => occ.tag.startsWith(char))
+                    if(tagsWithHits.length < 1)
+                        return undefined;
+                    return <>
+                        <h2 class="section" id={`section-${char}`}>{char.toUpperCase()}</h2>
+                        { tagsWithHits.map(({tag, times}) => <Tag {tag} total={times}/>) }
+                    </>
+                })
+            }
         </div>
     </div>
 </Layout>
+
+<style lang="scss">
+    #link-section {
+        margin: 0 auto;
+        width: 75%;
+        text-align: center;
+        padding: 1rem;
+        font-size: 14pt;
+        a {
+            font-weight: bold;
+        }
+    }
+</style>
