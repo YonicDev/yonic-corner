@@ -215,9 +215,18 @@
                 box-shadow: none;
             }
         }
-        .video-player {
-            border-width: 4px!important;
+        .video-wrapper.video-js {
+            border: 4px solid #{$emphasis-color}!important;
             box-shadow: none!important;
+            background-color: $nav-color-dark!important;
+            padding: 4px 0;
+            .video-player {
+                border: none!important;
+                aspect-ratio: auto!important;
+                height: 100%!important;
+                box-shadow: none!important;
+                background: none!important;
+            }
         }
     }
 

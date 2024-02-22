@@ -96,6 +96,18 @@
 
             .video-player {
                 box-shadow: util.extrude(8, $emphasis-color)!important;
+                border: 2px solid #{$emphasis-color}!important;
+                background-color: $nav-color-dark!important;
+            }
+            .video-wrapper.video-js {
+                border: 2px solid #{$emphasis-color}!important;
+                box-shadow: util.extrude(8, $emphasis-color)!important;
+                background-color: $nav-color-dark!important;
+                .video-player {
+                    border: none!important;
+                    box-shadow: none!important;
+                    background: none!important;
+                }
             }
         }
 

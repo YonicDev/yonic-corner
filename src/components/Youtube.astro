@@ -1,7 +1,5 @@
 ---
-import { INVIDIOUS_DEFAULT_INSTANCE } from "@lib/settings"
-
-const {id, title, description, instance, duration} = Astro.props;
+import Component from "./YouTube.svelte";
 
 interface Props {
     id: string;
@@ -10,27 +8,52 @@ interface Props {
     instance: string;
     duration?: `${number}:${number}`;
 }
+const {id, instance, description} = Astro.props;
+let title: Props["id"];
+let duration: Props["duration"];
 
+let videoData: {
+    title: string,
+    description: string,
+    lengthSeconds: number
+}
 
+async function fetchVideoData(): Promise<Partial<typeof videoData>> {
+    if(videoData)
+        return videoData;
+    else {
+        try {
+            const req = `${instance}/api/v1/videos/${id}?fields=title,lengthSeconds,description`
+            const res = await fetch(req);
+            if(res.ok) {
+                videoData = await res.json();
+                return videoData;
+            }
+            else {
+                return {};
+            }
+        } catch {
+            return {};
+        }
+    }
+}
+
+function secondsToTimestamp(seconds: number) {
+    return [Math.floor(seconds/60), seconds % 60].join(":") as `${number}:${number}`;
+}
+
+async function getDuration() {
+    const data = await fetchVideoData();
+    return data?.lengthSeconds ? secondsToTimestamp(data.lengthSeconds) : undefined;
+}
+
+title = Astro.props.title ?? ((await fetchVideoData())?.title ?? "Could not get video title");
+duration = Astro.props.duration ?? await getDuration();
 ---
-
-<iframe class="video-player" title="Video player" src={`${instance ?? INVIDIOUS_DEFAULT_INSTANCE}/embed/${id}`}/>
-<div class="videoCaption">
-    <p><b><u>{title ?? "Untitled video"}</u></b> {duration && <span>({duration})</span>}</p>
-    <p>{description && <i class="biyonic-string">{description}</i>}</p>
-</div>
-
-<style lang="scss">
-    @use "../styles/util.scss";
-
-    .video-player {
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        border: inherit;
-        border-width: 2px;
-        box-shadow: util.extrude(8);
-    }
-    b {
-        margin-bottom: 1em;
-    }
-</style>
+<noscript>
+    <Component {instance} {id} {title} {duration} {description} noJs />
+    <style is:inline>
+        .video-js { display: none!important }
+    </style>
+</noscript>
+<Component client:visible {instance} {id} {title} {duration} {description} />
