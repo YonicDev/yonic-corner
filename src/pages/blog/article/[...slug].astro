@@ -99,7 +99,7 @@ const series = post.data.series ? await getEntry(post.data.series.id) : null;
             { tags.length > 0 &&
                 <ul class="metadata tag-list">
                     <li><PostIcon title="Tags" icon="tag" /></li>
-                    {tags.map(tag => <li><Tag {tag} /></li> )}
+                    {tags.toSorted((a,b) => a.localeCompare(b, 'en-US')).map(tag => <li><Tag {tag} /></li> )}
                 </ul>
             }
             <hr id="separator"/>

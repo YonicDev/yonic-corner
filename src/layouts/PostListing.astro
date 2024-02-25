@@ -51,7 +51,7 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
                 <div class="tags">
                     <PostIcon title="Tags" icon="tag" height={22} width={22}/>
                     {post.data.tags.length > 0 
-                        ? post.data.tags.map((tag) => <Tag {tag} /> )
+                        ? post.data.tags.toSorted((a,b) => a.localeCompare(b, "en-US")).map((tag) => <Tag {tag} /> )
                         :  <span>None</span>
                     }
                 </div>

@@ -68,7 +68,7 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
                 <div class="tags">
                     <img class="icon" alt="Tags" title="Tags" src="/img/icons/tag.svg" width={22} height={22}/>
                     {
-                        post.data.tags.length > 0 ? post.data.tags.map(tag => (
+                        post.data.tags.length > 0 ? post.data.tags.toSorted((a,b) => a.localeCompare(b, "en-US")).map(tag => (
                             <Tag {tag} />
                         )) : <span>None</span>
                     }
