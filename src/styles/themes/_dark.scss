@@ -135,6 +135,12 @@
                         color: list.nth($data, 1);
                         border-color: list.nth($data, 1);
                         box-shadow: util.extrude(4, list.nth($data, 3));
+                        &:hover {
+                            box-shadow: util.extrude(8, list.nth($data, 3));
+                        }
+                        &:active {
+                            box-shadow: none;
+                        }
                     }
                 }
             } 
