@@ -20,9 +20,9 @@ const heroImages = await Promise.all(posts.map(async (post) => {
     try {
         const [year, month, id] = post.slug.split("/");
 
-        const imageMeta: ImageMetadata = year === "drafts" 
+        const imageMeta: ImageMetadata = post.data.hero?.modern ?? ( year === "drafts" 
             ? (await import(`../content/blog/${year}/${month}/hero.png`)).default
-            : (await import(`../content/blog/${year}/${month}/${id}/hero.png`)).default;
+            : (await import(`../content/blog/${year}/${month}/${id}/hero.png`)).default);
         const processedImage = await getImage({ src: imageMeta, width: 550, height: 280, format: "webp"});
         return Promise.resolve(processedImage.src);
     } catch (err) {
