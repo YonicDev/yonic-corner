@@ -38,7 +38,6 @@ $text-color: black;
     position: relative;
     padding: 2rem;
     border: 4px solid #{$outline-color};
-    margin-bottom: 3rem;
     border-radius: 24px;
     overflow: visible;
     box-sizing: content-box;
@@ -77,24 +76,51 @@ $text-color: black;
 
     /** Positions **/
 
-    &.bottom .triangle {
-        top: 100%;
-        .animated {
-            animation: speecher 0.333s linear alternate infinite;
+    &.bottom {
+        margin-bottom: 3rem;
+
+        .triangle {
+            top: 100%;
+            .animated {
+                animation: speecher 0.333s linear alternate infinite;
+            }
+        }
+        
+        &.near .triangle {
+            left: calc(32px);
+        }
+    
+        &.far .triangle {
+            right: calc(32px + 48px);
+        }
+    
+        &.center .triangle {
+            left: 50%;
+            transform: translateX(-50%);
         }
     }
+
+    &.top {
+        margin-top: 3rem;
+        .triangle {
+            bottom: 100%;
+            transform: scaleY(-1) translateX(-50%);
+            .animated {
+                animation: speecher 0.333s linear alternate infinite;
+            }
+        }
+        &.near .triangle {
+            left: calc(32px);
+        }
     
-    &.bottom.near .triangle {
-        left: calc(32px);
-    }
-
-    &.bottom.far .triangle {
-        right: calc(32px + 48px);
-    }
-
-    &.bottom.center .triangle {
-        left: 50%;
-        transform: translateX(-50%);
+        &.far .triangle {
+            right: calc(32px + 48px);
+        }
+    
+        &.center .triangle {
+            left: 50%;
+            transform: translateX(-50%);
+        }
     }
 }
 
