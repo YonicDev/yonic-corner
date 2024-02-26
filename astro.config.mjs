@@ -31,6 +31,7 @@ export default defineConfig({
         '@lib/components/ImageGrid.astro',
         '@lib/components/Figure.astro',
         '@lib/components/VersionBranch.astro',
+        '@lib/components/Ruby.astro',
         {
           'astro:assets': ['Image', 'Picture']
         },
