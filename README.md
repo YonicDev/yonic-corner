@@ -82,6 +82,7 @@ This collection is meant for MDX or Markdown posts only and associated assets. T
 * *`tags`*: An array containing the tags the post should have. These are also used as keywords for SEO.
 * *`draft`*: Takes in a boolean. Draft posts will not show on production mode. In development mode, they will have a \[draft\] indicator after the title, unless `HIDE_DRAFTS_IN_DEVELOPMENT` is set to true.
 * *`legacy`*: Determines if this post should be included in the [Legacy Version][1] of the blog. Can be set to `true`, `false` or `only`. If set to `only`, it will be filtered out from this version of the blog (Modern).
+* *`asianText`*: Has no effect on Modern version, but displays a warning to the reader when set to `true` in the [Legacy Version][1].
 * *`series`*: Set this if the post belongs to a series of posts. It's an object with the following properties (both mandatory).
   * `id`: The internal ID of the series.
   * `order`: An integer number that tells how should this post be ordered in relation to others. Posts with lower order numbers will be placed first.
@@ -104,9 +105,10 @@ MDX posts have some components that are already imported, and can be used right 
 
 * `<Bubble>`: Creates a comic-like text bubble.
 * `<Chara>`: Displays a character sprite. Used with `<Bubble>`.
-* `<Figure>`: Displays an image with art direction with an optional `<figcaption>`.
-* `<PlayerLink>`: Displays a link to play music on the player.
-* `<VersionBranch>`: Splits rendering between this version (Modern) and the [Legacy Version][1]. Anything with the `slot` attribute assigned to `modern` will be rendered in this version, while anything in the `legacy` slot will be rendered in the Legacy one.
+* `<Figure>`: Displays an image with art direction with an optional `<figcaption>`. This component has no slots.
+* `<PlayerLink>`: Displays a link to play music on the player. This component has no slots.
+* `<VersionBranch>`: Splits rendering between this version (Modern) and the [Legacy Version][1]. Anything with the `slot` prop assigned to `modern` will be rendered in this version, while anything in the `legacy` slot will be rendered in the Legacy one.
+* `<Ruby>`: adds [ruby text](https://en.wikipedia.org/wiki/Ruby_character) to the text in the `text` prop. The text in the `ruby` prop will be displayed as ruby characters. Both of them are arrays of strings, one `ruby` text per string of characters in the `text` array. This component has no slots.
 * `<ImageGrid>` (**Modern-only**): Creates a responsive grid to display images, with an optional caption.
 
 #### Replaced elements
