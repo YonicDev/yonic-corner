@@ -6,17 +6,18 @@ export interface Props {
     thoughts?: string;
     height?: number;
     position?: "left"|"right";
+    fallback: "png" | "svg";
 }
 
-const { name, set = "default", sprite, thoughts, height = 200, position = "right" } = Astro.props;
+const { name, set = "default", sprite, thoughts, height = 200, position = "right", fallback = "png" } = Astro.props;
 
 ---
 <div class="chara-wrapper">
-    <img src={`/chara/${name}/${set}/${sprite}.png`} alt={name} {height} style={`float: ${position}`} class="chara-shadow"/>
+    <img src={`/chara/${name}/${set}/${sprite}.${fallback}`} alt={name} {height} style={`float: ${position}; ${position}: ${4 * (position == "left" ? 1 : -1)}px`} class="chara-shadow"/>
     <picture aria-hidden={true} class="chara" title={thoughts} style={{float: position}}>
         <source srcset={`/chara/${name}/${set}/${sprite}.svg`} type="image/svg+xml" />
         <source srcset={`/chara/${name}/${set}/${sprite}.svg`} type="image/svg" />
-        <img src={`/chara/${name}/${set}/${sprite}.png`} alt={name} {height} style={`float: ${position}`} class="chara-legacy"/>
+        <img src={`/chara/${name}/${set}/${sprite}.${fallback}`} alt={name} {height} style={`float: ${position}`} class="chara-legacy"/>
     </picture>
 </div>
 <br style="clear: both; user-select: none"/>
@@ -47,7 +48,6 @@ const { name, set = "default", sprite, thoughts, height = 200, position = "right
         .chara-shadow {
             display: block;
             position: absolute;
-            right: 0;
             margin-top: 4px;
             margin-right: -4px;
             filter: grayscale(100);
