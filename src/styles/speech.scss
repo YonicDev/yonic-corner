@@ -1,6 +1,10 @@
 @use 'sass:list';
 
-$speech-colors: ("yonic": #0071aa #00eeff black, "raxki": #da1515 #2c0505 #ff9494);
+$speech-colors: (
+    "yonic": #0071aa #00eeff black,
+    "raxki": #da1515 #2c0505 #ff9494,
+    "lian": #ffb6a3 #992400 #ffef94,
+);
 
 @mixin speech {
     @each $theme, $colors in $speech-colors {
