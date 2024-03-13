@@ -8,9 +8,10 @@ import "@lib/styles/article.scss";
 
 interface Props {
     post: string,
+    heroImage?: ImageMetadata
 }
 
-const { post } = Astro.props;
+const { post, heroImage } = Astro.props;
 
 let finalHtml = "";
 
@@ -35,14 +36,18 @@ if(feedHtml) {
 /**
  * Gets the hero image.
  * 
- * The hero image has to be named "hero.png" and be located in a folder named the same way
- * as the target article inside the assets/articles folder.
+ * The hero image has to be named "hero.png" and be located in the post folder.
  * It doesn't need to be a PNG image, other formats are supported.
  */
-async function getHeroImage(): Promise<GetImageResult | null> {
+ async function getHeroImage(): Promise<GetImageResult | null> {
     try {
-        const {default: src} = await import(`../../assets/articles/${post}/hero.png`);
-        return getImage({src, width: 768, format: "jpg", quality: 80});
+        const [year, month, id] = post.split("/");
+
+        const imageMeta: ImageMetadata = heroImage ?? (year === "drafts" 
+            ? (await import(`../../content/blog/${year}/${month}/hero.png`)).default
+            : (await import(`../../content/blog/${year}/${month}/${id}/hero.png`)).default);
+            
+        return getImage({src: imageMeta, width: 768, format: "jpg", quality: 80});
     } catch {
         return null;
     }

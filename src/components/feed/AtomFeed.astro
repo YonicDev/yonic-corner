@@ -46,7 +46,7 @@ const atomFooter = `</feed>`
             <summary><![CDATA[ ${post.data.description} ]]></summary>
             <published>${post.data.pubDate.toISOString()}</published>
             <updated>${(post.data.updatedDate ?? post.data.pubDate).toISOString()}</updated>
-            <content type="xhtml"><![CDATA[`}/><HTMLFeed post={post.slug}><Content slot="html"/></HTMLFeed><Fragment set:html={`]]></content>
+            <content type="xhtml"><![CDATA[`}/><HTMLFeed post={post.slug} heroImage={post.data?.hero?.modern}><Content slot="html"/></HTMLFeed><Fragment set:html={`]]></content>
     </entry>`} />
 )})}
 <Fragment set:html={atomFooter} />
