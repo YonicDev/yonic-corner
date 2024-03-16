@@ -8,7 +8,7 @@ interface Props {
     instance: string;
     duration?: `${number}:${number}`;
 }
-const {id, instance, description} = Astro.props;
+const {id, instance = import.meta.env.INVIDIOUS_DEFAULT_INSTANCE, description} = Astro.props;
 let title: Props["id"];
 let duration: Props["duration"];
 

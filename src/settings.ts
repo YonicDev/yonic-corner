@@ -48,5 +48,3 @@ export const categories: Record<CategoryId, Category> = {
         emphasisColor: "#003A1E",
     }
 }
-
-export const INVIDIOUS_DEFAULT_INSTANCE = "https://inv.vern.cc";

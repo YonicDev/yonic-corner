@@ -1,8 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 
-import { INVIDIOUS_DEFAULT_INSTANCE } from "@lib/settings"
-
 import "@lib/styles/player.scss";
 import "@lib/styles/themes/dark-player.scss";
 
@@ -17,6 +15,8 @@ export async function getStaticPaths() {
 }
 
 const {title, sources, author, album} = Astro.props.music;
+
+const invidiousInstance = import.meta.env.INVIDIOUS_DEFAULT_INSTANCE;
 
 const adaptiveFields = [
     { itag: 251, type: 'audio/webm; codecs="opus"'},
@@ -75,7 +75,7 @@ interface Props {
                 if(source.type !== "youtube")
                     return <source src={source.src} type={source.type} />
                 return adaptiveFields.map(({itag, type}) => {
-                    return <source src={`${INVIDIOUS_DEFAULT_INSTANCE}/latest_version?id=${source.src}&itag=${itag}`} {type} />
+                    return <source src={`${invidiousInstance}/latest_version?id=${source.src}&itag=${itag}`} {type} />
                 })
             }) }
         </audio>

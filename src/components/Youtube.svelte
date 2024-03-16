@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { INVIDIOUS_DEFAULT_INSTANCE } from "@lib/settings";
     import { onMount } from "svelte";
 
     export let instance: string;
@@ -11,8 +10,9 @@
 
     let iframe: HTMLIFrameElement;
 
-    const src = `${instance ?? INVIDIOUS_DEFAULT_INSTANCE}/embed/${id}`;
-
+    
+    const src = `${instance}/embed/${id}`;
+    
     onMount(() => {
         iframe.src = src;
     })

@@ -64,6 +64,10 @@ The `src/settings.ts` file contains some properties that control the overall str
 * `CATEGORY_IDS`: The internal IDs of each category.
 * `HIDE_DRAFTS_IN_DEVELOPMENT`: A flag that hides draft posts in development mode.
 
+Additionally, the blog uses the following enviornment variables:
+
+* `INVIDIOUS_DEFAULT_INSTANCE`: URL to an Invidious instance to be used by default.
+
 ## Content
 
 The Yonic Corner uses Astro content collections for handling the actual content of the blog.
