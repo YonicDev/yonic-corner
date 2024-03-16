@@ -111,8 +111,8 @@
             </select>
         </div>
         <div>
-            <label for="biyonicToggle">{@html textVide("Biyonic reading", {ignoreHtmlTag: true})} <a href="/blog/article/biyonic-reading" target="_blank" rel="noreferrer">(?)</a></label>
-            <Toggle id="biyonicToggle" style="cursor: url('/img/cursors/pointer.png'), pointer;" toggledColor={toggleColor[toggleTheme]} bind:toggled={$biyonicEnabled} hideLabel on="On" off="Off"/>
+            <label for="biyonicToggle">{@html textVide("Bi(y)onic reading", {ignoreHtmlTag: true})} <a href="/blog/article/biyonic-reading" target="_blank" rel="noreferrer">(?)</a></label>
+            <Toggle label="Toggle Bi(y)onic reading" aria-label="Toggle Biyonic reading" role="switch" id="biyonicToggle" style="cursor: url('/img/cursors/pointer.png'), pointer;" toggledColor={toggleColor[toggleTheme]} bind:toggled={$biyonicEnabled} hideLabel on="On" off="Off"/>
         </div>
     </div>
     <div class="settings-tab"><img alt="Music" src="/img/icons/settings.svg" width="28"/></div>
