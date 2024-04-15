@@ -1,0 +1,76 @@
+---
+import { getImage } from "astro:assets";
+
+import Layout from '@lib/layouts/Layout.astro';
+import Yonic from "@assets/img/yonic-404.png";
+
+const baseResolution = 300;
+
+const images = {
+    png: await getImage({src: Yonic, width: baseResolution*2, densities: [1,2], format: "png"}),
+    webp: await getImage({src: Yonic, width: baseResolution*2, densities: [1,2], format: "webp"}),
+}
+
+const websiteText = "The Yonic Corner";
+---
+
+<Layout title={`Welcome to ${websiteText}`}>
+	<main class="main-wrapper">
+		<div>
+            <div class="error-image">
+                <span>
+                {"404".split("").map((char,i) => (
+                    <span style={`animation-delay: ${i/5}s; -webkit-animation-delay: ${i/5}s; -moz-animation-delay: ${i/5}s; -o-animation-delay: ${i/5}s`}>{char}</span>
+                ))}
+                </span>
+                <picture>
+                    <source srcset="/img/yonic-404.svg" type="image/svg+xml" />
+                    <source srcset={images.webp.srcSet.attribute} type="image/webp" />
+                    <img width={baseResolution} height={baseResolution} alt="Error 404" src={images.png.src} srcset={images.png.srcSet.attribute} />
+                </picture>
+            </div>
+			<h1>The page could not be found</h1>
+			<div class="infobox biyonic">
+                <p>It may have been moved or deleted.</p>
+				<p>
+					You could check if you wrote it correctly, explore all the blog's <b><a href="/blog">Posts</a></b> as well as the <b><a href="/browse/archive">Archive</a></b>,<br/>or check all <b><a href="/browse/series">Series</a></b> in this blog,
+					or you can search them by topics with <b><a href="/browse/tags">Tags</a></b>.
+				</p>
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<style lang="scss" is:global>
+    .error-image {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
+        > span {
+            font-family: Bungee, "Kosugi Maru", "Arial Black", Arial, Helvetica, sans-serif;
+            font-size: 30pt;
+            position: absolute;
+            color: blue;
+            left: 172px;
+            top: 100px;
+            transform: translate(-50%, -50%);
+            text-shadow: 2px 2px 0px black;
+            > span {
+                animation: 0.45s linear alternate infinite textAnim;
+            }
+        }
+    }
+
+    @keyframes textAnim {
+        0% {
+            color: blue;
+        }
+        50% {
+            color: cyan;
+        }
+        100% {
+            color: lime;
+        }
+    }
+</style>
