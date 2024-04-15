@@ -1,24 +1,19 @@
 ---
 
-const themes = [
-    "lightblueGradient",
-    "none",
-] as const;
-
 export interface Props {
 	position?: "top"|"left"|"right"|"bottom"|"none",
     alignment?: "near"|"center"|"far"|"none"
-    theme?: typeof themes[number]
+    theme?: string,
     name?: string
 }
 
-const { position = "none", alignment = "none", theme = "none", name } = Astro.props;
+const { position = "none", alignment = "none", theme, name } = Astro.props;
 ---
 
 <div class:list={["speech-container", alignment]} data-chara-name={name}>
     <slot name="charaLeft"/>
-    <div class={`speech ${position} ${alignment} ${theme}`}>
-        { position && alignment && <div class="triangle">
+    <div class:list={["speech", position, alignment, theme]}>
+        { position !== "none" && alignment !== "none" && <div class="triangle">
             <svg width="48" height="48" class="static" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 49.363281 50">
                 <polyline points="0 0 24.681640625 42.75 49.36328125 0"/>
             </svg>
