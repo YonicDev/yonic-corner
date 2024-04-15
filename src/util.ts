@@ -34,3 +34,10 @@ export function sortPosts(a: CollectionEntry<"blog">, b: CollectionEntry<"blog">
     const bEdt = b.data.updatedDate?.getTime() ?? 0;
     return Math.max(bEdt, bPub) - Math.max(aPub, aEdt) || a.id.localeCompare(b.id);
 }
+
+/**
+ * Checks whether it's being rendered the web feed.
+ * @param referencePath Path to use as reference for rendering (should be `Astro.url`)
+ * @returns A boolean with value true the page is being rendered for the web feed.
+ */
+export function isRenderingFeed(referencePath: URL) { return referencePath.pathname === "/" }

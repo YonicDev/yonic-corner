@@ -207,6 +207,14 @@ These three JSON files contain strings of text that are displayed in the site's 
 
 This blog generates an Atom feed that's copied into the public folder during post-build. Because of this, the feed is not available when running the development server.
 
+The Yonic Corner distinguishes between rendering for the website (**blog context**) and rendering for the blog's web feed (**feed context**).
+
+For the default feed, only the contents inside a `<div class="feed-preview">` element will be rendered. In the future, a full feed will render all of its contexts.
+
+Astro components that use the `<FeedBranch>` component split rendering into two slots. Anything in the default slot will only be rendered on the blog context, while anything in the `feed` slot will only be rendered in the feed context.
+
+⚠  Framework components rendered in the feed context is not recommended, but they may work without client directives.
+
 ## Issues regarding PostCSS
 
 This blog uses PostCSS with Autoprefixer to extend compatibility with older browsers. Sometimes, if there is an error during build and it takes some time to fix, the pages will error out with "unexpected token" errors. So far the only workaround is to reset the development server.

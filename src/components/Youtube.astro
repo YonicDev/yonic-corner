@@ -1,5 +1,7 @@
 ---
 import Component from "./Youtube.svelte";
+import FeedBranch from "./FeedBranch.astro";
+import Anchor from "./Anchor.astro";
 
 interface Props {
     id: string;
@@ -50,10 +52,15 @@ async function getDuration() {
 title = Astro.props.title ?? ((await fetchVideoData())?.title ?? "Could not get video title");
 duration = Astro.props.duration ?? await getDuration();
 ---
-<noscript>
-    <Component {instance} {id} {title} {duration} {description} noJs />
-    <style is:inline>
-        .video-js { display: none!important }
-    </style>
-</noscript>
-<Component client:visible {instance} {id} {title} {duration} {description} />
+<FeedBranch>
+    <noscript>
+        <Component {instance} {id} {title} {duration} {description} noJs />
+        <style is:inline>
+            .video-js { display: none!important }
+        </style>
+    </noscript>
+    <Component client:visible {instance} {id} {title} {duration} {description} />
+    <p slot="feed">
+        <b>YouTube video: </b> <Anchor href={`https://www.youtube.com/watch?v=${id}`}>{title}</Anchor> {duration && `(${duration})`}
+    </p>
+</FeedBranch>
