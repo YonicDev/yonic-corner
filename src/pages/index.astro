@@ -1,5 +1,6 @@
 ---
 import { getImage } from "astro:assets";
+import type { GetImageResult } from "astro";
 
 import Layout from '@lib/layouts/Layout.astro';
 import ProfileIcon from "@lib/components/ProfileIcon.svelte";
@@ -11,11 +12,11 @@ import StandardSummer from "@assets/img/profile-icon/standard_summer.png"
 import StandardWinter from "@assets/img/profile-icon/standard_winter.png"
 
 async function getProfilePic(src: ImageMetadata, format: "webp"|"png") {
-    const img = await getImage({src, format, width: 200, height: 200});
-    return img.src;
+    const img = await getImage({src, format, width: 200, height: 200, densities: [1,2], quality: "max"});
+    return img;
 }
 
-const profileImages: Record<string, {webp: string, png: string}> = {
+const profileImages: Record<string, {webp: GetImageResult, png: GetImageResult}> = {
     summer: {
 		webp: await getProfilePic(StandardSummer, "webp"),
 		png: await getProfilePic(StandardSummer, "png"),

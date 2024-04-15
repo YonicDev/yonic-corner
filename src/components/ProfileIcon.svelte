@@ -1,9 +1,10 @@
 <script lang="ts">
     import { onMount } from "svelte";
+    import type { GetImageResult } from "astro";
 
     export let images: Record<string, {
-        webp: string,
-        png: string
+        webp: GetImageResult,
+        png: GetImageResult
     }>;
 
     
@@ -25,8 +26,8 @@
 </script>
 
 <picture id="profile-image">
-    <source srcset={profileSource.webp} type="image/webp" />
-    <img alt="Profile icon" src={profileSource.png} width=200 height=200 />
+    <source srcset={profileSource.webp.srcSet.attribute} type="image/webp" />
+    <img alt="Profile icon" srcset={profileSource.png.srcSet.attribute} src={profileSource.png.src} width=200 height=200 />
 </picture>
 
 <style lang="scss">
