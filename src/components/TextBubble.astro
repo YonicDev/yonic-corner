@@ -1,5 +1,7 @@
 ---
+import {load} from 'cheerio';
 
+import FeedBranch from './FeedBranch.astro';
 export interface Props {
 	position?: "top"|"left"|"right"|"bottom"|"none",
     alignment?: "near"|"center"|"far"|"none"
@@ -8,9 +10,18 @@ export interface Props {
 }
 
 const { position = "none", alignment = "none", theme, name } = Astro.props;
----
 
-<div class:list={["speech-container", alignment]} data-chara-name={name}>
+
+let feedHtml = await Astro.slots.render("default");
+const $ = load(feedHtml, null, false); // Since this is just the inner content, we needn't remove anything around it.
+if(name) {
+    const firstLine = $("p").first();
+    firstLine.html(`<b>${name}:</b> ${firstLine.html()}`);
+}
+feedHtml = $.root().html()!;
+---
+<FeedBranch>
+<div class:list={["speech-container", alignment]}>
     <slot name="charaLeft"/>
     <div class:list={["speech", position, alignment, theme]}>
         { position !== "none" && alignment !== "none" && <div class="triangle">
@@ -26,3 +37,5 @@ const { position = "none", alignment = "none", theme, name } = Astro.props;
     </div>
     <slot name="charaRight"/>
 </div>
+<div slot="feed"><Fragment set:html={feedHtml} /></div>
+</FeedBranch>

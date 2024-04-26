@@ -1,4 +1,6 @@
 ---
+import FeedBranch from './FeedBranch.astro';
+
 export interface Props {
     name: string;
     set?: string;
@@ -12,6 +14,7 @@ export interface Props {
 const { name, set = "default", sprite, thoughts, height = 200, position = "right", fallback = "png" } = Astro.props;
 
 ---
+<FeedBranch>
 <div class="chara-wrapper">
     <img src={`/chara/${name}/${set}/${sprite}.${fallback}`} alt={name} {height} style={`float: ${position}; ${position}: ${4 * (position == "left" ? 1 : -1)}px`} class="chara-shadow"/>
     <picture aria-hidden={true} class="chara" title={thoughts} style={{float: position}}>
@@ -21,6 +24,7 @@ const { name, set = "default", sprite, thoughts, height = 200, position = "right
     </picture>
 </div>
 <br style="clear: both; user-select: none"/>
+</FeedBranch>
 
 <style is:global>
     .chara-wrapper {

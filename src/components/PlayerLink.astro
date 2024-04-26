@@ -2,6 +2,8 @@
 import { getEntry } from "astro:content";
 import { getImage } from "astro:assets";
 
+import FeedBranch from "./FeedBranch.astro";
+
 interface Props {
     id: string;
 }
@@ -12,11 +14,12 @@ const {id: musicId, data: music} = (await getEntry('music', id))!;
 
 const coverImport = music.cover != null ? (await import(`../assets/covers/${music.cover}.png`)).default as ImageMetadata : null;
 const coverImage = coverImport != null ? await getImage({src: coverImport, width: 64, format: "jpg"}) : null;
-
+const href = `/player/${musicId.replaceAll("\\", "/")}`;
+const fields = [music.album, music.author].filter(field => field != null);
 ---
 
-
-<a class="playerLink music" href={`/player/${musicId.replaceAll("\\", "/")}`} target="music-player" aria-hidden="true">
+<FeedBranch>
+<a class="playerLink music" {href} target="music-player" aria-hidden="true">
     <div class="cover" style={coverImage? `background-image: url(${coverImage.src ?? "/img/icons/music.svg"})` : undefined}>
         <div class="playIcon">
             <img alt="Play" src="/img/icons/play.svg"/>
@@ -24,9 +27,13 @@ const coverImage = coverImport != null ? await getImage({src: coverImport, width
     </div>
     <div class="metadata">
         <span><b><u>Music:</u>{" "}{music.title}</b></span>
-        <span>{[music.album, music.author].filter(field => field != null).join(" | ")}</span>
+        <span>{fields.join(" | ")}</span>
     </div>
 </a>
+<p slot="feed">
+    <a {href} target="_blank">Music: {music.title}</a> 
+    {fields.length > 0 && <i>({fields.join(" | ")})</i>}</p>
+</FeedBranch>
 
 <style lang="scss">
     @use "../styles/util.scss";
