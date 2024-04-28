@@ -25,7 +25,7 @@ interface Props {
 
 ---
 
-<Layout title={`All posts - Page ${page.currentPage}`} description="Browse all the posts from my blog." keywords={["blog", "posts", "navigation", "list", "index"]}>
+<Layout title={`All posts - Page ${page.currentPage}`} description="Browse all the posts from my blog." keywords={["blog", "posts", "navigation", "list", "index"]} noindex>
     <main class="main-container">
         <CategoryButtons />
         <PostListing posts={posts.filter(post => import.meta.env.DEV || !post.data.draft)} {heroImages} currentPage={page.currentPage} lastPage={page.lastPage} baseUrl="/blog" />

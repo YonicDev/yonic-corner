@@ -41,7 +41,7 @@ const heroImages = await getHeroImages(posts);
 
 ---
 
-<Layout title={`${category.title} posts`} description={category.description} keywords={["blog", "navigation", "category", "yonic corner", ...(categoryId? [categoryId] : [])]} coverImage={`${Astro.url.protocol}//${Astro.url.host}/img/seo/${categoryId}.png`}>
+<Layout title={`${category.title} posts`} description={category.description} noindex={page.currentPage > 1} keywords={["blog", "navigation", "category", "yonic corner", ...(categoryId? [categoryId] : [])]} coverImage={`${Astro.url.protocol}//${Astro.url.host}/img/seo/${categoryId}.png`}>
     <main class="main-container">
         <CategoryHero categoryId={categoryId ?? ""} {category} />
         <div class="rainbowAnchor">

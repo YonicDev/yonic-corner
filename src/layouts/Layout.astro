@@ -26,7 +26,8 @@ export interface Props {
 	description?: string,
 	keywords?: string[],
 	twitterCard?: TwitterCardType,
-	openGraph?: Partial<OpenGraph>
+	openGraph?: Partial<OpenGraph>,
+	noindex?: boolean,
 }
 
 const defaultOpenGraph = {
@@ -41,12 +42,16 @@ const {
 	openGraph = defaultOpenGraph, 
 	twitterCard = "summary", 
 	coverImage = `${Astro.url.protocol}//${Astro.url.host}/img/seo/generic.png`, 
-	keywords = openGraph.article?.tags ?? defaultOpenGraph.keywords 
+	keywords = openGraph.article?.tags ?? defaultOpenGraph.keywords,
+	noindex = false,
 } = Astro.props;
 
 const extendedMeta: Partial<Meta>[] = [];
 if(keywords.length > 0) {
 	extendedMeta.push({name: "keywords", content: keywords.join(", ")})
+}
+if(noindex) {
+	extendedMeta.push({name: "robots", content: "noindex"});
 }
 ---
 
@@ -84,7 +89,8 @@ if(keywords.length > 0) {
 					{ rel: "icon", type:"image/png", sizes: "16x16" as unknown as DOMTokenList, href: "/favicon-16x16.png"},
 					{ rel: "icon", type:"image/png", sizes: "32x32" as unknown as DOMTokenList, href: "/favicon-32x32.png"},
 					{ rel: "shortcut icon", href: "/favicon.ico"},
-					{ rel: "alternate", type: "application/rss+xml", title:"The Yonic Corner", href: "/atom/feed.xml"}
+					{ rel: "alternate", type: "application/rss+xml", title:"The Yonic Corner", href: "/atom/feed.xml"},
+					{ rel: "sitemap", href: "/sitemap-index.xml"}
 				],
 				meta: [
 					{ name: "viewport", content: "width=device-width, initial-scale=1.0"},
