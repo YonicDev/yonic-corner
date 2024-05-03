@@ -87,6 +87,9 @@ const musicCollection = defineCollection({
         author: z.string().optional(),
         album: z.string().optional(),
         cover: z.string().optional(),
+        duration: z.number().refine(n => n > 0, "Duration must be greater than 0")
+            .or(z.string().regex(/^\d+:\d{1,2}$/, "Duration must be set to 'minutes:seconds'"))
+            .optional(),
         sources: z.array(z.object({
             src: z.string().url().or(z.literal("")),
             type: createUnionSchema(audioTypes, {invalid_type_error: "Music sources with an URL source must have a compatible audio MIME type."})

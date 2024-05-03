@@ -165,6 +165,7 @@ Contains JSON data only. Properties in italics are optional.
 * *`author`*: The author/composer of the music
 * *`album`*: The album to which the track belongs to. In the Yonic Corner, it also refers to the title of the games the soundtrack belongs to.
 * *`cover`*: The filename of the cover image. Preferably a square image. The image has to be placed in the `/src/assets/covers` folder.
+* *`duration`*: Only has an effect on [Legacy version][1]. The duration of the song, in either minutes:seconds format, or a number with the amount of seconds (it can be decimal).
 * `sources`: An array of audio sources for the track.
 
 The audio sources can be of two types: Direct source or YouTube sourced.
