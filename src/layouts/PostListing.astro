@@ -5,6 +5,7 @@ import { categories } from "@lib/settings";
 
 import Tag from "@lib/components/Tag.astro";
 import PostIcon from "@lib/components/PostIcon.svelte";
+import TimeToRead from '@lib/components/TimeToReadAsync.astro';
 
 interface Props {
     posts: CollectionEntry<"blog">[];
@@ -15,6 +16,11 @@ interface Props {
 }
 
 const { posts, currentPage = 1, lastPage, baseUrl, heroImages } = Astro.props;
+
+async function getReadingTime(post: CollectionEntry<"blog">) {
+    const res = await post.render();
+    return res.remarkPluginFrontmatter.readingTime;
+}
 
 const dateFormat = new Intl.DateTimeFormat('en-US',
 {
@@ -36,15 +42,13 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
                     <h1>{post.data.title}{post.data.draft && <sup>[draft]</sup>}</h1>
                     <span class="metadata">
                         <span class="dataGroup">
-                            <PostIcon title="Published on" icon="post" height={24} width={24} />
-                            <span>{dateFormat.format(post.data.pubDate)}</span>
+                            <PostIcon title={post.data.updatedDate ? "Last updated on" : "Published on"} icon="edit" height={24} width={24} />
+                            <span>{dateFormat.format(post.data.updatedDate ?? post.data.pubDate)}</span>
                         </span>
-                        {post.data.updatedDate &&
-                            <span class="dataGroup">
-                                <PostIcon title="Last updated on" icon="edit" height={22} width={22} />
-                                <span>{dateFormat.format(post.data.updatedDate)}</span>
-                            </span>
-                        }
+                        <span class="dataGroup">
+                            <PostIcon title="Time to read" icon="time" height={26} width={26} />
+                            <TimeToRead readingTime={getReadingTime(post)} />
+                        </span>
                     </span>
                     <p class="description biyonic-string">{post.data.description}</p>
                     </a>
@@ -205,7 +209,7 @@ const dateFormat = new Intl.DateTimeFormat('en-US',
         }
     }
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 800px) {
         .listing {
             .article {
                 flex-direction: column;

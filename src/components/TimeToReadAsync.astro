@@ -1,0 +1,17 @@
+---
+import TimeToRead from "./TimeToRead.svelte";
+
+type Props = {
+    readingTime: Promise<{
+        text: number,
+        video: number
+    }>,
+    includeVideo?: boolean;
+}
+
+let readingTime = (await Astro.props.readingTime);
+const { includeVideo = false } = Astro.props;
+if(!includeVideo)
+    readingTime = {...readingTime, video: 0};
+---
+<TimeToRead {readingTime} client:load />
