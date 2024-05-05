@@ -10,10 +10,13 @@ import absent from "./src/assets/code-themes/absent-light.json";
 
 import readingTime from './src/remark/reading-time.mjs';
 
+import { filterSitemap, serializeSitemap } from './src/sitemap-config';
+
+const site = "https://www.yonic.blog"
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://www.yonic.blog",
+  site,
   markdown: {
     remarkPlugins: [readingTime],
     shikiConfig: {
@@ -39,7 +42,12 @@ export default defineConfig({
     }),
     MDXCodeBlocks(),
     mdx(), 
-    sitemap()
+    sitemap({
+      changefreq: "weekly",
+      filter: filterSitemap,
+      serialize: serializeSitemap,
+      customPages: [`${site}/atom/feed.xml`]
+    })
   ],
   scopedStyleStrategy: "class",
   redirects: {
