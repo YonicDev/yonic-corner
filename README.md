@@ -168,23 +168,50 @@ Contains JSON data only. Properties in italics are optional.
 * *`duration`*: Only has an effect on [Legacy version][1]. The duration of the song, in either minutes:seconds format, or a number with the amount of seconds (it can be decimal).
 * `sources`: An array of audio sources for the track.
 
-The audio sources can be of two types: Direct source or YouTube sourced.
+The audio sources can be of two types: Direct source or supplied from a third-party platform (YouTube or Internet Archive). You can combine sources from both types.
 
 #### Direct source
 
-  * `src`: The URL targeting the audio source.
-  * `type`: The MIME type of the source. It must be one of the compatible `audio/` types.
+Just an URL pointing directly to the source. If you self-host to the source, this is the best option.
 
-> Only HTTPS audio sources are used. Any other protocol is ignored.
+| Availability | Modern version | Legacy version |
+| :-- | :-- | :-- |
+| Depends on the supplier | HTTPS sources only of any majorly supported MIME type | Only the first plain HTTP *(not HTTPS)* source, ignores sources with incompatible MIME types.
+| 
+
+It has the following properties:
+
+* `type`: The MIME type of the source. It must be one of the compatible `audio/` types.
+* `src`: The full URL targeting the audio source.
+
+#### Internet Archive sourced *(experimental)*
+
+The Yonic Corner can use the [metadata API](https://archive.org/developers/items.html) from the Internet Archive to obtain information from any music file publicly uploaded there.
+
+| Availability | Modern version | Legacy version |
+| - | - | - |
+| Guaranteed on build, but may become stale over time | Uses both `d1` and `d2` servers over HTTPS | Uses `d1` over plain HTTP
+|
+
+It has the following properties:
+
+* `type`: Set to `'iarchive'`.
+* `src`: An object with the following properties:
+  * `item`: The item identifier associated with the archived item.
+  * `file`: The name of the file within the archived item. It may be either an original or a derivative.
 
 #### YouTube sourced *(experimental)*
 
-The Yonic Corner can rely on the Invidious API to get several audio stream sources from any YouTube video with publicly available playback.
+The Yonic Corner can rely on the Invidious API to get several audio stream sources from any YouTube video with publicly available playback. *This source type is not recommended*.
+
+| Availability | Modern version | Legacy version |
+| - | - | - |
+| Depends on the default Invidious instance | Anonymously accessible videos only | Ignored |
+
+It has the following properties:
 
 * `type`: Set to `'youtube'`.
 * `src`: The ID of the YouTube video.
-
-> These sources will be ignored in the [Legacy Version][1] and should always be accompanied by at least one direct source.
 
 ### Blurbs
 

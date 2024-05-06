@@ -29,6 +29,22 @@ const adaptiveFields = [
 interface Props {
     music: CollectionEntry<"music">["data"]
 }
+
+const archiveFormats = {
+    "VBR MP3" : "audio/mpeg"
+}
+
+type ArchiveItem = {
+    d1: string,
+    d2: string,
+    dir: string,
+    files: {
+        name: string,
+        length: string,
+        format: keyof typeof archiveFormats,
+    }[]
+}
+
 ---
 
 <html>
@@ -67,17 +83,48 @@ interface Props {
                 document.documentElement.setAttribute("data-theme", theme);
             }
             window.setTheme();
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var audio = document.getElementById("audio");
+                var sources = audio.getElementsByTagName("source");
+                var lastSource = sources[sources.length-1];
+                if(lastSource.src != "") {
+                    lastSource.onerror = function(e) {
+                        console.log(e.target.src);
+                        document.getElementById("label").innerHTML = "Could not load the music!"
+                    }
+                }
+            });
+
         </script>
     </head>
     <body>
-        <p>{[title, album, author].filter(data => data!=null).join(" | ")}</p>
-        <audio controls autoplay loop>
-            { sources.flatMap((source) => { 
-                if(source.type !== "youtube")
+        <p id="label">{[title, album, author].filter(data => data!=null).join(" | ")}</p>
+        <audio id="audio" controls autoplay loop>
+            { sources.flatMap(async (source) => { 
+                if(source.type === "youtube") {
+                    return adaptiveFields.map(({itag, type}) => {
+                        return <source src={`${invidiousInstance}/latest_version?id=${source.src}&itag=${itag}`} {type} />
+                    })
+                } else if(source.type === "iarchive") {
+                    try {
+                        const { item, file } = source.src;
+                        const archiveItem = await (await fetch(`https://archive.org/metadata/${item}`)).json() as ArchiveItem;
+                        const archiveFile = archiveItem.files.find(({name}) => file === name );
+                        if(!archiveFile) {
+                            console.warn(`Could not find IArchive music file ${file} from item ${item}`);
+                            return;
+                        }
+                        return [archiveItem.d1,archiveItem.d2].map(server => {
+                            const src = encodeURI(`https://${server}${archiveItem.dir}/${archiveFile.name}`);
+                            return <source {src} type={archiveFormats[archiveFile.format]} />
+                        });
+                    } catch {
+                        return;
+                    }
+                } else {
                     return <source src={source.src} type={source.type} />
-                return adaptiveFields.map(({itag, type}) => {
-                    return <source src={`${invidiousInstance}/latest_version?id=${source.src}&itag=${itag}`} {type} />
-                })
+                }
             }) }
         </audio>
     </body>

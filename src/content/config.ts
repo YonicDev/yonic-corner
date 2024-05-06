@@ -93,10 +93,16 @@ const musicCollection = defineCollection({
         sources: z.array(z.object({
             src: z.string().url().or(z.literal("")),
             type: createUnionSchema(audioTypes, {invalid_type_error: "Music sources with an URL source must have a compatible audio MIME type."})
-        }).or(z.object({
+        }).strict().or(z.object({
             src: z.string(),
-            type: z.literal("youtube", {invalid_type_error: "Music sources with a non-URL source must have their type set to 'youtube'."}),
-        })))
+            type: z.literal("youtube", {invalid_type_error: "Music sources with a non-URL source must have their type set to 'youtube' or 'iarchive'."}),
+        }).strict()).or(z.object({
+            type: z.literal("iarchive"),
+            src: z.object({
+                item: z.string(),
+                file: z.string()
+            }, {invalid_type_error: "iarchive sources must supply an Internet Archive item name and file name"}).strict()
+        }).strict()))
     }).strict()
 })
 
