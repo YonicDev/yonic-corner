@@ -176,8 +176,7 @@ Just an URL pointing directly to the source. If you self-host the source, this i
 
 | Availability | Modern version | Legacy version |
 | :-- | :-- | :-- |
-| Depends on the supplier | HTTP(S) sources of any majorly supported MIME type | Only the first plain HTTP *(not HTTPS)* source, ignores sources with incompatible MIME types.
-|
+| Depends on the supplier | HTTP(S) sources of any majorly supported MIME type | Only the first plain HTTP *(not HTTPS)* source, ignores sources with incompatible MIME types |
 
 In order to support both versions with a direct source, at least one of each HTTPS and HTTP sources must be supplied.
 
@@ -192,8 +191,7 @@ The Yonic Corner can use the [metadata API](https://archive.org/developers/items
 
 | Availability | Modern version | Legacy version |
 | - | - | - |
-| Guaranteed on build, but may become stale over time | Uses both `d1` and `d2` servers over HTTPS | Uses `d1` over plain HTTP
-|
+| Guaranteed on build, but may become stale over time | Uses both `d1` and `d2` servers over HTTPS | Uses `d1` over plain HTTP |
 
 It has the following properties:
 
