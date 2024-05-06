@@ -172,12 +172,14 @@ The audio sources can be of two types: Direct source or supplied from a third-pa
 
 #### Direct source
 
-Just an URL pointing directly to the source. If you self-host to the source, this is the best option.
+Just an URL pointing directly to the source. If you self-host the source, this is the best option.
 
 | Availability | Modern version | Legacy version |
 | :-- | :-- | :-- |
-| Depends on the supplier | HTTPS sources only of any majorly supported MIME type | Only the first plain HTTP *(not HTTPS)* source, ignores sources with incompatible MIME types.
-| 
+| Depends on the supplier | HTTP(S) sources of any majorly supported MIME type | Only the first plain HTTP *(not HTTPS)* source, ignores sources with incompatible MIME types.
+|
+
+In order to support both versions with a direct source, at least one of each HTTPS and HTTP sources must be supplied.
 
 It has the following properties:
 
@@ -196,9 +198,10 @@ The Yonic Corner can use the [metadata API](https://archive.org/developers/items
 It has the following properties:
 
 * `type`: Set to `'iarchive'`.
-* `src`: An object with the following properties:
-  * `item`: The item identifier associated with the archived item.
-  * `file`: The name of the file within the archived item. It may be either an original or a derivative.
+* `src`: A string divided into `{item}/{file}` format, where:
+  * `item` is the item identifier associated with the archived item.
+  * `file` is the name of the file within the archived item. It may be either an original or a derivative, and must include the extension.
+  * Both components must be exact (case and space sensitive, among others) except for URI encoding, which doesn't matter whether it's encoded or not.
 
 #### YouTube sourced *(experimental)*
 
@@ -206,7 +209,7 @@ The Yonic Corner can rely on the Invidious API to get several audio stream sourc
 
 | Availability | Modern version | Legacy version |
 | - | - | - |
-| Depends on the default Invidious instance | Anonymously accessible videos only | Ignored |
+| Depends on the default Invidious instance | Videos accessible without logging in only | No; ignored |
 
 It has the following properties:
 

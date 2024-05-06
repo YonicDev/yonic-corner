@@ -108,7 +108,7 @@ type ArchiveItem = {
                     })
                 } else if(source.type === "iarchive") {
                     try {
-                        const { item, file } = source.src;
+                        const [ item, file ] = source.src.split("/").map(segment => decodeURIComponent(segment));
                         const archiveItem = await (await fetch(`https://archive.org/metadata/${item}`)).json() as ArchiveItem;
                         const archiveFile = archiveItem.files.find(({name}) => file === name );
                         if(!archiveFile) {
