@@ -370,7 +370,7 @@
     }
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 800px) {
     :root[data-theme="legacy"] {
         $base-color: #A1FFED;
         $article-color: #C5FFF4;
@@ -380,7 +380,7 @@
             background-color: #03f3ff!important;
             background-image: url("https://legacy.yonic.blog/ui/bubbles.gif")!important;
             background-size: cover;
-            background-position: 0 -30px;
+
             .mobile-logo {
                 background: linear-gradient(90deg, #0011ff 0%, #13e2ec 50%, #22ff1e 100%);
                 background-clip: text;

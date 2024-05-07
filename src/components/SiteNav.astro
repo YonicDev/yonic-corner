@@ -69,9 +69,9 @@ const blurbList: typeof commonBlurbs = {
 			.mobile-logo {
 				display: none;
 				position: absolute;
-				top: 0;
+				top: 20px;
 				left: 50%;
-				transform: translate(calc(-8px + -50%), -4px);
+				transform: translate(calc(-8px + -50%), 4px);
 				text-shadow: util.extrude(8, #{$emphasis-color});
 				font-family: Bungee, "Arial Black", Arial, Helvetica, sans-serif;
 				font-size: 24pt;
@@ -120,8 +120,8 @@ const blurbList: typeof commonBlurbs = {
 				display: none;
 				position: relative;
 				z-index: 1000;
-				width: 2.5rem;
-				height: 2.5rem;
+				width: 40px;
+				height: 40px;
 				background-color: #{$article-color};
 				background-image: url('/img/hamburger.svg');
 				background-size: 18px;
@@ -168,10 +168,11 @@ const blurbList: typeof commonBlurbs = {
 						border: 2px solid #{$nav-color-dark};
 						border-radius: 0px;
 						font-size: 24pt;
-						height: auto;
+						height: 0px;
 						transition: none;
 						top: 0;
-						padding: 0 0.75em;
+						padding: 64px 16px;
+						line-height: 0;
 						box-shadow: util.extrude(4, #{$nav-color-dark});
 					}
 				}
@@ -218,7 +219,7 @@ const blurbList: typeof commonBlurbs = {
 		}
 	}
 
-	@media screen and (max-width: 750px) {
+	@media screen and (max-width: 800px) {
 		nav {
 			.links {
 				background-color: #{$nav-color-dark};
@@ -226,24 +227,27 @@ const blurbList: typeof commonBlurbs = {
 					display: none;
 				}
 				input#mobile-toggler {
-					display: block;
+					display: inline-block;
+					&:checked {
+						position: fixed;
+						top: 15px;
+						right: 15px;
+						width: 41px;
+						height: 41px;
+
+						+ .mobile-ui {
+							display: flex;
+						}
+					}
+					position: relative;
 				}
 				.desktop-logo {
 					display: none;
 				}
 				.mobile-logo {
 					display: block;
+					line-height: 30px;
 				}
-			}
-		}
-
-		input#mobile-toggler:checked {
-			position: fixed!important;
-			top: 1rem;
-			right: 1rem;
-
-			+ .mobile-ui {
-				display: flex;
 			}
 		}
 
