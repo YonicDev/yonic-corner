@@ -1,0 +1,130 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,600;1,400;1,600&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,600;1,400;1,600&family=Blinker:wght@600&family=Bungee&family=Fira+Code&display=swap"></noscript>
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+		<meta name="generator" content={Astro.generator} />
+        <meta name="robots" content="noindex, nofollow" />
+        <script is:inline>
+            window.setTheme = function() {
+                var theme = (function() {
+                    var localTheme = localStorage.getItem("theme");
+                    if ( typeof localStorage !== "undefined" && localTheme != null && localTheme !== "auto") {
+                        return localTheme;
+                    }
+                    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                        return "dark";
+                    }
+                    return "light";
+                })()
+    
+                document.documentElement.setAttribute("data-theme", theme);
+            }
+            window.setTheme();
+        </script>
+    </head>
+    <body>
+        <div class="spinner-base" title="Loading video...">
+            <div class="spinner-progress" />
+        </div>
+    </body>
+</html>
+
+<style lang="scss">
+    @use "../styles/vars.scss" as *;
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html, body {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: $nav-color-dark;
+        font-family: 'Asap', 'Kosugi Maru', Helvetica, Arial, Verdana, sans-serif;
+        cursor: url("/img/cursors/arrow.png"), auto;
+
+        .spinner-base {
+            border: 6px solid #{$article-color};
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            position: relative;
+            .spinner-progress {
+                position: absolute;
+                width: 42px;
+                height: 42px;
+                top: -6px;
+                left: -6px;
+                border: 8px solid;
+                border-left-color: $emphasis-color;
+                border-top-color: transparent;
+                border-bottom-color: transparent;
+                border-right-color: transparent;
+                border-radius: 50%;
+                animation: spin 0.75s infinite linear;
+            }
+        }
+    }
+
+    :root[data-theme="dark"] {
+        $base-color: #1e2f66;
+        $article-color: #2f4772;
+        $emphasis-color: #020f1b;
+        $nav-color-dark: #0b2350;
+        $nav-color-light: #0e57aa;
+        $emphasis-light: #76cdff;
+
+        html, body {
+            background: $nav-color-dark;
+            color: $emphasis-light;
+        }
+        .spinner-base {
+            border-color: $nav-color-light;
+            .spinner-progress {
+                border-left-color: $emphasis-light;
+            }
+        }
+    }
+
+    :root[data-theme="legacy"] {
+        $base-color: #A1FFED;
+        $article-color: #C5FFF4;
+        $emphasis-color: #00423A;
+        $nav-color-dark: #009183;
+        html, body {
+            background: $nav-color-dark;
+            color: black;
+        }
+        .spinner-base {
+            border-color: $base-color;
+            .spinner-progress {
+                border-left-color: $emphasis-color;
+            }
+        }
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate3d(0, 0, 1, 0deg);
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate3d(0, 0, 1, 360deg);
+            transform: rotate(360deg);
+        }
+    }
+</style>

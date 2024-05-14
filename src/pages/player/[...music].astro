@@ -62,12 +62,6 @@ type ArchiveItem = {
 		<meta name="generator" content={Astro.generator} />
         <meta name="robots" content="noindex, nofollow" />
         <script is:inline>
-            var otherWindow;
-
-            window.setOtherWindow = function(value) {
-                otherWindow = value;
-            }
-
             window.setTheme = function() {
                 var theme = (function() {
                     var localTheme = localStorage.getItem("theme");
@@ -95,7 +89,6 @@ type ArchiveItem = {
                     }
                 }
             });
-
         </script>
     </head>
     <body>

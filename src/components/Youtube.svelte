@@ -19,10 +19,7 @@
 </script>
 
 <div class="video-wrapper{noJs? "": " video-js"}">
-    {#if !noJs}
-        <p>Loading video...</p>
-    {/if}
-    <iframe bind:this={iframe} class="video-player" title="Video player" src={noJs? src : undefined}/>
+    <iframe bind:this={iframe} class="video-player" title="Video player" src={noJs? src : "/video-placeholder/"}></iframe>
 </div>
 <div class="videoCaption{noJs? "": " video-js"}">
     <p>
@@ -56,7 +53,6 @@
         aspect-ratio: 16 / 9;
         position: relative;
         :global(.video-player) {
-            position: absolute;
             box-shadow: none;
             background: none;
             border: none;

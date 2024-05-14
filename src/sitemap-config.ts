@@ -34,7 +34,7 @@ export function filterSitemap(page: string) {
     let inSitemap = true;
     const url = new URL(page);
     const segments = url.pathname.split("/");
-    inSitemap &&= segments[1] !== "player";
+    inSitemap &&= ["player", "video-placeholder"].indexOf(segments[1]) < 0;
     if(segments[1] === "browse" && segments[2] === "tags")
         inSitemap &&= segments[3] == null || segments[3] == '';
     return inSitemap;

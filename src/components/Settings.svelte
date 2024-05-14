@@ -55,6 +55,9 @@
                 toggleTheme = theme;
             }
             (document.getElementById("player")?.getElementsByTagName("iframe")[0].contentWindow as any).setTheme();
+            for (const iframe of document.getElementsByClassName("video-player") as HTMLCollectionOf<HTMLIFrameElement>) {
+                (iframe.contentWindow as any).setTheme();
+            }
         }
     }
 
