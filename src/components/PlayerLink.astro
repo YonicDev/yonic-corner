@@ -35,6 +35,16 @@ const fields = [music.album, music.author].filter(field => field != null);
     {fields.length > 0 && <i>({fields.join(" | ")})</i>}</p>
 </FeedBranch>
 
+<script>
+    for (const playerLink of document.getElementsByClassName("playerLink")) {
+        playerLink.addEventListener("click", function(e) {
+            e.preventDefault();
+            const iframe = document.getElementById("player")?.getElementsByTagName("iframe")[0];
+            iframe?.contentWindow?.location.replace(playerLink.getAttribute("href") ?? "/player/null");
+        })
+    }
+</script>
+
 <style lang="scss">
     @use "../styles/util.scss";
     @use "../styles/vars.scss" as *;
