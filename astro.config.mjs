@@ -23,6 +23,9 @@ export default defineConfig({
       theme: absent
     }
   },
+  devToolbar: {
+    enabled: false
+  },
   integrations: [
     svelte(),
     AutoImport({
