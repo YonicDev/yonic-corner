@@ -1,0 +1,82 @@
+@use "./vars.scss" as *;
+
+.code-block {
+    .line.marked {
+        $color: #33d1f8;
+        background-color: rgba($color, 20%);
+        border-left: 2px solid #{$color};
+        &::before {
+            margin-right: 22px;
+        }
+    }
+
+    .line.insertion {
+        $color: #03c278;
+        background-color: rgba($color, 25%);
+        border-left: 2px solid #{$color};
+        &::before {
+            color: darken($color, 10%);
+            content: "+";
+            margin-right: 22px;
+        }
+    }
+
+    .line.deletion {
+        $color: #dd0d4b;
+        background-color: rgba($color, 20%);
+        border-left: 2px solid #{$color};
+        &::before {
+            counter-increment: none;
+            color: $color;
+            content: "-";
+            margin-right: 22px;
+        }
+    }
+
+    &.dark {
+        .line.marked {
+            background-color: rgba(deepskyblue, 25%);
+            border-left: 2px solid deepskyblue;
+        }
+        .line.insertion {
+            $color: #4dff88;
+            border-color: $color;
+            background-color: rgba($color, 25%);
+            &::before {
+                color: $color;
+            }
+        }
+        .line.deletion {
+            $color: #f83364;
+            border-color: $color;
+            background-color: rgba($color, 25%);
+            &::before {
+                color: $color;
+            }
+        }
+    }
+
+    &.legacy {
+        .line.marked {
+            $color: skyblue;
+            background-color: rgba($color, 20%);
+            border-left: 2px solid $color;
+        }
+        .line.insertion {
+            $color: lime;
+            border-color: $color;
+            background-color: rgba($color, 20%);
+            &::before {
+                color: $color;
+            }
+        }
+        .line.deletion {
+            $color: red;
+            border-color: $color;
+            background-color: rgba($color, 25%);
+            &::before {
+                color: $color;
+            }
+        }
+    }
+}

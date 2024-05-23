@@ -1,17 +1,29 @@
 ---
-import { Code } from 'astro/components';
-import type { BuiltinLanguage, LanguageRegistration, SpecialLanguage } from 'shikiji';
+import Code from './Code.astro';
+import type { BuiltinLanguage, LanguageRegistration, SpecialLanguage } from 'shiki';
 
-interface Props {
+import { parseMeta, lineHighlightTransformer, squigglyLinesTransformer, betterCommentsTransformer } from '@lib/shiki';
+
+type CodeLanguage = BuiltinLanguage | SpecialLanguage | LanguageRegistration;
+
+type Props = {
     code: string,
-    lang?: BuiltinLanguage | SpecialLanguage | LanguageRegistration,
-    filename?: string
+    lang?: CodeLanguage,
+    filename?: string,
+    [x: string]: string | CodeLanguage | undefined,
 }
 
-const { code, lang } = Astro.props;
-const filename = Astro.props.filename?.trim();
+const { code, lang, filename: rawFilename, ...meta } = Astro.props;
+const filename = rawFilename?.trim();
 
 const buttonLabel = "Copy code";
+
+const transformers = [
+    parseMeta(),
+    lineHighlightTransformer(),
+    squigglyLinesTransformer(),
+    betterCommentsTransformer(),
+]
 ---
 <div class="code-block" data-button-label={buttonLabel}>
     {
@@ -22,7 +34,7 @@ const buttonLabel = "Copy code";
         </span>
     }
     <div>
-        <Code code={code} lang={lang} theme="min-light"/>
+        <Code {code} {lang} {transformers} theme="min-light" meta={meta as Record<string, string|undefined>} />
     </div>
 </div>
 <div class="code-block dark" data-button-label={buttonLabel}>
@@ -34,7 +46,7 @@ const buttonLabel = "Copy code";
         </span>
     }
     <div>
-        <Code code={code} lang={lang} theme="poimandres"/>
+        <Code {code} {lang} {transformers} theme="poimandres" meta={meta as Record<string, string|undefined>}/>
     </div>
 </div>
 <div class="code-block legacy" data-button-label={buttonLabel}>
@@ -46,7 +58,7 @@ const buttonLabel = "Copy code";
         </span>
     }
     <div>
-        <Code code={code} lang={lang} theme="min-dark"/>
+        <Code {code} {lang} {transformers} theme="min-dark" meta={meta as Record<string, string|undefined>}/>
     </div>
 </div>
 

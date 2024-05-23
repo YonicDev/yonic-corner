@@ -138,8 +138,8 @@ code {
 code .line::before {
     content: counter(step);
     counter-increment: step;
-    width: 1rem;
-    margin-right: 1.5rem;
+    width: 16px;
+    margin-right: 24px;
     display: inline-block;
     text-align: right;
     color: rgba(115,138,148,.6);
