@@ -2,6 +2,8 @@
 import Code from './Code.astro';
 import type { BuiltinLanguage, LanguageRegistration, SpecialLanguage } from 'shiki';
 
+import { getIconForFile } from 'vscode-icons-js';
+
 import { parseMeta, lineHighlightTransformer, squigglyLinesTransformer, betterCommentsTransformer } from '@lib/shiki';
 
 type CodeLanguage = BuiltinLanguage | SpecialLanguage | LanguageRegistration;
@@ -24,12 +26,14 @@ const transformers = [
     squigglyLinesTransformer(),
     betterCommentsTransformer(),
 ]
+
+const iconSize = 16;
 ---
 <div class="code-block" data-button-label={buttonLabel}>
     {
         filename && filename !== "-" &&
         <span class="filename">
-            <span class="icon"></span>
+            <img width={iconSize} height={iconSize} alt={(lang as string) ?? "plaintext"} src={`/img/icons/filetypes/${getIconForFile(filename)}`} class="icon" />
             {filename}
         </span>
     }
@@ -41,7 +45,7 @@ const transformers = [
     {
         filename && filename !== "-" &&
         <span class="filename">
-            <span class="icon"></span>
+            <img width={iconSize} height={iconSize} alt={(lang as string) ?? "plaintext"} src={`/img/icons/filetypes/${getIconForFile(filename)}`} class="icon" />
             {filename}
         </span>
     }
@@ -62,7 +66,7 @@ const transformers = [
     </div>
 </div>
 
-<style>
+<style lang="scss">
     .code-block {
         position: relative;
     }

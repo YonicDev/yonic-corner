@@ -38,7 +38,7 @@ h1 {
 
 .filename {
     background-color: darken(aqua, 20%);
-    padding: 0.25rem 0.75rem;
+    padding: 6px 12px;
     display: inline-block;
     color: white;
     border-radius: 5px 5px 0 0;
@@ -49,6 +49,11 @@ h1 {
     z-index: 1;
     border-bottom: none;
     font-size: 16px;
+    .icon {
+        display: inline;
+        vertical-align: bottom;
+        margin-right: 2px;
+    }
 }
 
 a {
