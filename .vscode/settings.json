@@ -1,0 +1,28 @@
+{
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "/src/content/blog/**"
+            ],
+            "url": "./.astro/collections/blog.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/src/content/series/**"
+            ],
+            "url": "./.astro/collections/series.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/src/content/music/**"
+            ],
+            "url": "./.astro/collections/music.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/src/content/blurb/**"
+            ],
+            "url": "./.astro/collections/blurb.schema.json"
+        },
+    ]
+}
