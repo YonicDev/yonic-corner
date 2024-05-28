@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import svelte from "@astrojs/svelte";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
+import { loadEnv } from "vite";
 
 import AutoImport from 'astro-auto-import';
 import MDXCodeBlocks, { mdxCodeBlockAutoImport } from 'astro-mdx-code-blocks';
@@ -13,6 +14,10 @@ import readingTime from './src/remark/reading-time.mjs';
 import { filterSitemap, serializeSitemap } from './src/sitemap-config';
 
 const site = "https://www.yonic.blog"
+
+const {
+  USE_CONTENT_COLLECTION_CACHE
+} = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
 // https://astro.build/config
 export default defineConfig({
@@ -55,6 +60,9 @@ export default defineConfig({
   scopedStyleStrategy: "class",
   redirects: {
     '/blog/article/biyonic-reading': '/blog/article/2023/06/biyonic-reading'
+  },
+  experimental: {
+    contentCollectionCache: (USE_CONTENT_COLLECTION_CACHE === "true") ?? false,
   },
   vite: {
     build: {
