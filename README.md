@@ -2,7 +2,7 @@
 
 This is the source code of my personal blog, built with Astro, and uses Svelte components. Apart from a few key differences, it's not much different than any other Astro blog site.
 
-There is another blog expressly designed for extremely old browsers called [Legacy Version][1] that uses nearly the same content.
+There is another blog expressly designed for extremely old browsers called [Legacy Version][1] that uses nearly the same content. A popup with a link to it will be displayed if the browser detected cannot confidently display the page properly.
 
 ## Setup
 
@@ -49,12 +49,11 @@ node cli.mjs update <Post id> [-p | --publish]
 
 Adds or modified the `updatedDate` field of the post. With the `-p` or `--publish` option, it updates the `publishDate` field instead.
 
-## Migrating from 2.1.0
+## Migrating from 2.2.0
 
-1. Move the `assets` folder associated with a MDX post straight to the `contents` folder and group it by year/month.
-2. In the same folder, put the MDX post with the same ID and rename it `index.mdx`.
-3. Remove the `export components = { ... }` line from the MDX.
-4. Optionally, add a `hero` property in the frontmatter with the `modern` and `legacy` parameters, with values being relative paths pointing to the images.
+Not much has changed in terms of the content API, except for the fact that **this version updates Astro from v3 to v4**. The blog has already addressed all of the breaking changes from the builtin features, but any additional features you may have added might require upgrading. [Check the Astro v4 upgrading guide](https://docs.astro.build/en/guides/upgrade-to/v4/) for more information.
+
+However, the `src/feeds` folder that was automatically generated for internal use is not being utilized anymore, and should now be deleted.
 
 ## Configuration
 
@@ -64,19 +63,20 @@ The `src/settings.ts` file contains some properties that control the overall str
 * `CATEGORY_IDS`: The internal IDs of each category.
 * `HIDE_DRAFTS_IN_DEVELOPMENT`: A flag that hides draft posts in development mode.
 
-Additionally, the blog uses the following enviornment variables:
+Additionally, the blog uses the following environment variables:
 
 * `INVIDIOUS_DEFAULT_INSTANCE`: URL to an Invidious instance to be used by default.
+* `USE_CONTENT_COLLECTION_CACHE`: Whether to use the Astro experimental feature of content collection cache. By default it's set to false.
 
 ## Content
 
-The Yonic Corner uses Astro content collections for handling the actual content of the blog.
+The Yonic Corner uses Astro content collections for handling the actual content of the blog. In 2.3.0, [JSON schemas](https://json-schema.org/) are generated automatically to aid in the creation of data content files.
 
 ### Blog posts
 
-Located in `content/blog`. From 2.2.0, these are organized by year and month, although grouping them in a `drafts` folder is also supported.
+Located in `content/blog`. These are organized by year and month, although grouping them in a `drafts` folder is also supported.
 
-This collection is meant for MDX or Markdown posts only and associated assets. The frontmatter structure is as follows (in *italics*, optional):
+This collection is meant for MDX or Markdown posts only and associated assets, with MDX posts being far more recommended. The frontmatter structure is as follows (in *italics*, optional):
 
 * `title`: The display title of the post.
 * `description`: Flavor text to be used in the blog and SEO.
@@ -101,14 +101,14 @@ If `hero` is not defined, the hero images can be set by placing an image named `
 
 When the modern hero image's aspect ratio is different than 16/9, `heroPosition` controls how the image should be vertically centered, with either the top, center, or bottom of the image being centered. Hero images are always horizontally centered in the middle. Hero images are used as images for Twitter/X Cards.
 
-### Built-in components
+#### Built-in components
 
 MDX posts have some components that are already imported, and can be used right away without `import` statements.
 
 **Modern-only** components may only be rendered in the Modern version. This can be guaranteed using the `<VersionBranch>` component.
 
-* `<Bubble>`: Creates a comic-like text bubble.
-* `<Chara>`: Displays a character sprite. Used with `<Bubble>`.
+* `<TextBubble>`: Creates a comic-like text bubble.
+* `<Chara>`: Displays a character sprite. Used with `<TextBubble>`.
 * `<Figure>`: Displays an image with art direction with an optional `<figcaption>`. This component has no slots.
 * `<PlayerLink>`: Displays a link to play music on the player. This component has no slots.
 * `<VersionBranch>`: Splits rendering between this version (Modern) and the [Legacy Version][1]. Anything with the `slot` prop assigned to `modern` will be rendered in this version, while anything in the `legacy` slot will be rendered in the Legacy one.
@@ -117,23 +117,69 @@ MDX posts have some components that are already imported, and can be used right 
 
 #### Replaced elements
 
-Some HTML elements are replaced with built-in components to provide additional enhancements. Since 2.2.0, these are replaced automatically when rendering and don't have to be exported in the MDX posts.
+Some HTML elements are replaced with built-in components to provide additional enhancements. These are replaced automatically when rendering and don't have to be exported in the MDX posts.
 
 * `<Paragraph>` and `<ListItem>` enable the text inside for Bi(y)onic reading.
 * `<Anchor>` will make external links open in a new tab or window.
-* `<Code>` disables the text that will be shown in monospace text (`like this string`) for Bi(y)onic reading.
+* `<Code>` disables the text that will be shown in inline monospace text (`like this string`) for Bi(y)onic reading.
+* `<CodeBlock>`: Adds some customization options to code blocks that take more than one line and allow for syntax highlighting. [See the below section](#code-blocks) for more information.
 
-### Code blocks
+> Do not confuse the `<Code>` component with the `<CodeBlock>` component and the `_internal/Code.astro` component.
 
-A filename tag can be added to a code block by adding a commented line as the first line, like this:
+#### Code blocks
+
+Inspired by [Expressive Code](https://github.com/expressive-code/expressive-code), you can further customize code blocks with meta information (the first line of the code block) and extended syntax for comments, line highlights, among other things.
+
+All code fences in the markdown posts will be replaced with the `<CodeBlock>` component, which uses a modified version of Astro's built-in Shiki renderer component (`_internal/Code.astro`) as a workaround to add these customizations in ways that the Astro built-in renderer can't.
+
+##### Meta tags
+
+A filename tag can be added to a code block with the `filename` meta tag, which will display a tab with the filename and its associated icon to the left of it.
+
+By default the icon is determined from the file extension, but a custom icon can be set with the `icon` meta tag. It must correspond to the filename of the icon located in the public file icons folder without the image extension.
+
+> Light icons (meant for dark backgrounds) are usually preferred over dark icons (meant for light backgrounds), although it depends on the contrast ratio between the icon and background.
 
 ```markdown
-```js
-// src/script.js
-console.log("The // comment in the first line will add a filename tag with the name 'src/script.js'");
+```js filename="src/script.js" icon="file_type_reactjs"
+
+console.log("Backwards compatibility: You can also use a // comment in the second line of the block code, although this is not recommended.");
 
 // ... rest of blockcode
 ```
+
+You can highlight an entire line by putting them in one of the following three categories in the meta:
+* `mark`: Simple highlight. Meant for focusing on a line.
+* `ins`: Diff insertion highlight.
+* `del`: Diff deletion highlight.
+  
+> Line number markings *(Modern version only)* do not count up diff deleted lines and respect the actual line numbering after the diff would be applied.
+
+```markdown
+```plaintext mark="1" ins="2-3" del="4,7"
+Within curly braces, you can group consecutive lines with a hyphen (a-b,
+from a to b) and separate lines with commas (3,8; lines 3 and 8).
+
+You can make any mixture of these: "2-5,8" (lines 2 to 5, and line 8), "1,4,7"...
+```
+
+##### Syntax extensions
+
+You can underline a piece of code with a red wavy line (simple underline in browsers that do not support wavy lines) by wrapping the content with two pairs of tildes (`~~`):
+
+```markdown
+```js
+~~consoul~~.log("This will not work!") //! ReferenceError: consoul is not defined.
+```
+
+> ⚠ Due to limitations of the Shiki transformer, adding wavy lines can potentially alter and/or break syntax highlighting. Make sure the span of the tildes makes syntactical sense and does not cut a token in two.
+
+You can also customize stylings by making comments of a specific format. This only works for file types that allow backslash comments:
+* **Error style** (`//! Comment`), for the error message that a line of code will throw.
+* **Return style** (`//> Comment`), for the result that a line of code will return.
+* **Header style** (`//N. Comment`), where `N` is a positive integer number. Useful for highlighting sections of code.
+* **Warning style** (`//? Comment`), for warnings that a line of code may display, or important messages.
+* **Note/information style** (`//i Comment`), for marking comments as tips or noteworthy information.
 
 ### Series
 
@@ -234,18 +280,15 @@ These three JSON files contain strings of text that are displayed in the site's 
 
 ## Web feeds
 
-This blog generates an Atom feed that's copied into the public folder during post-build. Because of this, the feed is not available when running the development server.
+Since version 2.3.0, web feeds are now generated in the Astro pipeline, so they are available on development mode.
+However, in dev mode it's displayed as plain HTML, and image URLs may not be resolved correctly, so it's recommended to test them on production mode as well. 
 
 The Yonic Corner distinguishes between rendering for the website (**blog context**) and rendering for the blog's web feed (**feed context**).
 
-For the default feed, only the contents inside a `<div class="feed-preview">` element will be rendered. In the future, a full feed will render all of its contexts.
+For the default feed, only the contents inside a `<div class="feed-preview">` element will be rendered. The full feed renders the post's full contents.
 
-Astro components that use the `<FeedBranch>` component split rendering into two slots. Anything in the default slot will only be rendered on the blog context, while anything in the `feed` slot will only be rendered in the feed context.
+Astro components that use the `<FeedBranch>` component to split rendering into two slots and customize their appearance for either context. Anything in the default slot will only be rendered on the blog context, while anything in the `feed` slot will only be rendered in the feed context.
 
-⚠  Framework components rendered in the feed context is not recommended, but they may work without client directives.
-
-## Issues regarding PostCSS
-
-This blog uses PostCSS with Autoprefixer to extend compatibility with older browsers. Sometimes, if there is an error during build and it takes some time to fix, the pages will error out with "unexpected token" errors. So far the only workaround is to reset the development server.
+⚠  Framework components rendered in the feed context is not recommended, but they may be displayed without client directives.
 
 [1]: https://github.com/YonicDev/yonic-corner-legacy
