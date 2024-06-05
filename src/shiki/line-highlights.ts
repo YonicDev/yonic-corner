@@ -31,12 +31,15 @@ export function lineHighlightTransformer(): ShikiTransformer {
                     this.addClassToHast(node, className);
             }
             
-            if(!this.options.meta?.mark)
+            if(!this.options.meta?.mark && !this.options.meta?.ins && !this.options.meta?.del)
                 return;
             const meta: Record<string, string | undefined> = this.options.meta;
-            createMarks("mark", "marked")
-            createMarks("ins", "insertion")
-            createMarks("del", "deletion")
+            if(meta.mark)
+                createMarks("mark", "marked");
+            if(meta.ins)
+                createMarks("ins", "insertion");
+            if(meta.del)
+                createMarks("del", "deletion");
         },
     }
 }
