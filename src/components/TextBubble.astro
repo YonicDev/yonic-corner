@@ -6,15 +6,16 @@ export interface Props {
 	position?: "top"|"left"|"right"|"bottom"|"none",
     alignment?: "near"|"center"|"far"|"none"
     theme?: string,
-    name?: string
+    name?: string,
+    singleLine?: boolean,
 }
 
-const { position = "none", alignment = "none", theme, name } = Astro.props;
+const { position = "none", alignment = "none", theme, name, singleLine = false } = Astro.props;
 
 
 let feedHtml = await Astro.slots.render("default");
 const $ = load(feedHtml, null, false); // Since this is just the inner content, we needn't remove anything around it.
-if(name) {
+if(name && singleLine) {
     const firstLine = $("p").first();
     firstLine.html(`<b>${name}:</b> ${firstLine.html()}`);
 }
@@ -37,5 +38,5 @@ feedHtml = $.root().html()!;
     </div>
     <slot name="charaRight"/>
 </div>
-<div slot="feed"><Fragment set:html={feedHtml} /></div>
+<div slot="feed">{name && !singleLine && <p>{`<${name}>`}</p>}<Fragment set:html={feedHtml} />{name && !singleLine && <p>{`</${name}>`}</p>}</div>
 </FeedBranch>
