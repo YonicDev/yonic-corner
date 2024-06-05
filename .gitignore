@@ -23,5 +23,4 @@ pnpm-debug.log*
 # Local Netlify folder
 .netlify
 
-src/feeds
 asset-making/

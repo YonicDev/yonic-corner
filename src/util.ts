@@ -40,4 +40,6 @@ export function sortPosts(a: CollectionEntry<"blog">, b: CollectionEntry<"blog">
  * @param referencePath Path to use as reference for rendering (should be `Astro.url`)
  * @returns A boolean with value true the page is being rendered for the web feed.
  */
-export function isRenderingFeed(referencePath: URL) { return referencePath.pathname === "/" }
+export function isRenderingFeed(referencePath: URL) {
+    return /^\/feeds\//.test(referencePath.pathname) 
+}

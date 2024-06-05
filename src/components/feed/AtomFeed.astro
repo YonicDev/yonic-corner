@@ -5,15 +5,21 @@ import getUuid from "uuid-by-string"
 import HTMLFeed from "./HTMLFeed.astro";
 import { filterPosts, sortPosts } from "@lib/util";
 
+type Props = {
+    full?: boolean
+}
+
+const { full = false } = Astro.props;
+
 const posts = (await getCollection('blog')).filter(filterPosts).sort(sortPosts).slice(0,20);
 
 const atomHeader = `<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="/atom/style.xsl" type="text/xsl"?>
+<?xml-stylesheet href="/feeds/styles/atom.xsl" type="text/xsl"?>
 
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss/1.0">
     <title>The Yonic Corner</title>
     <subtitle><![CDATA[ A blog about games, technology, and my hobbies ]]></subtitle>
-    <link rel="self" href="${import.meta.env.SITE}/atom/feed.xml" />
+    <link rel="self" href="${new URL(Astro.url.pathname, import.meta.env.SITE).href}" />
     <link rel="alternate" type="text/html" href="${import.meta.env.SITE}" />
     <id>urn:uid:${getUuid(import.meta.env.SITE, 5)}</id>
     <updated>${new Date().toISOString()}</updated>
@@ -46,7 +52,8 @@ const atomFooter = `</feed>`
             <summary><![CDATA[ ${post.data.description} ]]></summary>
             <published>${post.data.pubDate.toISOString()}</published>
             <updated>${(post.data.updatedDate ?? post.data.pubDate).toISOString()}</updated>
-            <content type="xhtml"><![CDATA[`}/><HTMLFeed post={post.slug} heroImage={post.data?.hero?.modern}><Content slot="html"/></HTMLFeed><Fragment set:html={`]]></content>
+            <content type="xhtml"><![CDATA[`}/><HTMLFeed post={post.slug} heroImage={post.data?.hero?.modern} {full}><Content slot="html"/></HTMLFeed><Fragment set:html={`]]></content>
     </entry>`} />
-)})}
+    )
+})}
 <Fragment set:html={atomFooter} />

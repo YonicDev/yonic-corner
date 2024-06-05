@@ -3,6 +3,8 @@ import Component from "./Youtube.svelte";
 import FeedBranch from "./FeedBranch.astro";
 import Anchor from "./Anchor.astro";
 
+import { isRenderingFeed } from "@lib/util"
+
 interface Props {
     id: string;
     title?: string;
@@ -49,6 +51,13 @@ async function getDuration() {
     return data?.lengthSeconds ? secondsToTimestamp(data.lengthSeconds) : undefined;
 }
 
+function parseDuration(duration: typeof Astro.props.duration): string | undefined {
+    if(!duration)
+        return undefined;
+    const [mins, seconds] = duration.split(":");
+    return [mins, seconds.padStart(2, "0")].join(":");
+}
+
 title = Astro.props.title ?? ((await fetchVideoData())?.title ?? "Could not get video title");
 duration = Astro.props.duration ?? await getDuration();
 ---
@@ -59,8 +68,8 @@ duration = Astro.props.duration ?? await getDuration();
             .video-js { display: none!important }
         </style>
     </noscript>
-    <Component client:visible {instance} {id} {title} {duration} {description} />
+    { !isRenderingFeed(Astro.url) && <Component client:visible {instance} {id} {title} duration={parseDuration(duration)} {description} /> }
     <p slot="feed">
-        <b>YouTube video: </b> <Anchor href={`https://www.youtube.com/watch?v=${id}`}>{title}</Anchor> {duration && `(${duration})`}
+        <b>YouTube video: </b> <Anchor href={`https://www.youtube.com/watch?v=${id}`}>{title}</Anchor> {duration && `(${parseDuration(duration)})`}
     </p>
 </FeedBranch>

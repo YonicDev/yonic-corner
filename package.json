@@ -11,7 +11,6 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "postbuild": "node ./postbuild.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -19,7 +18,7 @@
     "@astrojs/mdx": "^3.0.0",
     "@astrojs/sitemap": "^3.1.4",
     "@astrojs/svelte": "^5.4.0",
-    "astro": "^4.8.6",
+    "astro": "^4.9.3",
     "astro-auto-import": "^0.4.2",
     "astro-mdx-code-blocks": "^0.0.6",
     "astro-seo": "^0.8.0",

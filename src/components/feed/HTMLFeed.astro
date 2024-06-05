@@ -8,16 +8,17 @@ import "@lib/styles/article.scss";
 
 interface Props {
     post: string,
-    heroImage?: ImageMetadata
+    heroImage?: ImageMetadata,
+    full: boolean,
 }
 
-const { post, heroImage } = Astro.props;
+const { post, heroImage, full } = Astro.props;
 
 let finalHtml = "";
 
 const html = await Astro.slots.render("html");
 let $ = load(html, null, false);
-const feedHtml = $(".feed-preview").html();
+const feedHtml = full? $.html() : $(".feed-preview").html();
 if(feedHtml) {
     $ = load(feedHtml, null, false);
     $("p").each(function() {

@@ -5,8 +5,6 @@ import type { GetImageResult } from "astro";
 import Layout from '@lib/layouts/Layout.astro';
 import ProfileIcon from "@lib/components/ProfileIcon.svelte";
 import MovingLogo from "@lib/components/modern/MovingLogo.svelte";
-import AtomFeed from "@lib/components/feed/AtomFeed.astro";
-import WriteFeed from "@lib/components/feed/WriteFeed.astro";
 
 import StandardSummer from "@assets/img/profile-icon/standard_summer.png"
 import StandardWinter from "@assets/img/profile-icon/standard_winter.png"
@@ -52,9 +50,6 @@ const blurb = "Welcome to your just around the corner blog."
 		</div>
 		<!--[if IE]> <p class="infobox info">You are using an old version of Internet Explorer. I've made a <a href="http://legacy.yonic.blog/">legacy version</a> of my blog specifically designed for old browsers.</p> <![endif]-->
 	</main>
-	<WriteFeed slot="feed-writer">
-		<AtomFeed slot="feed-writer"/>
-	</WriteFeed>
 </Layout>
 
 <style lang="scss">

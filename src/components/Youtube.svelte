@@ -5,7 +5,7 @@
     export let id: string;
     export let title: string;
     export let description: string | undefined;
-    export let duration: `${number}:${number}` | undefined;
+    export let duration: string | undefined;
     export let noJs = false;
 
     let iframe: HTMLIFrameElement;
@@ -25,7 +25,7 @@
     <p>
         <b><u>{title ?? "Untitled video"}</u></b>
             {#if duration}
-                <span>({duration})</span>
+                <span>({duration.padStart(2, '0')})</span>
             {/if}
         </p>
     {#if description}

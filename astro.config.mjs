@@ -54,7 +54,10 @@ export default defineConfig({
       changefreq: "weekly",
       filter: filterSitemap,
       serialize: serializeSitemap,
-      customPages: [`${site}/atom/feed.xml`]
+      customPages: [
+        `${site}/feeds/atom.xml`,
+        `${site}/feeds/atom-full.xml`,
+      ]
     })
   ],
   scopedStyleStrategy: "class",
