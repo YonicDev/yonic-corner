@@ -21,6 +21,7 @@
     "astro": "^4.9.3",
     "astro-auto-import": "^0.4.2",
     "astro-mdx-code-blocks": "^0.0.6",
+    "astro-modernizr": "^0.1.0",
     "astro-seo": "^0.8.0",
     "autoprefixer": "^10.4.14",
     "cheerio": "^1.0.0-rc.12",

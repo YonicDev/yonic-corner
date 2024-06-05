@@ -4,6 +4,8 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { loadEnv } from "vite";
 
+import modernizr from "astro-modernizr";
+
 import AutoImport from 'astro-auto-import';
 import MDXCodeBlocks, { mdxCodeBlockAutoImport } from 'astro-mdx-code-blocks';
 
@@ -49,7 +51,16 @@ export default defineConfig({
       ]
     }),
     MDXCodeBlocks(),
-    mdx(), 
+    mdx(),
+    modernizr({
+      enableJSClass: false,
+      options: ["setClasses"],
+      featureDetects: [
+        "css/flexbox",
+        "img/webp",
+        "storage/sessionstorage"
+      ]
+    }),
     sitemap({
       changefreq: "weekly",
       filter: filterSitemap,

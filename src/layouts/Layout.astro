@@ -122,6 +122,23 @@ if(noindex) {
 				document.documentElement.setAttribute("data-theme", theme);
 			}
 		</script>
+		<script is:inline>
+			function closePopup() {
+				hidePopup();
+			}
+			function hidePopup() {
+				document.getElementById("old-browser").style.display = "none";
+				sessionStorage.setItem("closed-popup", "true");
+			}
+			function autoHide() {
+				if(Modernizr.sessionstorage) {
+					if(sessionStorage.getItem("closed-popup") == "true")
+						hidePopup();
+				}
+			}
+			window.addEventListener("DOMContentLoaded", autoHide);
+			window.addEventListener("load", autoHide);
+		</script>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,400;0,650;1,400;1,650&family=Blinker:wght@600&family=Bungee&family=Fira+Code&family=Kosugi+Maru&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -129,6 +146,11 @@ if(noindex) {
 		<noscript><link rel="stylesheet" href="/static-themes/dark.css"></noscript>
 	</head>
 	<body>
+		<div id="old-browser" data-nosnippet class="unsupported">
+			<p>You're using an old browser that may not display this page correctly.</p>
+			<p>This blog contains a <a href="http://legacy.yonic.blog/">Legacy version</a> designed to work with browsers dating as far back as the late 1990s.</p>
+			<p><button onclick="closePopup()">Close</button></p>
+		</div>
 		<SiteNav />
 		<slot />
 		<Settings client:idle />
@@ -152,6 +174,29 @@ if(noindex) {
 
 <style lang="scss">
 	@use "../styles/vars.scss" as *;
+	html.no-flexbox, html.no-webp {
+		.unsupported {
+			display: block;
+		}
+	}
+	.unsupported {
+		display: none;
+		background-color: silver;
+		color: black;
+		border: 2px solid darkslategray;
+		padding: 16px;
+		text-align: justify;
+		p:first-of-type {
+			margin-top: 0;
+		}
+		p:last-child {
+			margin-bottom: 0;
+		}
+		a {
+			color: blue;
+		}
+	}
+
 	footer {
 		position: relative;
 		bottom: 0;
