@@ -10,11 +10,12 @@ export interface Props {
     singleLine?: boolean,
 }
 
-const { position = "none", alignment = "none", theme, name, singleLine = false } = Astro.props;
+const { position = "none", alignment = "none", theme, name } = Astro.props;
 
 
 let feedHtml = await Astro.slots.render("default");
 const $ = load(feedHtml, null, false); // Since this is just the inner content, we needn't remove anything around it.
+const singleLine = Astro.props.singleLine ?? $.root().children().length === 1;
 if(name && singleLine) {
     const firstLine = $("p").first();
     firstLine.html(`<b>${name}:</b> ${firstLine.html()}`);
