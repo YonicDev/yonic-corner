@@ -122,6 +122,7 @@ if(noindex) {
 				document.documentElement.setAttribute("data-theme", theme);
 			}
 		</script>
+		<script is:inline src="/js/sessionstorage.min.js"></script>
 		<script is:inline>
 			function closePopup() {
 				hidePopup();
@@ -131,13 +132,13 @@ if(noindex) {
 				sessionStorage.setItem("closed-popup", "true");
 			}
 			function autoHide() {
-				if(Modernizr.sessionstorage) {
-					if(sessionStorage.getItem("closed-popup") == "true")
+				if(window.sessionStorage) {
+					if(window.sessionStorage.getItem("closed-popup") == "true")
 						hidePopup();
 				}
 			}
+			window.onload = autoHide;
 			window.addEventListener("DOMContentLoaded", autoHide);
-			window.addEventListener("load", autoHide);
 		</script>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -146,7 +147,7 @@ if(noindex) {
 		<noscript><link rel="stylesheet" href="/static-themes/dark.css"></noscript>
 	</head>
 	<body>
-		<div id="old-browser" data-nosnippet class="unsupported">
+		<div id="old-browser" class="unsupported">
 			<p>You're using an old browser that may not display this page correctly.</p>
 			<p>This blog contains a <a href="http://legacy.yonic.blog/">Legacy version</a> designed to work with browsers dating as far back as the late 1990s.</p>
 			<p><button onclick="closePopup()">Close</button></p>
@@ -175,13 +176,13 @@ if(noindex) {
 <style lang="scss">
 	@use "../styles/vars.scss" as *;
 	html.no-flexbox, html.no-webp {
-		.unsupported {
+		div.unsupported {
 			display: block;
 		}
 	}
-	.unsupported {
+	div.unsupported {
 		display: none;
-		background-color: silver;
+		background-color: lightgrey;
 		color: black;
 		border: 2px solid darkslategray;
 		padding: 16px;
