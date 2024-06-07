@@ -122,8 +122,8 @@ if(noindex) {
 				document.documentElement.setAttribute("data-theme", theme);
 			}
 		</script>
-		<script is:inline src="/js/sessionstorage.min.js"></script>
-		<script is:inline>
+		<script is:inline src="/js/sessionstorage.min.js" defer></script>
+		<script is:inline defer>
 			function closePopup() {
 				hidePopup();
 			}
@@ -138,7 +138,6 @@ if(noindex) {
 				}
 			}
 			window.onload = autoHide;
-			window.addEventListener("DOMContentLoaded", autoHide);
 		</script>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
