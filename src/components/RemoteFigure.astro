@@ -1,0 +1,34 @@
+---
+import type { ImageOutputFormat, ImageQuality } from "astro";
+
+import { getRemoteImage, getImageDimensions } from "@lib/remote-images";
+
+interface Props {
+    src: string,
+    alt: string,
+    width?: number,
+    fallback?: "jpeg" | "jpg" | "gif" | "png"
+    formats?: ImageOutputFormat[]
+    quality?: number,
+    eager?: boolean,
+}
+
+const defaultWidth = 700;
+const {src, alt, formats = ["webp"], fallback = "jpg", quality = 70, eager = false} = Astro.props;
+const width = Astro.props.width? Math.min(defaultWidth, Astro.props.width) : defaultWidth;
+
+const cssWidth = (Astro.props.width? width : defaultWidth) + 'px';
+
+const fallbackSource = getRemoteImage({src, width, format: fallback, quality});
+const dimensions = await getImageDimensions({src: fallbackSource, width});
+---
+
+<figure class="thumbnail" style={{maxWidth: cssWidth}}>
+    <picture style="width: 100%">
+        { formats.map((format) => <source srcset={getRemoteImage({src, width, format, quality})} type={`image/${format}`} style="width: 100%; height: auto"/>)}
+        <img src={fallbackSource} width={dimensions.width} height={dimensions.height} {alt} style="width: 100%; height: auto" loading={eager? "eager" : "lazy"} decoding={eager? "sync" : "async"}/>
+    </picture>
+    <figcaption class="biyonic">
+        <slot />
+    </figcaption>
+</figure>

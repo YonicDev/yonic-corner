@@ -14,3 +14,11 @@ declare interface Category {
     baseColor: string,
     emphasisColor: string,
 }
+
+declare interface ImportMetaEnv {
+    INVIDIOUS_DEFAULT_INSTANCE: string,
+    USE_CONTENT_COLLECTION_CACHE: boolean,
+    IMGPROXY_HOST: string,
+    IMGPROXY_KEY: string,
+    IMGPROXY_SALT: string,
+}
