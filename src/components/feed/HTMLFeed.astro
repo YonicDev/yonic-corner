@@ -4,11 +4,13 @@ import type { GetImageResult } from 'astro';
 
 import {load} from 'cheerio';
 
+import { getRemoteHeroImage } from '@lib/remote-images';
+
 import "@lib/styles/article.scss";
 
 interface Props {
     post: string,
-    heroImage?: ImageMetadata,
+    heroImage?: ImageMetadata | string,
     full: boolean,
 }
 
@@ -47,9 +49,15 @@ if(feedHtml) {
     }
 }
 
-const hero = await getHeroImage();
+let hero: string | null;
+if(typeof heroImage === "string")
+    hero = getRemoteHeroImage({src: heroImage });
+else {
+    const localImage = await getHeroImage()
+    hero = localImage ? import.meta.env.SITE + localImage.src : null;
+}
 
 ---
-{hero && <figure><img alt="Cover image" src={import.meta.env.SITE + hero.src} /><figcaption></figcaption></figure>}
+{hero && <figure><img alt="Cover image" src={hero} /><figcaption></figcaption></figure>}
 <Fragment set:html={finalHtml} />
 <a href={import.meta.env.SITE + "/blog/article/" + post}>Continue reading &rarr;</a>
