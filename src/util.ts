@@ -2,23 +2,28 @@ import { getImage } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 
 import { HIDE_DRAFTS_IN_DEVELOPMENT } from "./settings";
+import { getRemoteHeroImage } from "./remote-images";
 
 export async function getHeroImages(posts: CollectionEntry<"blog">[]) {
     return await Promise.all(posts.map(async (post) => {
-        // The images can be of any supported filetype, not just PNG.
-        // But the file *has* to be an article asset named hero.png,
-        // regardless of what the image type actually is.
-        try {
-            const [year, month, id] = post.slug.split("/");
-            const imageMeta: ImageMetadata = post.data.hero?.modern ?? (year === "drafts" 
-                ? (await import(`./content/blog/${year}/${month}/hero.png`)).default
-                : (await import(`./content/blog/${year}/${month}/${id}/hero.png`)).default);
-            const processedImage = await getImage({ src: imageMeta, width: 550, height: 280, format: "webp"});
-            return Promise.resolve(processedImage.src);
-        } catch (err: any) {
-            if(!err.message.includes("Unknown variable dynamic import"))
-                console.error(err);
-            return null;
+        if(typeof post.data.hero?.modern === "string") {
+            return getRemoteHeroImage({src: post.data.hero.modern});
+        } else {
+            // The images can be of any supported filetype, not just PNG.
+            // But the file *has* to be an article asset named hero.png,
+            // regardless of what the image type actually is.
+            try {
+                const [year, month, id] = post.slug.split("/");
+                const imageMeta: ImageMetadata = post.data.hero?.modern ?? (year === "drafts" 
+                    ? (await import(`./content/blog/${year}/${month}/hero.png`)).default
+                    : (await import(`./content/blog/${year}/${month}/${id}/hero.png`)).default);
+                const processedImage = await getImage({ src: imageMeta, width: 550, height: 280, format: "webp"});
+                return Promise.resolve(processedImage.src);
+            } catch (err: any) {
+                if(!err.message.includes("Unknown variable dynamic import"))
+                    console.error(err);
+                return null;
+            }
         }
     }));    
 }
@@ -42,4 +47,13 @@ export function sortPosts(a: CollectionEntry<"blog">, b: CollectionEntry<"blog">
  */
 export function isRenderingFeed(referencePath: URL) {
     return /^\/feeds\//.test(referencePath.pathname) 
+}
+
+export function isURL(href: string | URL): href is URL {
+    try {
+        new URL(href);
+        return true;
+    } catch (_) {
+        return false;
+    }
 }

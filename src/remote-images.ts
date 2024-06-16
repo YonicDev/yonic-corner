@@ -21,8 +21,29 @@ export function getSignedUrl(href: string): string {
 export function getRemoteImage(options: {src: string, width: number, format: ImageOutputFormat, quality: number}) {
     const { src, width, format, quality } = options;
     const encodedURL = Buffer.from(src).toString("base64url");
-    const imageSrc = getSignedUrl(`${IMGPROXY_HOST}/${salt}/s:${width}/q:${quality}/${encodedURL}.${format}`);
+    const imageSrc = getSignedUrl(`${IMGPROXY_HOST}/${salt}/s:${Math.round(width)}/q:${quality}/${encodedURL}.${format}`);
     return imageSrc;
+}
+
+export function getRemoteSizedImage(options: {src: string, width: number, height: number, format: ImageOutputFormat, quality: number}) {
+    const { src, width, height, format, quality } = options;
+    const encodedURL = Buffer.from(src).toString("base64url");
+    const imageSrc = getSignedUrl(`${IMGPROXY_HOST}/${salt}/rs:fill:${Math.round(width)}:${Math.round(height)}/q:${quality}/${encodedURL}.${format}`);
+    return imageSrc;
+}
+
+export function getRemoteHeroImage(options: {src: string}) {
+    const { src } = options;
+    return getRemoteSizedImage({src, width: 550, height: 310, format: "webp", quality: 90});
+}
+
+export function getRemoteCover(options: {src: string, width: number, height: number, format?: ImageOutputFormat}) {
+    const { src, format = "webp", width, height} = options;
+    return getRemoteSizedImage({src, width, height, format, quality: 90});
+}
+
+export function getRemoteAlbumCover(src: string) {
+    return getRemoteSizedImage({src, width: 64, height: 64, format: "webp", quality: 80});
 }
 
 export async function getImageDimensions(options: {src: string, width: number}): Promise<{width: number, height?: number}> {

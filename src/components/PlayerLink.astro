@@ -4,6 +4,9 @@ import { getImage } from "astro:assets";
 
 import FeedBranch from "./FeedBranch.astro";
 
+import { isURL } from "@lib/util";
+import { getRemoteAlbumCover } from "@lib/remote-images";
+
 interface Props {
     id: string;
 }
@@ -12,8 +15,17 @@ const {id} = Astro.props;
 
 const {id: musicId, data: music} = (await getEntry('music', id))!;
 
-const coverImport = music.cover != null ? (await import(`../assets/covers/${music.cover}.png`)).default as ImageMetadata : null;
-const coverImage = coverImport != null ? await getImage({src: coverImport, width: 64, format: "jpg"}) : null;
+const coverImport = music.cover != null 
+    ? ( isURL(music.cover)
+        ? getRemoteAlbumCover(music.cover)
+        : (await import(`../assets/covers/${music.cover}.png`)).default as ImageMetadata
+    )
+    : null;
+const coverImage = coverImport != null 
+    ? ( typeof coverImport === "string"
+        ? {src: coverImport}
+        : await getImage({src: coverImport, width: 64, format: "jpg"})
+    ) : null;
 const href = `/player/${musicId.replaceAll("\\", "/")}`;
 const fields = [music.album, music.author].filter(field => field != null);
 ---

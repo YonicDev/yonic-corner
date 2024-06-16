@@ -1,6 +1,6 @@
 ---
 import { type CollectionEntry, getCollection, getEntry } from 'astro:content';
-import { getImage, Picture } from 'astro:assets';
+import { getImage, Picture, Image } from 'astro:assets';
 
 import { categories } from '@lib/settings';
 import Layout from '@lib/layouts/Layout.astro';
@@ -18,6 +18,7 @@ import Anchor from '@lib/components/Anchor.astro';
 
 import "@lib/styles/article.scss";
 import { filterPosts, sortPosts } from '@lib/util';
+import { getRemoteCover } from '@lib/remote-images';
 
 interface Props {
     post: CollectionEntry<'blog'>,
@@ -78,12 +79,23 @@ async function getHeroImage(): Promise<ImageMetadata | null> {
 const hero = post.data.hero?.modern ?? await getHeroImage();
 const series = post.data.series ? await getEntry(post.data.series.id) : null;
 
+const coverImage = hero
+    ? (
+        typeof hero === "string"
+            ? getRemoteCover({src: hero, width: 600, height: 600*9/16, format: "jpg"})
+            : `${Astro.url.protocol}//${Astro.url.host}${(await getImage({src: hero, width: 600, format: "jpg"})).src}`
+        )
+    : `${Astro.url.protocol}//${Astro.url.host}/img/seo/hero-${post.data.category}.png`;
+
 ---
 
-<Layout {...post.data} twitterCard="summary_large_image" description={post.data.description} coverImage={hero? `${Astro.url.protocol}//${Astro.url.host}${(await getImage({src: hero, width: 600, format: "jpg"})).src}` : `${Astro.url.protocol}//${Astro.url.host}/img/seo/hero-${post.data.category}.png`} openGraph={{type: "article", article: {pubDate, updatedDate, category: post.data.category, tags}}} keywords={tags}>
+<Layout {...post.data} twitterCard="summary_large_image" description={post.data.description} {coverImage} openGraph={{type: "article", article: {pubDate, updatedDate, category: post.data.category, tags}}} keywords={tags}>
     <main id="top">
         <div class="blog-article">
-            {hero && <Picture id="hero" class:list={["cover", post.data.heroPosition]} alt="Cover image" src={hero} formats={['avif', 'webp']} fallbackFormat='png' widths={[256,400,700]} height={432} loading="eager" />}
+            {hero && (typeof hero ==="string"
+                ? (<Image id="hero" class:list={["cover", post.data.heroPosition]} alt="Cover" src={getRemoteCover({src: hero, width: 700, height: 700*9/16})} width={700} height={700*9/16} loading="eager"/>)
+                : <Picture id="hero" class:list={["cover", post.data.heroPosition]} alt="Cover" src={hero} formats={['avif', 'webp']} fallbackFormat='png' widths={[256,400,700]} height={432} loading="eager" />
+            )}
             <h1>{post.data.title}{ post.data.draft && <sup>[draft]</sup>}</h1>
             <p class="metadata dates">
                 <PostIcon title="Publish date" icon="post" height={28} width={28}/>
