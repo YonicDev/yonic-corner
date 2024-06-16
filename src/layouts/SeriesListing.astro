@@ -1,34 +1,18 @@
 ---
-import { getImage } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 
 import { categories } from "@lib/settings";
+import { getHeroImages } from '@lib/util';
 
 import Tag from "@lib/components/Tag.astro";
 
 interface Props {
     posts: CollectionEntry<"blog">[],
-    baseUrl: string,
 }
 
-const { posts, baseUrl } = Astro.props;
+const { posts } = Astro.props;
 
-const heroImages = await Promise.all(posts.map(async (post) => {
-    // The images can be of any supported filetype, not just PNG.
-    // But the file *has* to be an article asset named hero.png,
-    // regardless of what the image type actually is.
-    try {
-        const [year, month, id] = post.slug.split("/");
-
-        const imageMeta: ImageMetadata = post.data.hero?.modern ?? ( year === "drafts" 
-            ? (await import(`../content/blog/${year}/${month}/hero.png`)).default
-            : (await import(`../content/blog/${year}/${month}/${id}/hero.png`)).default);
-        const processedImage = await getImage({ src: imageMeta, width: 550, height: 280, format: "webp"});
-        return Promise.resolve(processedImage.src);
-    } catch (err) {
-        return null;
-    }
-}));
+const heroImages = await getHeroImages(posts);
 
 const dateFormat = new Intl.DateTimeFormat('en-US',
 {
