@@ -2,12 +2,17 @@ import { getImage } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 
 import { HIDE_DRAFTS_IN_DEVELOPMENT } from "./settings";
-import { getRemoteHeroImage } from "./remote-images";
+import { getRemoteHeroImage, processShorthandles, type Shorthandle } from "./remote-images";
 
 export async function getHeroImages(posts: CollectionEntry<"blog">[]) {
     return await Promise.all(posts.map(async (post) => {
         if(typeof post.data.hero?.modern === "string") {
-            return getRemoteHeroImage({src: post.data.hero.modern});
+            const shorthandles: Shorthandle[] = [
+                {replaceCase: /^@local:/, value: import.meta.env.BLOG_IMAGE_ROOT + post.slug + '/'},
+                {replaceCase: /^@:/, value: import.meta.env.BLOG_IMAGE_ROOT},
+            ]
+            const src = processShorthandles(post.data.hero.modern, shorthandles)
+            return getRemoteHeroImage({src});
         } else {
             // The images can be of any supported filetype, not just PNG.
             // But the file *has* to be an article asset named hero.png,

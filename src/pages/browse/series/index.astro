@@ -8,7 +8,9 @@ import Layout from "@lib/layouts/Layout.astro";
 import Buttoner from "@lib/components/BrowseButtons.astro";
 
 import "@lib/styles/series.scss";
-import { getRemoteSizedImage } from "@lib/remote-images";
+import { getRemoteSizedImage, processShorthandles, type Shorthandle } from "@lib/remote-images";
+
+const shorthandles: Shorthandle[] = [{replaceCase: /^@:/, value: import.meta.env.BLOG_IMAGE_ROOT}]
 
 const series = await getCollection("series");
 
@@ -28,9 +30,10 @@ const description = "Ever had problems trying to locate the next part of a post?
                 series.map(async ({id, data}) => {
                     let coverImage: GetImageResult | {src: string} | undefined;
                     try {
-                        if(typeof data.hero?.modern === "string")
-                            coverImage = { src: getRemoteSizedImage({src: data.hero.modern, width: 200 * 16/9, height: 200, format: "webp", quality: 90}) }
-                        else {
+                        if(typeof data.hero?.modern === "string") {
+                            const src = processShorthandles(data.hero.modern, shorthandles);
+                            coverImage = { src: getRemoteSizedImage({src, width: 200 * 16/9, height: 200, format: "webp", quality: 90}) }
+                        } else {
                             const src = data.hero?.modern ?? (await import(`../../../assets/series/${id}.png`)).default;
                             coverImage = await getImage({src, width: 400});
                         }
