@@ -62,3 +62,16 @@ export async function getImageDimensions(options: {src: string, width: number}):
         }
     }
 }
+
+export interface Shorthandle {
+    replaceCase: RegExp,
+    value: string
+}
+
+export function processShorthandles(src: string, shorthandles: Shorthandle[]) {
+    return shorthandles.reduce((str, {replaceCase, value}) => str.replace(replaceCase, value), src)
+}
+
+export function toLocalShort(url: string) {
+    return url.split(".")[0].split("/").slice(["blog","year","id"].length,-1).join("/");
+}

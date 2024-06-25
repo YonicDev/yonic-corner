@@ -16,6 +16,8 @@ declare interface Category {
 }
 
 declare interface ImportMetaEnv {
+    BLOG_IMAGE_ROOT: string,
+    BLOG_STATIC_ROOT: string,
     INVIDIOUS_DEFAULT_INSTANCE: string,
     USE_CONTENT_COLLECTION_CACHE: boolean,
     IMGPROXY_HOST: string,

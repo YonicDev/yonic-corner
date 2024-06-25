@@ -1,7 +1,7 @@
 ---
-import type { ImageOutputFormat, ImageQuality } from "astro";
+import type { ImageOutputFormat } from "astro";
 
-import { getRemoteImage, getImageDimensions } from "@lib/remote-images";
+import { getRemoteImage, getImageDimensions, processShorthandles, type Shorthandle } from "@lib/remote-images";
 
 interface Props {
     src: string,
@@ -14,7 +14,9 @@ interface Props {
 }
 
 const defaultWidth = 700;
-const {src, alt, formats = ["webp"], fallback = "jpg", quality = 70, eager = false} = Astro.props;
+const shorthandles: Shorthandle[] = [{ replaceCase: /^@:/, value: import.meta.env.BLOG_IMAGE_ROOT }];
+const {alt, formats = ["webp"], fallback = "jpg", quality = 70, eager = false} = Astro.props;
+const src = processShorthandles(Astro.props.src, shorthandles);
 const width = Astro.props.width? Math.min(defaultWidth, Astro.props.width) : defaultWidth;
 
 const cssWidth = (Astro.props.width? width : defaultWidth) + 'px';

@@ -1,5 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
+import { processShorthandles, type Shorthandle } from "@lib/remote-images";
 
 import "@lib/styles/player.scss";
 import "@lib/styles/themes/dark-player.scss";
@@ -44,6 +45,8 @@ type ArchiveItem = {
         format: keyof typeof archiveFormats,
     }[]
 }
+
+const shorthandles: Shorthandle[] = [{ replaceCase: /^@:/, value: import.meta.env.BLOG_STATIC_ROOT }];
 
 ---
 
@@ -117,7 +120,8 @@ type ArchiveItem = {
                         return;
                     }
                 } else {
-                    return <source src={source.src} type={source.type} />
+                    const src = processShorthandles(source.src, shorthandles);
+                    return <source {src} type={source.type} />
                 }
             }) }
         </audio>
