@@ -11,23 +11,27 @@ interface Props {
     formats?: ImageOutputFormat[]
     quality?: number,
     eager?: boolean,
+    raw?: boolean,
+    fallbackSrc?: string,
 }
 
 const defaultWidth = 700;
 const shorthandles: Shorthandle[] = [{ replaceCase: /^@:/, value: import.meta.env.BLOG_IMAGE_ROOT }];
-const {alt, formats = ["webp"], fallback = "jpg", quality = 70, eager = false} = Astro.props;
+const {alt, formats = ["webp"], fallback = "jpg", quality = 70, eager = false, raw = false} = Astro.props;
 const src = processShorthandles(Astro.props.src, shorthandles);
 const width = Astro.props.width? Math.min(defaultWidth, Astro.props.width) : defaultWidth;
 
 const cssWidth = (Astro.props.width? width : defaultWidth) + 'px';
-
-const fallbackSource = getRemoteImage({src, width, format: fallback, quality});
+const fallbackSource = raw
+    ? processShorthandles(Astro.props.fallbackSrc ?? Astro.props.src, shorthandles)
+    : getRemoteImage({src, width, format: fallback, quality});
 const dimensions = await getImageDimensions({src: fallbackSource, width});
+console.log(src);
 ---
 
 <figure class="thumbnail" style={{maxWidth: cssWidth}}>
     <picture style="width: 100%">
-        { formats.map((format) => <source srcset={getRemoteImage({src, width, format, quality})} type={`image/${format}`} style="width: 100%; height: auto"/>)}
+        { formats.map((format) => <source srcset={raw? src : getRemoteImage({src, width, format, quality})} type={`image/${format}`} style="width: 100%; height: auto"/>)}
         <img src={fallbackSource} width={dimensions.width} height={dimensions.height} {alt} style="width: 100%; height: auto" loading={eager? "eager" : "lazy"} decoding={eager? "sync" : "async"}/>
     </picture>
     <figcaption class="biyonic">
