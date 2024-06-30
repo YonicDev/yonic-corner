@@ -48,3 +48,5 @@ export const categories: Record<CategoryId, Category> = {
         emphasisColor: "#003A1E",
     }
 }
+
+export const INFER_REMOTE_IMAGE_SIZE = false;

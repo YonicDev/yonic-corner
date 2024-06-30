@@ -2,6 +2,7 @@
 import type { ImageOutputFormat } from "astro";
 
 import { getRemoteImage, getImageDimensions, processShorthandles, type Shorthandle } from "@lib/remote-images";
+import { INFER_REMOTE_IMAGE_SIZE } from "@lib/settings";
 
 interface Props {
     src: string,
@@ -25,8 +26,7 @@ const cssWidth = (Astro.props.width? width : defaultWidth) + 'px';
 const fallbackSource = raw
     ? processShorthandles(Astro.props.fallbackSrc ?? Astro.props.src, shorthandles)
     : getRemoteImage({src, width, format: fallback, quality});
-const dimensions = await getImageDimensions({src: fallbackSource, width});
-console.log(src);
+const dimensions: {width?: number, height?: number} = INFER_REMOTE_IMAGE_SIZE ? await getImageDimensions({src: fallbackSource, width}) : {width: undefined, height: undefined};
 ---
 
 <figure class="thumbnail" style={{maxWidth: cssWidth}}>
