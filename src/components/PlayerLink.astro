@@ -5,7 +5,7 @@ import { getImage } from "astro:assets";
 import FeedBranch from "./FeedBranch.astro";
 
 import { isURL } from "@lib/util";
-import { getRemoteAlbumCover } from "@lib/remote-images";
+import { getRemoteAlbumCover, processShorthandles, type Shorthandle } from "@lib/remote-images";
 
 interface Props {
     id: string;
@@ -15,9 +15,14 @@ const {id} = Astro.props;
 
 const {id: musicId, data: music} = (await getEntry('music', id))!;
 
-const coverImport = music.cover != null 
-    ? ( isURL(music.cover)
-        ? getRemoteAlbumCover(music.cover)
+const shorthandles: Shorthandle[] = [
+    { replaceCase: /^@:/, value: import.meta.env.BLOG_MUSIC_COVER_ROOT }
+]
+
+const coverSrc = music.cover ? processShorthandles(music.cover, shorthandles) : undefined
+const coverImport = coverSrc
+    ? ( isURL(coverSrc)
+        ? getRemoteAlbumCover(coverSrc)
         : (await import(`../assets/covers/${music.cover}.png`)).default as ImageMetadata
     )
     : null;
