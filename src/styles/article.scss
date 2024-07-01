@@ -59,6 +59,13 @@ main {
         width: 100%;
         height: auto;
     }
+
+    .twitter-tweet-rendered {
+        margin: 10px auto;
+        iframe {
+            color-scheme: light;
+        }
+    }
 }
 
 .navigator {

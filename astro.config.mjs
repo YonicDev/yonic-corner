@@ -58,7 +58,8 @@ export default defineConfig({
       featureDetects: [
         "css/flexbox",
         "img/webp",
-        "storage/sessionstorage"
+        "storage/sessionstorage",
+        "es6/promises",
       ]
     }),
     sitemap({

@@ -7,7 +7,7 @@ const { tag, total } = Astro.props;
 ---
 
 <a class:list={[tag, "tag", total? "with-count" : undefined]} href={`/browse/tags/${tag}/1`}>
-    <div class="label biyonic-string">{tag.replace("-", " ")}</div>
+    <div class="label biyonic-string">{tag.replaceAll("-", " ")}</div>
     { total && <div class="count">{total}</div> }
 </a>
 
