@@ -75,3 +75,10 @@ export function processShorthandles(src: string, shorthandles: Shorthandle[]) {
 export function toLocalShort(url: string) {
     return url.split(".")[0].split("/").slice(["blog","year","id"].length,-1).join("/");
 }
+
+export function getSeriesShorthandles(seriesId: string): Shorthandle[] {
+    return [
+        { replaceCase: /@id/, value: seriesId },
+        { replaceCase: /^@series:/, value: import.meta.env.BLOG_IMAGE_ROOT + 'series-legacy/' }
+    ]
+}

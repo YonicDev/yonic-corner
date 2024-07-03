@@ -12,7 +12,7 @@ import Buttoner from "@lib/components/BrowseButtons.astro";
 
 import "@lib/styles/series.scss";
 import "@lib/styles/rainbow.scss";
-import { getRemoteSizedImage, processShorthandles, type Shorthandle } from "@lib/remote-images";
+import { getRemoteSizedImage, getSeriesShorthandles, processShorthandles, type Shorthandle } from "@lib/remote-images";
 
 export const getStaticPaths = async() => {
     const series = await getCollection("series");
@@ -39,14 +39,16 @@ const { series: seriesId } = Astro.params;
 const rainbowColors = ["#078D70","#26CEAA","#98E8C1","white","#7BADE2","#5049CC","#3D1A78"]
 const bowrainColors = [...rainbowColors].reverse();
 
-const shorthandles: Shorthandle[] = [{replaceCase: /^@:/, value: import.meta.env.BLOG_IMAGE_ROOT}]
-
 let imageMeta: ImageMetadata | undefined;
 let processedImage: GetImageResult | {src: string} | undefined;
 
 if(seriesId) {
     try {
         if(typeof series.hero?.modern === "string") {
+            const shorthandles: Shorthandle[] = [
+                ...getSeriesShorthandles(seriesId),
+                {replaceCase: /^@:/, value: import.meta.env.BLOG_IMAGE_ROOT}
+            ]
             const src = processShorthandles(series.hero.modern, shorthandles);
             processedImage = {src: getRemoteSizedImage({src, width: 800, height: 450, format: "webp", quality: 80})}
         } else {
