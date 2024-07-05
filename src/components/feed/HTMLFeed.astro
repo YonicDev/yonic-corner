@@ -4,7 +4,7 @@ import type { GetImageResult } from 'astro';
 
 import {load} from 'cheerio';
 
-import { getRemoteHeroImage } from '@lib/remote-images';
+import { getRemoteHeroImage, processShorthandles, type Shorthandle } from '@lib/remote-images';
 
 import "@lib/styles/article.scss";
 
@@ -50,9 +50,14 @@ if(feedHtml) {
 }
 
 let hero: string | null;
-if(typeof heroImage === "string")
-    hero = getRemoteHeroImage({src: heroImage });
-else {
+if(typeof heroImage === "string") {
+    const shorthandles: Shorthandle[] = [
+        {replaceCase: /^@local:/, value: import.meta.env.BLOG_IMAGE_ROOT + post + '/'},
+        {replaceCase: /^@:/, value: import.meta.env.BLOG_IMAGE_ROOT },
+    ]
+    const src = processShorthandles(heroImage, shorthandles)
+    hero = getRemoteHeroImage({src});
+} else {
     const localImage = await getHeroImage()
     hero = localImage ? import.meta.env.SITE + localImage.src : null;
 }
