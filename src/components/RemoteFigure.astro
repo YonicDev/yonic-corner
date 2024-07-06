@@ -1,7 +1,7 @@
 ---
 import type { ImageOutputFormat } from "astro";
 
-import { getRemoteImage, getImageDimensions, processShorthandles, type Shorthandle } from "@lib/remote-images";
+import { getRemoteImage, generateSourceset, getImageDimensions, processShorthandles, type Shorthandle } from "@lib/remote-images";
 import { INFER_REMOTE_IMAGE_SIZE } from "@lib/settings";
 
 interface Props {
@@ -9,7 +9,8 @@ interface Props {
     alt: string,
     width?: number,
     fallback?: "jpeg" | "jpg" | "gif" | "png"
-    formats?: ImageOutputFormat[]
+    formats?: ImageOutputFormat[],
+    sizes?: number[],
     quality?: number,
     eager?: boolean,
     raw?: boolean,
@@ -18,7 +19,7 @@ interface Props {
 
 const defaultWidth = 700;
 const shorthandles: Shorthandle[] = [{ replaceCase: /^@:/, value: import.meta.env.BLOG_IMAGE_ROOT }];
-const {alt, formats = ["webp"], fallback = "jpg", quality = 70, eager = false, raw = false} = Astro.props;
+const {alt, formats = ["webp"], fallback = "jpg", quality = 70, eager = false, raw = false, sizes = [0.25, 0.5, 1/1.5, 1]} = Astro.props;
 const src = processShorthandles(Astro.props.src, shorthandles);
 const width = Astro.props.width? Math.min(defaultWidth, Astro.props.width) : defaultWidth;
 
@@ -27,12 +28,13 @@ const fallbackSource = raw
     ? processShorthandles(Astro.props.fallbackSrc ?? Astro.props.src, shorthandles)
     : getRemoteImage({src, width, format: fallback, quality});
 const dimensions: {width?: number, height?: number} = INFER_REMOTE_IMAGE_SIZE ? await getImageDimensions({src: fallbackSource, width}) : {width: undefined, height: undefined};
+const viewportSizes = "(min-width: 1920px) 700px, (min-width: 1024px) 66vw, (min-width: 800px) 90vw, 50vw"
 ---
 
 <figure class="thumbnail" style={{maxWidth: cssWidth}}>
     <picture style="width: 100%">
-        { formats.map((format) => <source srcset={raw? src : getRemoteImage({src, width, format, quality})} type={`image/${format}`} style="width: 100%; height: auto"/>)}
-        <img src={fallbackSource} width={dimensions.width} height={dimensions.height} {alt} style="width: 100%; height: auto" loading={eager? "eager" : "lazy"} decoding={eager? "sync" : "async"}/>
+        { formats.map((format) => <source srcset={raw? src : generateSourceset({src, width, format, quality, sizes})} sizes={viewportSizes} type={`image/${format}`} style="width: 100%; height: auto"/>)}
+        <img srcset={raw? src : generateSourceset({src, width, format: fallback, quality, sizes})} sizes={viewportSizes} src={fallbackSource} width={dimensions.width} height={dimensions.height} {alt} style="width: 100%; height: auto" loading={eager? "eager" : "lazy"} decoding={eager? "sync" : "async"}/>
     </picture>
     <figcaption class="biyonic">
         <slot />
