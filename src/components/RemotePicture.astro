@@ -1,0 +1,42 @@
+---
+import type { ImageOutputFormat } from "astro";
+
+import { getRemoteImage, generateSourceset, getImageDimensions, processShorthandles, type Shorthandle } from "@lib/remote-images";
+import { INFER_REMOTE_IMAGE_SIZE } from "@lib/settings";
+
+interface Props {
+    id?: string,
+    "class:list"?: (string|undefined)[],
+    src: string,
+    alt: string,
+    width?: number,
+    height?: number,
+    sizes?: number[]
+    fallback?: "jpeg" | "jpg" | "gif" | "png"
+    formats?: ImageOutputFormat[]
+    quality?: number,
+    eager?: boolean,
+    raw?: boolean,
+    fallbackSrc?: string,
+}
+
+const defaultWidth = 700;
+const shorthandles: Shorthandle[] = [{ replaceCase: /^@:/, value: import.meta.env.BLOG_IMAGE_ROOT }];
+const {id, alt, formats = ["webp"], fallback = "jpg", quality = 70, eager = false, raw = false, sizes = [0.25, 0.5, 1/1.5, 1], height} = Astro.props;
+const src = processShorthandles(Astro.props.src, shorthandles);
+const width = Astro.props.width? Math.min(defaultWidth, Astro.props.width) : defaultWidth;
+
+const cssWidth = (Astro.props.width? width : defaultWidth) + 'px';
+const fallbackSource = raw
+    ? processShorthandles(Astro.props.fallbackSrc ?? Astro.props.src, shorthandles)
+    : getRemoteImage({src, width, format: fallback, quality});
+const dimensions: {width?: number, height?: number} = height
+    ? { width, height }
+    : (INFER_REMOTE_IMAGE_SIZE ? await getImageDimensions({src: fallbackSource, width}) : {width: undefined, height: undefined});
+const viewportSizes = "(min-width: 1920px) 700px, (min-width: 1024px) 66vw, (min-width: 800px) 90vw, 50vw"
+---
+
+<picture class:list={Astro.props["class:list"]} {id} style={{width: "100%", maxWidth: cssWidth}}>
+    { formats.map((format) => <source srcset={raw? src : generateSourceset({src, width, sizes, format, quality})} sizes={viewportSizes} type={`image/${format}`} style="width: 100%; height: auto" />)}
+    <img src={fallbackSource} srcset={raw? fallbackSource : generateSourceset({src, width, sizes, format: fallback, quality})} sizes={viewportSizes} width={dimensions.width} height={dimensions.height} {alt} style="width: 100%; height: auto" loading={eager? "eager" : "lazy"} decoding={eager? "sync" : "async"} fetchpriority={eager? "high" : "auto"}/>
+</picture>

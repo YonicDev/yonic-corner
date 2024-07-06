@@ -32,6 +32,11 @@ export function getRemoteSizedImage(options: {src: string, width: number, height
     return imageSrc;
 }
 
+export function generateSourceset(options: {src: string, sizes: number[], width: number, format: ImageOutputFormat, quality: number}) {
+    const { sizes, width } = options;
+    return sizes.map(size => `${getRemoteImage(options)} ${width*size}w`).join(", ");
+}
+
 export function getRemoteHeroImage(options: {src: string}) {
     const { src } = options;
     return getRemoteSizedImage({src, width: 550, height: 310, format: "webp", quality: 90});

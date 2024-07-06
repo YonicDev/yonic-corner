@@ -15,6 +15,7 @@ import Paragraph from '@lib/components/biyonic/Paragraph.astro';
 import ListItem from '@lib/components/biyonic/ListItem.astro';
 import Code from '@lib/components/biyonic/Code.astro';
 import Anchor from '@lib/components/Anchor.astro';
+import RemotePicture from '@lib/components/RemotePicture.astro';
 
 import "@lib/styles/article.scss";
 import { filterPosts, sortPosts } from '@lib/util';
@@ -97,7 +98,7 @@ const coverImage = hero
     <main id="top">
         <div class="blog-article">
             {hero && (typeof hero ==="string"
-                ? (<Image id="hero" class:list={["cover", post.data.heroPosition]} alt="Cover" src={getRemoteCover({src: processShorthandles(hero, shorthandles), width: 700, height: 700*9/16})} width={700} height={700*9/16} loading="eager"/>)
+                ? (<RemotePicture id="hero" class:list={["cover", post.data.heroPosition]} alt="Cover" src={getRemoteCover({src: processShorthandles(hero, shorthandles), width: 700, height: 700*9/16})} width={700} height={700*9/16} eager/>)
                 : <Picture id="hero" class:list={["cover", post.data.heroPosition]} alt="Cover" src={hero} formats={['avif', 'webp']} fallbackFormat='png' widths={[256,400,700]} height={432} loading="eager" />
             )}
             <h1>{post.data.title}{ post.data.draft && <sup>[draft]</sup>}</h1>
