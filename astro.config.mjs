@@ -14,6 +14,7 @@ import absent from "./src/assets/code-themes/absent-light.json";
 import readingTime from './src/remark/reading-time.mjs';
 
 import { filterSitemap, serializeSitemap } from './src/sitemap-config';
+import { remoteImageManifest } from './src/integrations/remote-manifest';
 
 const site = "https://www.yonic.blog"
 
@@ -70,7 +71,8 @@ export default defineConfig({
         `${site}/feeds/atom.xml`,
         `${site}/feeds/atom-full.xml`,
       ]
-    })
+    }),
+    remoteImageManifest(),
   ],
   scopedStyleStrategy: "class",
   redirects: {

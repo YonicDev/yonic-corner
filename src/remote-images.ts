@@ -6,6 +6,10 @@ const { IMGPROXY_HOST, IMGPROXY_KEY, IMGPROXY_SALT } = import.meta.env;
 
 const salt = Buffer.from(IMGPROXY_SALT, "hex").toString();
 
+function addToRemoteManifest(imageUrl: string) {
+    (globalThis as any).remoteImageManifest?.push(imageUrl);
+}
+
 export function getSignedUrl(href: string): string {
     try {
         const url = new URL(href);
@@ -22,6 +26,7 @@ export function getRemoteImage(options: {src: string, width: number, format: Ima
     const { src, width, format, quality } = options;
     const encodedURL = Buffer.from(src).toString("base64url");
     const imageSrc = getSignedUrl(`${IMGPROXY_HOST}/${salt}/s:${Math.round(width)}/q:${quality}/${encodedURL}.${format}`);
+    addToRemoteManifest(imageSrc);
     return imageSrc;
 }
 
@@ -29,6 +34,7 @@ export function getRemoteSizedImage(options: {src: string, width: number, height
     const { src, width, height, format, quality } = options;
     const encodedURL = Buffer.from(src).toString("base64url");
     const imageSrc = getSignedUrl(`${IMGPROXY_HOST}/${salt}/rs:fill:${Math.round(width)}:${Math.round(height)}/q:${quality}/${encodedURL}.${format}`);
+    addToRemoteManifest(imageSrc);
     return imageSrc;
 }
 
