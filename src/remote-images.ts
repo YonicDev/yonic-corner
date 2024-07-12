@@ -56,8 +56,8 @@ export async function getImageDimensions(options: {src: string, width: number}):
     try {
         const image = (await getImage({src, width, inferSize: true}));
         return {
-            width: image.attributes.width,
-            height: image.attributes.height
+            width: Math.round(image.attributes.width),
+            height: Math.round(image.attributes.height)
         }
     } catch (e) {
         console.error(e);
