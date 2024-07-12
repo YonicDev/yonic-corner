@@ -37,9 +37,9 @@ export function generateSourceset(options: {src: string, sizes: number[], width:
     return sizes.map(size => `${getRemoteImage({...options, width: width*size})} ${Math.round(width*size)}w`).join(", ");
 }
 
-export function getRemoteHeroImage(options: {src: string}) {
-    const { src } = options;
-    return getRemoteSizedImage({src, width: 550, height: 310, format: "webp", quality: 90});
+export function getRemoteHeroImage(options: {src: string, format?: ImageOutputFormat}) {
+    const { src, format = "webp" } = options;
+    return getRemoteSizedImage({src, width: 550, height: 310, format, quality: 90});
 }
 
 export function getRemoteCover(options: {src: string, width: number, height: number, format?: ImageOutputFormat}) {

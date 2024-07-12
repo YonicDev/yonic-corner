@@ -38,5 +38,5 @@ const viewportSizes = "(min-width: 1920px) 700px, (min-width: 1024px) 66vw, (min
 
 <picture class:list={Astro.props["class:list"]} {id}>
     { formats.map((format) => <source srcset={raw? src : generateSourceset({src, width, sizes, format, quality})} sizes={viewportSizes} type={`image/${format}`} />)}
-    <img src={fallbackSource} srcset={raw? fallbackSource : generateSourceset({src, width, sizes, format: fallback, quality})} sizes={viewportSizes} width={dimensions.width} height={dimensions.height} {alt} style={{width: "100%", maxWidth: cssWidth, height: "auto"}}  loading={eager? "eager" : "lazy"} decoding={eager? "sync" : "async"} fetchpriority={eager? "high" : "auto"}/>
+    <img src={fallbackSource} srcset={raw? fallbackSource : generateSourceset({src, width, sizes, format: fallback, quality})} sizes={viewportSizes} width={dimensions.width} height={dimensions.height} {alt} style={{width: "100%", maxWidth: cssWidth, height: "auto", aspectRatio: id === "hero"? "16 / 9": undefined, objectFit: id === "hero"? "cover" : undefined}}  loading={eager? "eager" : "lazy"} decoding={eager? "sync" : "async"} fetchpriority={eager? "high" : "auto"}/>
 </picture>

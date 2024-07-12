@@ -56,7 +56,7 @@ if(typeof heroImage === "string") {
         {replaceCase: /^@:/, value: import.meta.env.BLOG_IMAGE_ROOT },
     ]
     const src = processShorthandles(heroImage, shorthandles)
-    hero = getRemoteHeroImage({src});
+    hero = getRemoteHeroImage({src, format: "jpg"});
 } else {
     const localImage = await getHeroImage()
     hero = localImage ? import.meta.env.SITE + localImage.src : null;
