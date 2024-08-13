@@ -12,16 +12,14 @@ const posts = (await getCollection('blog')).filter(filterPosts).sort(sortPosts)
 
 const heroImages = await getHeroImages(posts);
 
-//Math.ceil won't guarantee that last page will be Page 1.
-const lastPage = Math.floor(posts.length/(BLOG_PAGE_SIZE+1))+1;
-
-posts.length = BLOG_PAGE_SIZE;
+//Math.ceil won't lead to Page 1 if there are no posts.
+const lastPage = posts.length > 0 ? Math.ceil(posts.length/BLOG_PAGE_SIZE) : 1;
 
 ---
 
 <Layout title="All posts" description="Browse all the posts from my blog." keywords={["blog", "posts", "navigation", "list", "index"]}>
     <main class="main-container">
         <CategoryButtons />
-        <PostListing posts={posts} {heroImages} currentPage={1} lastPage={lastPage} baseUrl="/blog" />
+        <PostListing posts={posts.slice(0, BLOG_PAGE_SIZE)} {heroImages} currentPage={1} {lastPage} baseUrl="/blog" />
     </main>
 </Layout>
