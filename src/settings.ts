@@ -49,4 +49,4 @@ export const categories: Record<CategoryId, Category> = {
     }
 }
 
-export const INFER_REMOTE_IMAGE_SIZE = false;
+export const INFER_REMOTE_IMAGE_SIZE = true;
