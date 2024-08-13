@@ -52,4 +52,4 @@ const hero = await getHeroImage();
 ---
 {hero && <figure><img alt="Cover image" src={import.meta.env.SITE + hero.src} /><figcaption></figcaption></figure>}
 <Fragment set:html={finalHtml} />
-<a href={import.meta.env.SITE + "/blog/article/" + post}>Continue reading &rarr;</a>
+{ !full && <a href={import.meta.env.SITE + "/blog/article/" + post}>Continue reading &rarr;</a> }
