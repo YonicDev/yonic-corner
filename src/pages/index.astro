@@ -30,6 +30,11 @@ const blurb = "Welcome to your just around the corner blog."
 ---
 
 <Layout title={`Welcome to ${websiteText}`}>
+	{
+		Object.values(profileImages).flatMap((set) => {
+			return Object.values(set).map((image) => (<link slot="head" href={image.src} rel="preload" fetchpriority="high" as="image" type={`image/${image.rawOptions.format!}`}/>))
+		})
+	}
 	<main class="main-wrapper">
 		<div>
 			<ProfileIcon images={profileImages} client:load />
