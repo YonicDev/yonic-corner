@@ -90,6 +90,6 @@ export function toLocalShort(url: string) {
 export function getSeriesShorthandles(seriesId: string): Shorthandle[] {
     return [
         { replaceCase: /@id/, value: seriesId },
-        { replaceCase: /^@series:/, value: import.meta.env.BLOG_IMAGE_ROOT + 'series-legacy/' }
+        { replaceCase: /^@series:/, value: import.meta.env.BLOG_IMAGE_ROOT + 'series/' }
     ]
 }
