@@ -60,7 +60,6 @@ export default defineConfig({
         "css/flexbox",
         "img/webp",
         "storage/sessionstorage",
-        "es6/promises",
       ]
     }),
     sitemap({
