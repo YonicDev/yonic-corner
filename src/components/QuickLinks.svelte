@@ -1,20 +1,25 @@
 <script lang="ts">
     import type { CollectionEntry } from "astro:content";
+    import type { CategoryId } from "@lib/settings"
 
     export let prev: CollectionEntry<"blog"> | null = null;
     export let next: CollectionEntry<"blog"> | null = null;
     export let series: string = "All posts";
     export let seriesUrl: string = "/blog";
-    export let category: string = "all";
+    export let category: CategoryId | "all" | "series" = "all";
 
-    // const { prev, next, series = "All posts", seriesUrl="/blog", category } = Astro.props
+    const labels: Record<string, {previous: string, next: string}> = {
+        series: { previous: "PREV", next: "NEXT" },
+        default: { previous: "NEWER", next: "OLDER"}
+    }
+    const labelType = category === "series" ? "series" : "default";
 </script>
 
 <div class="navigator {category}">
     <div class="page">
         {#if prev}
             <a href={`/blog/article/${prev.slug}`}>
-                <b>&larr; PREV</b>
+                <b>&larr;&nbsp;{labels[labelType].previous}</b>
                 <span class="title" style="justify-content: flex-start">{prev.data.title}{#if prev.data.draft}<sup>[draft]</sup>{/if}</span>
             </a>
         {/if}
@@ -23,7 +28,7 @@
     <div class="page" style="text-align: right">
         {#if next}
             <a href={`/blog/article/${next.slug}`}>
-                <b>NEXT &rarr;</b>
+                <b>{labels[labelType].next}&nbsp;&rarr;</b>
                 <span class="title" style="justify-content: flex-end">{next.data.title}{#if next.data.draft}<sup>[draft]</sup>{/if}</span>
             </a>
         {/if}

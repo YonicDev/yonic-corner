@@ -19,7 +19,7 @@
 </script>
 
 <div class="video-wrapper{noJs? "": " video-js"}">
-    <iframe bind:this={iframe} class="video-player" title="Video player" src={noJs? src : "/video-placeholder/"}></iframe>
+    <iframe bind:this={iframe} class="video-player" title="Video player" src={noJs? src : "/video-placeholder/"} allow="fullscreen;autoplay 'none'"></iframe>
 </div>
 <div class="videoCaption{noJs? "": " video-js"}">
     <p>
