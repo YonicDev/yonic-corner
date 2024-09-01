@@ -1,5 +1,5 @@
 ---
-import Code from './_internal/Code.astro';
+import { Code } from "astro:components";
 import type { BuiltinLanguage, LanguageRegistration, SpecialLanguage } from 'shiki';
 
 import { getIconForFile } from 'vscode-icons-js';
@@ -33,36 +33,36 @@ const iconSize = 16;
     {
         filename && filename !== "-" &&
         <span class="filename">
-            <img width={iconSize} height={iconSize} alt={(lang as string) ?? "plaintext"} src={`/img/icons/filetypes/${getIconForFile(filename)}`} class="icon" />
+            <img width={iconSize} height={iconSize} alt={(lang as string) ?? "plaintext"} src={`/img/icons/filetypes/${(meta?.icon + ".svg") ?? getIconForFile(filename)}`} class="icon" />
             {filename}
         </span>
     }
     <div>
-        <Code {code} {lang} {transformers} theme="min-light" meta={meta as Record<string, string|undefined>} />
+        <Code {code} {lang} {transformers} theme="min-light" meta={JSON.stringify(meta)} />
     </div>
 </div>
 <div class="code-block dark" data-button-label={buttonLabel}>
     {
         filename && filename !== "-" &&
         <span class="filename">
-            <img width={iconSize} height={iconSize} alt={(lang as string) ?? "plaintext"} src={`/img/icons/filetypes/${getIconForFile(filename)}`} class="icon" />
+            <img width={iconSize} height={iconSize} alt={(lang as string) ?? "plaintext"} src={`/img/icons/filetypes/${meta.icon != null ? `${meta.icon}.svg` : getIconForFile(filename)}`} class="icon" />
             {filename}
         </span>
     }
     <div>
-        <Code {code} {lang} {transformers} theme="poimandres" meta={meta as Record<string, string|undefined>}/>
+        <Code {code} {lang} {transformers} theme="poimandres" meta={JSON.stringify(meta)}/>
     </div>
 </div>
 <div class="code-block legacy" data-button-label={buttonLabel}>
     {
         filename && filename !== "-" &&
         <span class="filename">
-            <span class="icon"></span>
+            <img width={iconSize} height={iconSize} alt={(lang as string) ?? "plaintext"} src={`/img/icons/filetypes/${meta.icon != null ? `${meta.icon}.svg` : getIconForFile(filename)}`} class="icon" />
             {filename}
         </span>
     }
     <div>
-        <Code {code} {lang} {transformers} theme="min-dark" meta={meta as Record<string, string|undefined>}/>
+        <Code {code} {lang} {transformers} theme="min-dark" meta={JSON.stringify(meta)}/>
     </div>
 </div>
 

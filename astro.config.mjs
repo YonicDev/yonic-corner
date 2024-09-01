@@ -77,7 +77,6 @@ export default defineConfig({
   },
   experimental: {
     contentCollectionCache: (USE_CONTENT_COLLECTION_CACHE === "true") ?? false,
-    contentCollectionJsonSchema: true,
   },
   vite: {
     build: {
