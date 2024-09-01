@@ -9,6 +9,8 @@ import modernizr from "astro-modernizr";
 import AutoImport from 'astro-auto-import';
 import MDXCodeBlocks, { mdxCodeBlockAutoImport } from 'astro-mdx-code-blocks';
 
+import compressor from "astro-compressor";
+
 import absent from "./src/assets/code-themes/absent-light.json";
 
 import readingTime from './src/remark/reading-time.mjs';
@@ -19,7 +21,8 @@ import { remoteImageManifest } from './src/integrations/remote-manifest';
 const site = "https://www.yonic.blog"
 
 const {
-  USE_CONTENT_COLLECTION_CACHE
+  USE_CONTENT_COLLECTION_CACHE,
+  USE_SITE_COMPRESSION,
 } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
 // https://astro.build/config
@@ -70,6 +73,11 @@ export default defineConfig({
         `${site}/feeds/atom.xml`,
         `${site}/feeds/atom-full.xml`,
       ]
+    }),
+    USE_SITE_COMPRESSION === "true" && compressor({
+      gzip: true,
+      brotli: true,
+      fileExtensions: [".html", ".js", ".css", ".xml", ".json"]
     }),
     remoteImageManifest(),
   ],
