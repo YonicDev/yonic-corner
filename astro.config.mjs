@@ -9,6 +9,8 @@ import modernizr from "astro-modernizr";
 import AutoImport from 'astro-auto-import';
 import MDXCodeBlocks, { mdxCodeBlockAutoImport } from 'astro-mdx-code-blocks';
 
+import compressor from "astro-compressor";
+
 import absent from "./src/assets/code-themes/absent-light.json";
 
 import readingTime from './src/remark/reading-time.mjs';
@@ -69,7 +71,13 @@ export default defineConfig({
         `${site}/feeds/atom.xml`,
         `${site}/feeds/atom-full.xml`,
       ]
-    })
+    }),
+    compressor({
+      gzip: true,
+      brotli: true,
+      fileExtensions: [".html", ".js", ".css", ".xml", ".json"]
+    }),
+    remoteImageManifest(),
   ],
   scopedStyleStrategy: "class",
   redirects: {

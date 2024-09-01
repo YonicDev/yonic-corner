@@ -20,6 +20,7 @@
     "@astrojs/svelte": "^5.7.0",
     "astro": "^4.15.1",
     "astro-auto-import": "^0.4.2",
+    "astro-compressor": "^0.4.1",
     "astro-mdx-code-blocks": "^0.0.6",
     "astro-modernizr": "^0.1.0",
     "astro-seo": "^0.8.0",
