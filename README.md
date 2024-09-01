@@ -67,6 +67,7 @@ Additionally, the blog uses the following environment variables:
 
 * `INVIDIOUS_DEFAULT_INSTANCE`: URL to an Invidious instance to be used by default.
 * `USE_CONTENT_COLLECTION_CACHE`: Whether to use the Astro experimental feature of content collection cache. By default it's set to false.
+* `USE_SITE_COMPRESSION`: Whether to generate a compressed version of the site (gzip and brotli). By default it won't compress the site.
 
 ## Content
 

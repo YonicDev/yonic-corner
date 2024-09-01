@@ -20,7 +20,8 @@ import { filterSitemap, serializeSitemap } from './src/sitemap-config';
 const site = "https://www.yonic.blog"
 
 const {
-  USE_CONTENT_COLLECTION_CACHE
+  USE_CONTENT_COLLECTION_CACHE,
+  USE_SITE_COMPRESSION,
 } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
 // https://astro.build/config
@@ -72,7 +73,7 @@ export default defineConfig({
         `${site}/feeds/atom-full.xml`,
       ]
     }),
-    compressor({
+    USE_SITE_COMPRESSION === "true" && compressor({
       gzip: true,
       brotli: true,
       fileExtensions: [".html", ".js", ".css", ".xml", ".json"]
