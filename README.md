@@ -68,6 +68,8 @@ Additionally, the blog uses the following environment variables:
 * `INVIDIOUS_DEFAULT_INSTANCE`: URL to an Invidious instance to be used by default.
 * `USE_CONTENT_COLLECTION_CACHE`: Whether to use the Astro experimental feature of content collection cache. By default it's set to false.
 
+There are more environment variables involved in [remote asset handling](#remote-assets).
+
 ## Content
 
 The Yonic Corner uses Astro content collections for handling the actual content of the blog. In 2.3.0, [JSON schemas](https://json-schema.org/) are generated automatically to aid in the creation of data content files.
@@ -109,7 +111,8 @@ MDX posts have some components that are already imported, and can be used right 
 
 * `<TextBubble>`: Creates a comic-like text bubble.
 * `<Chara>`: Displays a character sprite. Used with `<TextBubble>`.
-* `<Figure>`: Displays an image with art direction with an optional `<figcaption>`. This component has no slots.
+* `<Figure>`: Displays an image inside a frame with art direction with an optional `<figcaption>` as a slot. `<RemoteFigure>` can be used for remote assets.
+* `<Picture>`: Similar to `<Figure>` but just the image and art direction, without any slots. `<RemotePicture>` can be used for remote assets.
 * `<PlayerLink>`: Displays a link to play music on the player. This component has no slots.
 * `<VersionBranch>`: Splits rendering between this version (Modern) and the [Legacy Version][1]. Anything with the `slot` prop assigned to `modern` will be rendered in this version, while anything in the `legacy` slot will be rendered in the Legacy one.
 * `<Ruby>`: adds [ruby text](https://en.wikipedia.org/wiki/Ruby_character) to the text in the `text` prop. The text in the `ruby` prop will be displayed as ruby characters. Both of them are arrays of strings, one `ruby` text per string of characters in the `text` array. This component has no slots.
@@ -222,9 +225,9 @@ Just an URL pointing directly to the source. If you self-host the source, this i
 
 | Availability | Modern version | Legacy version |
 | :-- | :-- | :-- |
-| Depends on the supplier | HTTP(S) sources of any majorly supported MIME type | Only the first plain HTTP *(not HTTPS)* source, ignores sources with incompatible MIME types |
+| Depends on the supplier | HTTP(S) sources of any majorly supported MIME type | Only the first plain HTTP *(not HTTPS)* `audio/mpeg` source |
 
-In order to support both versions with a direct source, at least one of each HTTPS and HTTP sources must be supplied.
+In order to support both versions with a direct source, at least one of each HTTPS and HTTP sources must be supplied. If `BLOG_MUSIC_ROOT` is configured as HTTPS in the Modern version and HTTP in the Legacy version, [shorthandles](#remote-assets) can be used as wildcard HTTPS/HTTP sources.
 
 It has the following properties:
 
@@ -277,6 +280,116 @@ These three JSON files contain strings of text that are displayed in the site's 
     * `from`: The starting date specified, in YYYY-MM-DD format.
     * `dot`: The ending date specified, in YYYY-MM-DD format.
     * *`useYear`*: When true, also checks if it falls within the year ranges.
+
+## Remote assets
+
+> 🧪 **This is an experimental feature set and highly susceptible to major, breaking changes.**
+
+The Yonic Corner supports loading images and other assets remotely using special Astro components and cross-version API functions.
+
+To speed up writing URLs to remote content, **shorthandles** can be used, which are prefixes that will be replaced with a valid URL using the `BLOG_*_ROOT` environment variables provided.
+
+Shorthandles are usually in the form of `@:<url>` or `@<type-of-shorthandle>:<url>`. In the future, custom shorthandles will be able to be created to be used in built-in usages.
+
+### Image backend
+
+Remote images currently work with an [imgproxy](https://imgproxy.net) basic server as an image backend. It automatically signs your image requests cryptographically to prevent undesired image transformations. Support for other backends such as advanced CDNs is currently not planned.
+
+Remote content support must be previously configured with the following environment variables:
+
+* `IMGPROXY_HOST`: Hostname for your imgproxy server
+* `IMGPROXY_KEY`: Cryptographic key for imgproxy (hex-encoded string)
+* `IMGPROXY_SALT`: Cryptographic salt for imgproxy (hex-encoded string)
+* `BLOG_IMAGE_ROOT`: Base URL where your images are stored. If a [storage origin](https://docs.imgproxy.net/category/image-sources) is configured on imgproxy, you can use their associated imgproxy compatible prefix such as Amazon S3's (`s3://`) or Google Cloud Storage's (`gs://`).
+* `BLOG_MUSIC_COVER_ROOT`: Base URL where your cover music images are stored. If you wish, it can be the same as `BLOG_IMAGE_ROOT`.
+* `BLOG_STATIC_ROOT`: Base URL where additional static files are stored. This variable is not used by imgproxy, so no imgproxy compatible prefixes are allowed here. Meant for other types of multimedia such as audio and video.
+* `FIX_REMOTE_IMAGE_CLS`: When `true`, it infers the size of the remote images to fix CLS *(currently unused, by default it always infers the size regardless of this value)*.
+
+> **⚠ Do not use imgproxy URLs as image sources!**
+> 
+> The imgproxy related environment variables are used internally to construct URLs that imgproxy will use.  Use the original source URLs where they come from instead, using the `BLOG_*_ROOT` as base URLs for shorthandles.
+
+#### Caching
+
+When making a build, a `remote-manifest.json` file will be generated in the dist folder with a list of all resulting image URLs that will be processed by imgproxy. This file is meant to be used for quickly generating a cache of transformed images with a script.
+
+If you do not wish this file to be generated, simply remove the `remoteImageManifest` integration in the Astro config file.
+
+### Usage in posts
+
+In a content post, you can use the `<RemoteFigure>` and `<RemotePicture>` components for displaying remote images. A helper function `toLocalShort` can also be used to allow using local shorthandles in these components.
+
+Since remote images are still not a mainstream feature, you must manually import all of this in your MDX file:
+
+```ts
+import RemoteFigure from "@lib/components/RemoteFigure.astro"
+import RemotePicture from "@lib/components/RemotePicture.astro"
+import { toLocalShort } from "@lib/remote-images"
+```
+
+Both's `src` and `fallbackSrc` props of these components currently accept the following shorthandles: 
+
+* `@:<url>` &rarr; `BLOG_IMAGE_ROOT/<url>`
+
+Due to limitations with the implementation of Astro's markdown renderer, a `@local:`-like shorthandle is currently not possible in this situation. Instead, a workaround can be used with `toLocalShort`, which will add the slug to the url, essentially making it a `@local:`-like shorthandle:
+
+```jsx
+import RemotePicture from "@lib/components/RemotePicture.astro"
+import { toLocalShort } from "@lib/remote-images"
+
+<RemotePicture src={`@:${toLocalShort(url)}`} />
+```
+
+> For `toLocalShort` to work, posts must be arranged in `content/blog/<year>/<id>` paths. Currently, there is no way to customize this.
+
+With the `raw` prop set, the image will not be processed by imgproxy, and shorthandles will not work. You should also set a separate `fallbackSrc` for the fallback image if the `src` is in a modern format. `raw` is useful for formats that imgproxy cannot process fully by default such as animated WebP or GIF images.
+
+The `height` prop is currently used for Cumulative Layout Shift handling purposes only. This behavior will very likely change in the future.
+
+Frontmatter hero images can also be remotely set by inputting an URL, with or without any of the following shorthandles:
+
+* `@:<url>` &rarr; `BLOG_IMAGE_ROOT/<url>`
+* `@local:<url>` &rarr; `BLOG_IMAGE_ROOT/<slug-of-post>/<url>`
+
+### Usage on series entries
+
+Series remote hero images can be set by inputting an URL, with or without any of the following shorthandles:
+
+* `@:<url>` &rarr; `BLOG_IMAGE_ROOT/<url>`
+* `@series:<url>` &rarr; `BLOG_IMAGE_ROOT/series/<url>`
+* `@id` &rarr; `<series-id>`. You may place this shorthandle anywhere in the URL, not just the beginning.
+
+### Usage on music entries
+
+[Direct link music sources](#direct-source) can have the following shorthandles:
+
+* `@:<url>` &rarr; `BLOG_STATIC_ROOT/<url>`
+
+No other type of source can use shorthandles in any way.
+
+Music covers can have the following shorthandles:
+
+* `@:<url>` &rarr; `BLOG_MUSIC_COVER_ROOT/<url>`
+
+### Manual usage
+
+`@lib/remote-images` exports several utility functions to manually create URLs for processing of remote images with imgproxy.
+
+The functions `getRemoteImage` and `getRemoteSizedImage` can be used to construct imgproxy URLs for any image source. The function `generateSourceset` allows for generating imgproxy sources for HTML5 `<picture>` elements. They all take very similar named arguments:
+
+* `src`: Source URL of the image.
+* `width`: Target width of the image.
+* `quality`: Compression quality of the image. See [imgproxy's documentation on quality](https://docs.imgproxy.net/usage/processing#quality) for values.
+* `format`: Any of the allowed `ImageOutputFormat`, excluding `svg`.
+* `height`: Target height of the image. (`getRemoteSizedImage` only)
+* `sizes`: Multiple of sizes to generate. It accepts values between 0 exclusive and 1 inclusive, with 1 being the original image's size. Values outside these range are clamped between 0.01 and 1. (`generateSourceset` only)
+
+You can also use shorthandles manually in any Astro page or component by using the `processShorthandles` function. The function takes in the URL to be processed, and an array of `Shorthandle` objects that follow this structure:
+
+* `replaceCase`: A `RegExp` (regular expression) to use for the prefix. Common values are `/^@:/` or `/^@local:/`, but you may use whichever you wish. You can even generate them dynamically.
+* `value`: The string to replace it to. You can use the environment variables from `import.meta.env` as a basis. It can be a dynamic or template string. Do note that shorthandles only change what's in the `replaceCase`, so you mustn't include the URL in here.
+
+The shorthandles are evaluated from the first shorthandle to the last in the array, meaning you should order them in increasing priority.
 
 ## Web feeds
 
