@@ -1,5 +1,12 @@
 # ![The Yonic Corner](./public/img/desktop-logo.svg)
 
+> [!WARNING]
+> **[The Yonic Corner is continuing its development in Codeberg](https://codeberg.org/YonicDev/yonic-corner).** GitHub has proven since 2025 to have been extremely untrustful to humans and has shifted its focus on LLM-driven development, putting reliability, community building, and secure software development in risk, as well as potentially violating the fundamentals of FOSS and their licences.
+>
+> This is a web project that has some focus on supporting legacy systems. **Training LLMs to use this code can potentially make your model spit out deprecated and unsafe code, or make decisions based on outdated web design practices.**
+>
+> If you care about developing by and for real, fleshy and organic humans (and potentially cyborgs with an organic human brain should that be a thing in the distant future), **you should also consider making the move into an existing GitHub alternative or self-hosting your own with [Foregejo](https://forgejo.org/) or [Gitea](https://about.gitea.com/products/gitea/).**
+
 This is the source code of my personal blog, built with Astro, and uses Svelte components. Apart from a few key differences, it's not much different than any other Astro blog site.
 
 There is another blog expressly designed for extremely old browsers called [Legacy Version][1] that uses nearly the same content. A popup with a link to it will be displayed if the browser detected cannot confidently display the page properly.
